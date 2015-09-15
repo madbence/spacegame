@@ -1,0 +1,35 @@
+{
+  "name": "spacegame",
+  "version": "0.0.0",
+  "description": "Multiplayer space-shooter game",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha",
+    "start": "babel-node app",
+    "start:dev": "npm run watch:js & npm start & wait",
+    "build:js": "browserify -o _client.js -t babelify client.js",
+    "watch:js": "watchify -o _client.js -t babelify client.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/madbence/spacegame.git"
+  },
+  "author": "Bence Dányi <bence@danyi.me>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/madbence/spacegame/issues"
+  },
+  "homepage": "https://github.com/madbence/spacegame#readme",
+  "dependencies": {
+    "babel": "^5.8.23",
+    "koa": "^1.0.0",
+    "koa-mount": "^1.3.0",
+    "koa-route": "^2.4.2",
+    "ws": "^0.8.0"
+  },
+  "devDependencies": {
+    "babelify": "^6.3.0",
+    "browserify": "^11.1.0",
+    "watchify": "^3.4.0"
+  }
+}
