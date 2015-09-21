@@ -5,10 +5,12 @@
   "main": "app.js",
   "scripts": {
     "test": "mocha",
-    "start": "babel-node app",
-    "start:dev": "npm run watch:js & npm start & wait",
-    "build:js": "browserify -o _client.js -t babelify src/client/main.js",
-    "watch:js": "watchify -o _client.js -t babelify src/client/main.js"
+    "start": "babel-node src/server/app",
+    "start:dev": "npm run watch:js & npm run watch:css & npm start & wait",
+    "build:js": "browserify -o assets/bundle.js -t babelify src/client/main.js",
+    "build:css": "stylus -o assets/style.css styles/index.styl",
+    "watch:js": "watchify -o assets/bundle.js -t babelify src/client/main.js",
+    "watch:css": "stylus -w -o assets/style.css styles/index.styl"
   },
   "repository": {
     "type": "git",
@@ -34,6 +36,7 @@
     "react": "^0.13.3",
     "react-redux": "^2.1.2",
     "redux": "^3.0.0",
+    "stylus": "^0.52.4",
     "watchify": "^3.4.0"
   }
 }
