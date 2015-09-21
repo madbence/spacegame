@@ -6,7 +6,6 @@ export default (state, action) => {
         text: action.message,
       }]),
     };
-    console.log(state, s);
     return s;
   }
   return state;
