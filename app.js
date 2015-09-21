@@ -12,7 +12,7 @@ app
     this.type = 'application/javascript';
   }))
   .use(get('/', function* () {
-    this.body = '<script src=bundle.js></script>';
+    this.body = '<div id=mount></div><script src=bundle.js></script>';
   }));
 
 const server = http.createServer(app.callback());

@@ -1,7 +1,9 @@
+/* @flow */
+
 import WS from 'ws';
 
 const client = new WS('ws://localhost:3000');
-let id, clients = [];
+let id: ?number = null, clients = [];
 
 function send(message) {
   client.send(JSON.stringify(message));
@@ -26,5 +28,9 @@ client.onmessage = event => {
 }
 
 function render() {
-  document.body.innerHTML = 'You are client #' + id + ', clients connected: ' + clients.join(', ');
+  if (id == null) {
+    document.body.innerHTML = 'Init...';
+  } else {
+    document.body.innerHTML = 'You are client #' + id + ', clients connected: ' + clients.join(', ');
+  }
 }
