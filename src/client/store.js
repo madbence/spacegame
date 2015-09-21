@@ -1,18 +1,7 @@
 import { createStore } from 'redux';
+import reducer from 'client/reducers';
 
-export default createStore((state, action) => {
-  switch(action.type) {
-    case 'ADD_MESSAGE':
-    const s = {
-      messages: state.messages.concat([{
-        text: action.message,
-      }]),
-    };
-    console.log(state, s);
-    return s;
-  }
-  return state;
-}, {
+export default createStore(reducer, {
   messages: [{
     author: 'Teszt Elek',
     text: 'Hello world!',
