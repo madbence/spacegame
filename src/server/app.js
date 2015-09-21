@@ -8,11 +8,15 @@ const app = koa();
 
 app
   .use(get('/bundle.js', function* () {
-    this.body = fs.createReadStream('./_client.js');
+    this.body = fs.createReadStream('./assets/bundle.js');
     this.type = 'application/javascript';
   }))
+  .use(get('/style.css', function* () {
+    this.body = fs.createReadStream('./assets/style.css');
+    this.type = 'text/css';
+  }))
   .use(get('/', function* () {
-    this.body = '<div id=mount></div><script src=bundle.js></script>';
+    this.body = '<link rel=stylesheet href=style.css /><div id=mount></div><script src=bundle.js></script>';
   }));
 
 const server = http.createServer(app.callback());
