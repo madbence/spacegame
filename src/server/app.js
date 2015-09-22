@@ -25,7 +25,49 @@ const wsServer = new ws.Server({server});
 
 server.listen(3000);
 
+let uid = 0;
+const clients = new Set();
+
+function broadcast(action) {
+  const message = JSON.stringify(action);
+  [...clients].forEach(client => {
+    client.send(message);
+  });
+}
+
+function act(type, payload, meta) {
+  return {
+    type,
+    payload,
+    meta,
+  };
+}
+
 wsServer.on('connection', client => {
-  client.on('message', message => {})
-        .on('close', () => {})
+  client.id = uid++;
+  broadcast(act('ADD_USER', {
+    id: client.id,
+  }));
+  clients.add(client);
+  client.on('message', message => {
+    const action = JSON.parse(message);
+    switch(action.type) {
+      case 'ADD_MESSAGE':
+      setTimeout(() => {
+        broadcast(act('ADD_MESSAGE', {
+          message: action.payload.message,
+          author: client.id,
+          date: new Date(),
+        }, {
+          done: true,
+          id: action.meta.id,
+        }));
+      }, 1000);
+    }
+  }).on('close', () => {
+    clients.delete(client);
+    broadcast(act('DEL_USER', {
+      id: client.id,
+    }));
+  });
 });

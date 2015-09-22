@@ -21,7 +21,9 @@ class Chat extends React.Component {
 function add(message) {
   return {
     type: 'ADD_MESSAGE',
-    message,
+    payload: {
+      message,
+    },
   };
 }
 
