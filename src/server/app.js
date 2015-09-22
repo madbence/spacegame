@@ -6,15 +6,16 @@ import fs from 'fs';
 
 const app = koa();
 
+function serve(url, path, type) {
+  return get(url, function* () {
+    this.body = fs.createReadStream(path);
+    this.type = type;
+  });
+}
+
 app
-  .use(get('/bundle.js', function* () {
-    this.body = fs.createReadStream('./assets/bundle.js');
-    this.type = 'application/javascript';
-  }))
-  .use(get('/style.css', function* () {
-    this.body = fs.createReadStream('./assets/style.css');
-    this.type = 'text/css';
-  }))
+  .use(serve('/bundle.js', './assets/bundle.js', 'application/javascript'))
+  .use(serve('/style.css', './assets/style.css', 'text/css'))
   .use(get('/', function* () {
     this.body = '<link rel=stylesheet href=style.css /><div id=mount></div><script src=bundle.js></script>';
   }));
@@ -24,47 +25,7 @@ const wsServer = new ws.Server({server});
 
 server.listen(3000);
 
-const clients = new Set();
-let uid = 0;
-
-wsServer
-  .on('connection', client => {
-    client.id = uid++;
-    clients.add(client);
-    clientList();
-
-    function broadcast(message) {
-      clients.forEach(client => client.send(JSON.stringify(message)));
-    }
-    function send(message) {
-      client.send(JSON.stringify(message));
-    }
-
-    function clientList() {
-      broadcast({
-        type: 'CLIENT_LIST',
-        clients: Array.from(clients).map(function (client) {
-          return client.id
-        }),
-      });
-    }
-
-    client
-      .on('message', message => {
-        message = JSON.parse(message);
-        switch(message.type) {
-          case 'HELLO':
-          send({ 
-            id: client.id,
-            type: 'HELLO',
-          });
-          break;
-          default:
-          console.error('Unknown message: %j', message);
-        }
-      })
-      .on('close', () => {
-        clients.delete(client);
-        clientList();
-      })
-  });
+wsServer.on('connection', client => {
+  client.on('message', message => {})
+        .on('close', () => {})
+});
