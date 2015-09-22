@@ -7,10 +7,10 @@
     "test": "mocha",
     "start": "babel-node src/server/app",
     "start:dev": "npm run watch:js & npm run watch:css & npm run watch:app & wait",
-    "build:js": "browserify -o assets/bundle.js -t babelify src/client/main.js",
+    "build:js": "browserify -o assets/bundle.js -t [ babelify --optional runtime ] src/client/main.js",
     "build:css": "stylus -o assets/style.css styles/index.styl",
     "watch:app": "nodemon -w src/server -q --exec babel-node src/server/app",
-    "watch:js": "watchify -o assets/bundle.js -t babelify src/client/main.js",
+    "watch:js": "watchify -o assets/bundle.js -t [ babelify --optional runtime ] src/client/main.js",
     "watch:css": "stylus -w -o assets/style.css styles/index.styl"
   },
   "repository": {
@@ -31,6 +31,7 @@
     "ws": "^0.8.0"
   },
   "devDependencies": {
+    "babel-runtime": "^5.8.24",
     "babelify": "^6.3.0",
     "browserify": "^11.1.0",
     "flow-bin": "^0.16.0",
