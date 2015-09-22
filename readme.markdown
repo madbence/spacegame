@@ -2,24 +2,27 @@
 
 ## install
 
-Right now, Windows is not fully supported (Flowtype has no windows support), everything else should work.
+Right now, Windows is not fully supported (Flowtype has no pre-built windows binaries), everything else should work.
 
 ```sh
 $ git clone ...
 $ npm i
 
 # create a symlink: project-root/node_modules/client -> project-root/src/client
+# create a symlink: project-root/node_modules/server -> project-root/src/server
 # unix: ls -s ../src/client node_modules/client
+# windows: dunno...
 ```
 
 ## run
 
 ```sh
 # unix
-$ npm run start:dev
+$ npm run start:dev # automatic recompile on change, etc
 
 # windows (has no support for sh primitives like & and wait)
 $ npm run build:js
+$ npm run build:css
 $ npm start
 
 # open localhost:3000 in the browser
