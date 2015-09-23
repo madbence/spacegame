@@ -27,6 +27,11 @@ $ npm start
 
 # open localhost:3000 in the browser
 ```
+## lint
+
+```sh
+$ npm run lint
+```
 
 ## stack
 
@@ -35,7 +40,7 @@ and [`ws`](https://www.npmjs.com/package/ws) to manage `WebSocket` connections.
 The code is written in *modern* javascript, and it is compiled down to runnable
 code with [`babel`](http://babeljs.io/). Client-side code is bundled using [`browserify`](http://browserify.org/) ([`watchify`](https://www.npmjs.com/package/watchify) provides incremental builds), using the [`babelify`](https://github.com/babel/babelify) tranform module. Typechecking provided by [`flowtype`](http://flowtype.org).
 HTML is rendered with [`react`](https://facebook.github.io/react/), using [`redux`](http://rackt.github.io/redux/) as state container.
-CSS preprocessor is [`stylus`](https://learnboost.github.io/stylus/).
+CSS preprocessor is [`stylus`](https://learnboost.github.io/stylus/). The codebase is linted with [`eslint`](http://eslint.org).
 
 *TODO from here...*
 
