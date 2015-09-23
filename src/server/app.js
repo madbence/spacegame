@@ -51,7 +51,7 @@ wsServer.on('connection', client => {
   clients.add(client);
   client.on('message', message => {
     const action = JSON.parse(message);
-    switch(action.type) {
+    switch (action.type) {
       case 'ADD_MESSAGE':
       setTimeout(() => {
         broadcast(act('ADD_MESSAGE', {

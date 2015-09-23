@@ -12,7 +12,7 @@ class Chat extends React.Component {
     return (
       <div className='chat-window'>
         <MessageList {...this.props} />
-        <MessageForm onSubmit={message => dispatch(add(message))}/>
+        <MessageForm onSubmit={ message => dispatch(add(message)) }/>
       </div>
     );
   }

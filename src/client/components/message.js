@@ -6,14 +6,14 @@ export default class Message extends React.Component {
     if (!this.props.date) {
       return (
         <div className='message pending'>
-          {this.props.text}
+          { this.props.text }
         </div>
       );
     }
     return (
       <div className='message'>
-        <span className='author'>{this.props.author}: </span>
-        {this.props.text}
+        <span className='author'>{ this.props.author }: </span>
+        { this.props.text }
       </div>
     );
   }

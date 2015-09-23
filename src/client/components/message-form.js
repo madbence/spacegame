@@ -7,9 +7,9 @@ export default class MessageForm extends React.Component {
     return (
       <div className='message-form'>
         <input type='text' ref='message'/>
-        <button onClick={this.onClick.bind(this)}>Küldés</button>
+        <button onClick={ this.onClick.bind(this) }>Küldés</button>
       </div>
-    )
+    );
   }
 
   onClick() {

@@ -8,8 +8,8 @@ export default class MessageList extends React.Component {
 
     return (
       <div className='messages'>
-        {messages}
+        { messages }
       </div>
-    )
+    );
   }
 }

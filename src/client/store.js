@@ -27,11 +27,13 @@ client.onmessage = event => {
 
 const middlewares = [
   () => next => action => {
-    console.log(action)
+    /* eslint-disable no-console */
+    console.log(action);
+    /* eslint-enable no-console */
     return next(action);
   },
   store => next => action => {
-    switch(action.type) {
+    switch (action.type) {
       case 'ADD_MESSAGE':
       if (!action.meta || action.meta.done !== true) {
         const id = uuid.v4();
