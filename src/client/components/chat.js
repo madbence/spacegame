@@ -1,6 +1,6 @@
 import React from 'react';
-import MessageList from 'client/components/message-list';
-import MessageForm from 'client/components/message-form';
+import MessageList from './message-list';
+import MessageForm from './message-form';
 import { connect } from 'react-redux';
 
 class Chat extends React.Component {

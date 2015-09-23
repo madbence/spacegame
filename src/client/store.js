@@ -1,8 +1,9 @@
-import { applyMiddleware, createStore } from 'redux';
-import reducer from 'client/reducers';
-import uuid from 'uuid';
 import WS from 'ws';
-import store from 'client/store';
+import { applyMiddleware, createStore } from 'redux';
+import uuid from 'uuid';
+
+import reducer from './reducers';
+import store from './store';
 
 const client = new WS('ws://localhost:3000');
 

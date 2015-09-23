@@ -7,11 +7,6 @@ Right now, Windows is not fully supported (Flowtype has no pre-built windows bin
 ```sh
 $ git clone ...
 $ npm i
-
-# create a symlink: project-root/node_modules/client -> project-root/src/client
-# create a symlink: project-root/node_modules/server -> project-root/src/server
-# unix: ls -s ../src/client node_modules/client
-# windows: dunno...
 ```
 
 ## run
