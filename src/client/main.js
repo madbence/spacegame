@@ -1,7 +1,8 @@
 import React from 'react';
-import Chat from 'client/components/chat';
 import { Provider } from 'react-redux';
-import store from 'client/store';
+
+import Chat from './components/chat';
+import store from './store';
 
 React.render(
   <Provider store={ store }>
