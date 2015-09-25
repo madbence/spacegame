@@ -1,4 +1,4 @@
-# spacegame
+# spacegame [![Build Status](https://travis-ci.org/madbence/spacegame.svg)](https://travis-ci.org/madbence/spacegame)
 
 ## install
 
