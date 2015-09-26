@@ -39,7 +39,7 @@ CSS preprocessor is [`stylus`](https://learnboost.github.io/stylus/). The codeba
 
 *TODO from here...*
 
-The test runner is [`mocha`](https://mochajs.org/), assertions are provided by [`should`](https://shouldjs.github.io/), test coverage is created by [`istanbul`](https://gotwarlost.github.io/istanbul/) (with the help of [`isparta`](https://github.com/douglasduteil/isparta)).
+The test runner is [`ava`](https://npmjs.com/ava), test coverage is created by [`istanbul`](https://gotwarlost.github.io/istanbul/) (with the help of [`isparta`](https://github.com/douglasduteil/isparta)).
 
 ## docs
 
