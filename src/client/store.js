@@ -1,9 +1,9 @@
 import WS from 'ws';
-import { applyMiddleware, createStore } from 'redux';
+import { applyMiddleware, createStore, combineReducers } from 'redux';
 import uuid from 'uuid';
 
-import reducer from './reducers';
-import store from './store';
+import messages from './reducers';
+import ships from '../common/game';
 
 const client = new WS('ws://localhost:3000');
 
@@ -29,7 +29,7 @@ client.onmessage = event => {
 const middlewares = [
   () => next => action => {
     /* eslint-disable no-console */
-    console.log(action);
+    // console.log(JSON.stringify(store.getState()));
     /* eslint-enable no-console */
     return next(action);
   },
@@ -55,6 +55,19 @@ const middlewares = [
   }
 ];
 
-export default applyMiddleware(...middlewares)(createStore)(reducer, {
+const store = applyMiddleware(...middlewares)(createStore)(combineReducers({
+  messages,
+  ships,
+}), {
   messages: [],
+  ships: [{
+    pos: { x: 0, y: 0 },
+    vel: { x: 0, y: 0 },
+    rot: 0,
+    avel: 0,
+    thrust: false,
+    rotThrust: 0,
+  }],
 });
+
+export default store;

@@ -1,42 +1,55 @@
 /* @flow */
 
-type State = {
-  ships: Array<Ship>,
-}
-
 type Ship = {
   pos: Vector,
   vel: Vector,
-  acc: Vector,
+  rot: Rotation,
+  avel: Rotation,
+  thrust: bool,
+  rotThrust: number
 }
 
 type Vector = { x: number, y: number }
 type Position = Vector
+type Rotation = number
 
-type Action = { type: 'TICK' }
+type Action =
+  { type: 'TICK' } |
+  { type: 'ACCELERATE', index: number, state: bool } |
+  { type: 'ROTATE', index: number, dir: number }
 
 function advanceShip(ship: Ship): Ship {
-  const vel = {
-    x: ship.vel.x + ship.acc.x,
-    y: ship.vel.y + ship.acc.y,
-  };
-  const pos = {
+  let avel = ship.avel + ship.rotThrust;
+  let vel = ship.vel;
+  if (ship.thrust) {
+    vel = {
+      x: ship.vel.x + -Math.sin(ship.rot) * 0.01,
+      y: ship.vel.y +  Math.cos(ship.rot) * 0.01,
+    };
+  }
+  let rot = ship.rot + avel;
+  let pos = {
     x: ship.pos.x + vel.x,
     y: ship.pos.y + vel.y,
   };
+
   return {
     ...ship,
-    pos: pos,
-    vel: vel,
+    pos,
+    vel,
+    rot,
+    avel,
   };
 }
 
-export default function reduce(state: State, action: Action) {
+export default function reduce(ships: Array<Ship> = [], action: Action): Array<Ship> {
   switch (action.type) {
     case 'TICK':
-    return {
-      ...state,
-      ships: state.ships.map(advanceShip),
-    };
+    return ships.map(advanceShip);
+    case 'ACCELERATE':
+    return [...ships.slice(0, action.index - 1), { ...ships[action.index], thrust: action.state }, ...ships.slice(action.index + 1)];
+    case 'ROTATE':
+    return [...ships.slice(0, action.index - 1), { ...ships[action.index], rotThrust: action.dir }, ...ships.slice(action.index + 1)];
   }
+  return ships;
 }
