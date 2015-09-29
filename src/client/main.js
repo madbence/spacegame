@@ -11,8 +11,14 @@ React.render(
   document.getElementById('mount')
 );
 
+let time = Date.now();
 const tick = () => {
-  store.dispatch({ type: 'TICK' });
+  const now = Date.now();
+  while (time + 1000/60 < now) {
+    store.dispatch({ type: 'TICK' });
+    time += 1000/60
+  }
+  render();
   requestAnimationFrame(tick);
 };
 
@@ -49,8 +55,6 @@ function render() {
   }
   ctx.restore();
 }
-
-store.subscribe(render);
 
 document.addEventListener('keydown', e => {
   switch (e.keyCode) {
