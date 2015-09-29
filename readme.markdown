@@ -28,6 +28,14 @@ $ npm start
 $ npm run lint
 ```
 
+## check
+
+Run static typechecker ([Flowtype](http://flowtype.org)):
+
+```sh
+$ npm run check
+```
+
 ## stack
 
 The app server uses [`koa`](http://koajs.com/) to serve `HTTP` requests,
