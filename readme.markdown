@@ -24,6 +24,8 @@ $ npm start
 ```
 ## lint
 
+Lint code style with [ESLint](http://eslint.org):
+
 ```sh
 $ npm run lint
 ```
