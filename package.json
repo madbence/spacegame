@@ -10,6 +10,7 @@
     "build": "npm run build:js & npm run build:css & wait",
     "build:js": "browserify -o assets/bundle.js -t [ babelify --optional runtime ] src/client/main.js",
     "build:css": "stylus -o assets/style.css styles/index.styl",
+    "check": "flow",
     "lint": "eslint 'src/**/*.js'",
     "watch:app": "nodemon -w src/server -q --exec babel-node src/server/app",
     "watch:js": "watchify -o assets/bundle.js -t [ babelify --optional runtime ] src/client/main.js",

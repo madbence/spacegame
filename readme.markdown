@@ -24,8 +24,18 @@ $ npm start
 ```
 ## lint
 
+Lint code style with [ESLint](http://eslint.org):
+
 ```sh
 $ npm run lint
+```
+
+## check
+
+Run static typechecker ([Flowtype](http://flowtype.org)):
+
+```sh
+$ npm run check
 ```
 
 ## stack
