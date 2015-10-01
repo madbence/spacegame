@@ -4,6 +4,8 @@ import MessageForm from './message-form';
 import { connect } from 'react-redux';
 
 class Chat extends React.Component {
+
+  // set proper component name
   displayName: 'Chat'
 
   render() {

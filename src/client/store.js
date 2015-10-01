@@ -1,53 +1,44 @@
 import WS from 'ws';
-import { applyMiddleware, createStore } from 'redux';
+import { applyMiddleware, createStore, combineReducers } from 'redux';
 import uuid from 'uuid';
 
-import reducer from './reducers';
-import store from './store';
+import messages from './reducers';
+import ships from '../common/game';
 
 const client = new WS('ws://localhost:3000');
 
-function act(type, payload, meta) {
-  return {
+function send(type, payload, meta) {
+  const message = JSON.stringify({
     type,
     payload,
     meta,
-  };
+  });
+
+  client.send(message);
 }
 
 const pending = new Map();
 
 client.onmessage = event => {
   const action = JSON.parse(event.data);
-  if (action.meta && pending.has(action.meta.id)) {
-    pending.get(action.meta.id)(action);
-  } else {
-    store.dispatch(action);
-  }
+  store.dispatch(action);
 };
 
 const middlewares = [
-  () => next => action => {
-    /* eslint-disable no-console */
-    console.log(action);
-    /* eslint-enable no-console */
-    return next(action);
-  },
   store => next => action => {
     switch (action.type) {
       case 'ADD_MESSAGE':
       if (!action.meta || action.meta.done !== true) {
         const id = uuid.v4();
-        client.send(JSON.stringify(act('ADD_MESSAGE', {
+        send('ADD_MESSAGE', {
           message: action.payload.message,
         }, {
           id,
-        })));
-        next(act('ADD_MESSAGE', action.payload, { id }));
-        return new Promise(resolve => {
-          pending.set(id, resolve);
-        }).then(action => {
-          store.dispatch(action);
+        });
+        next({
+          type: 'ADD_MESSAGE',
+          payload: action.payload,
+          meta: { id }
         });
       }
     }
@@ -55,6 +46,19 @@ const middlewares = [
   }
 ];
 
-export default applyMiddleware(...middlewares)(createStore)(reducer, {
+const store = applyMiddleware(...middlewares)(createStore)(combineReducers({
+  messages,
+  ships,
+}), {
   messages: [],
+  ships: [{
+    pos: { x: 0, y: 0 },
+    vel: { x: 0, y: 0 },
+    rot: 0,
+    avel: 0,
+    thrust: false,
+    rotThrust: 0,
+  }],
 });
+
+export default store;

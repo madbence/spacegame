@@ -17,7 +17,7 @@ app
   .use(serve('/bundle.js', './assets/bundle.js', 'application/javascript'))
   .use(serve('/style.css', './assets/style.css', 'text/css'))
   .use(get('/', function* () {
-    this.body = '<link rel=stylesheet href=style.css /><div id=mount></div><script src=bundle.js></script>';
+    this.body = '<link rel=stylesheet href=style.css /><div id=mount></div><canvas id=canvas width=500 height=500></canvas><script src=bundle.js></script>';
   }));
 
 const server = http.createServer(app.callback());
