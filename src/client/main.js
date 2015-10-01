@@ -78,6 +78,7 @@ document.addEventListener('keydown', e => {
     }); break;
   }
 });
+
 document.addEventListener('keyup', e => {
   switch (e.keyCode) {
     case 87:
