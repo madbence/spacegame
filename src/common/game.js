@@ -65,14 +65,24 @@ function advanceShip(ship: Ship): Ship {
   };
 }
 
+/**
+ * Update ship with the specific index with the given modifications
+ */
+function updateShip(ships: Array<Ship>, index: number, modification: any): Array<Ship> {
+  return ships.slice(0, index - 1).concat(
+    [{ ...ships[index], ...modification }],
+    ships.slice(index + 1)
+  );
+};
+
 export default function reduce(ships: Array<Ship> = [], action: Action): Array<Ship> {
   switch (action.type) {
     case 'TICK':
     return ships.map(advanceShip);
     case 'ACCELERATE':
-    return [...ships.slice(0, action.index - 1), { ...ships[action.index], thrust: action.state }, ...ships.slice(action.index + 1)];
+    return updateShip(ships, action.index, { thrust: action.state });
     case 'ROTATE':
-    return [...ships.slice(0, action.index - 1), { ...ships[action.index], rotThrust: action.dir }, ...ships.slice(action.index + 1)];
+    return updateShip(ships, action.index, { rotThrust: action.dir });
   }
   return ships;
 }
