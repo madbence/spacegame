@@ -2,20 +2,13 @@ import koa from 'koa';
 import http from 'http';
 import ws from 'ws';
 import { get } from 'koa-route';
-import fs from 'fs';
+import mount from 'koa-mount';
+import assets from './routes/assets';
 
 const app = koa();
 
-function serve(url, path, type) {
-  return get(url, function* () {
-    this.body = fs.createReadStream(path);
-    this.type = type;
-  });
-}
-
 app
-  .use(serve('/bundle.js', './assets/bundle.js', 'application/javascript'))
-  .use(serve('/style.css', './assets/style.css', 'text/css'))
+  .use(mount(assets))
   .use(get('/', function* () {
     this.body = '<link rel=stylesheet href=style.css /><div id=mount></div><canvas id=canvas width=500 height=500></canvas><script src=bundle.js></script>';
   }));
