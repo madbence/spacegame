@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 
 import Chat from './components/chat';
 import store from './store';
+import renderPlayground from './render';
 
 React.render(
   <Provider store={ store }>
@@ -18,43 +19,9 @@ const tick = () => {
     store.dispatch({ type: 'TICK' });
     time += 1000/60
   }
-  render();
+  renderPlayground(store);
   requestAnimationFrame(tick);
 };
-
-const ctx = document.getElementById('canvas').getContext('2d');
-function render() {
-  const state = store.getState();
-  ctx.save();
-  ctx.clearRect(0, 0, 500, 500);
-  ctx.translate(250.5, 250.5);
-  for (const ship of state.ships) {
-    ctx.translate(ship.pos.x, ship.pos.y);
-    ctx.rotate(ship.rot);
-    ctx.fillRect(-5, -10, 10, 20);
-    if (ship.thrust) {
-      ctx.save();
-      ctx.fillStyle = 'red';
-      ctx.fillRect(-2.5, -20, 5, 10);
-      ctx.restore();
-    }
-    if (ship.rotThrust < 0) {
-      ctx.save();
-      ctx.fillStyle = 'red';
-      ctx.fillRect(2.5, -7.5, 5, 5);
-      ctx.fillRect(-7.5, 2.5, 5, 5);
-      ctx.restore();
-    }
-    if (ship.rotThrust > 0) {
-      ctx.save();
-      ctx.fillStyle = 'red';
-      ctx.fillRect(-7.5, -7.5, 5, 5);
-      ctx.fillRect(2.5, 2.5, 5, 5);
-      ctx.restore();
-    }
-  }
-  ctx.restore();
-}
 
 document.addEventListener('keydown', e => {
   switch (e.keyCode) {
