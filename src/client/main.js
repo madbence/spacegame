@@ -5,6 +5,8 @@ import Chat from './components/chat';
 import store from './store';
 import renderPlayground from './render';
 
+import key from './lib/keypress';
+
 React.render(
   <Provider store={ store }>
     { () => <Chat /> }
@@ -23,44 +25,37 @@ const tick = () => {
   requestAnimationFrame(tick);
 };
 
-document.addEventListener('keydown', e => {
-  switch (e.keyCode) {
-    case 87:
-    store.dispatch({
-      type: 'ACCELERATE',
-      index: 0,
-      state: true,
-    }); break;
-    case 65:
-    store.dispatch({
-      type: 'ROTATE',
-      index: 0,
-      dir: -0.001,
-    }); break;
-    case 68:
-    store.dispatch({
-      type: 'ROTATE',
-      index: 0,
-      dir: 0.001,
-    }); break;
-  }
-});
+function accelerate(index, state) {
+  store.dispatch({
+    type: 'ACCELERATE',
+    index,
+    state,
+  });
+}
 
-document.addEventListener('keyup', e => {
-  switch (e.keyCode) {
-    case 87:
-    store.dispatch({
-      type: 'ACCELERATE',
-      index: 0,
-      state: false,
-    }); break;
-    case 65:
-    case 68:
-    store.dispatch({
-      type: 'ROTATE',
-      index: 0,
-      dir: 0,
-    }); break;
+function rotate(index, dir) {
+  store.dispatch({
+    type: 'ROTATE',
+    index,
+    dir,
+  });
+}
+
+key((type, e) => {
+  switch (type) {
+    case 'down':
+    switch (e.keyCode) {
+      case 87: accelerate(0, true); break;
+      case 65: rotate(0, -0.001); break;
+      case 68: rotate(0, 0.001); break;
+    }
+    break;
+    case 'up':
+    switch (e.keyCode) {
+      case 87: accelerate(0, false); break;
+      case 65: rotate(0, 0); break;
+      case 68: rotate(0, 0); break;
+    }
   }
 });
 
