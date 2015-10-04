@@ -22,6 +22,10 @@ function broadcast(type, payload, meta) {
   });
 }
 
+setInterval(broadcast, 1000 / 60, 'TICK', undefined, {
+  done: true,
+});
+
 export default client => {
   // assign uniq id to client
   client.id = uid++;
@@ -56,7 +60,23 @@ export default client => {
             done: true,
             id: action.meta.id,
           });
-        }, 1000);
+        }, 1000); break;
+
+        case 'ACCELERATE':
+        broadcast('ACCELERATE', {
+          index: action.payload.index,
+          state: action.payload.state,
+        }, {
+          done: true,
+        }); break;
+
+        case 'ROTATE':
+        broadcast('ROTATE', {
+          index: action.payload.index,
+          dir: action.payload.dir,
+        }, {
+          done: true,
+        });
       }
     })
 
