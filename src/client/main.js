@@ -28,16 +28,20 @@ const tick = () => {
 function accelerate(index, state) {
   store.dispatch({
     type: 'ACCELERATE',
-    index,
-    state,
+    payload: {
+      index,
+      state,
+    },
   });
 }
 
 function rotate(index, dir) {
   store.dispatch({
     type: 'ROTATE',
-    index,
-    dir,
+    payload: {
+      index,
+      dir,
+    },
   });
 }
 

@@ -80,9 +80,9 @@ export default function reduce(ships: Array<Ship> = [], action: Action): Array<S
     case 'TICK':
     return ships.map(advanceShip);
     case 'ACCELERATE':
-    return updateShip(ships, action.index, { thrust: action.state });
+    return updateShip(ships, action.payload.index, { thrust: action.payload.state });
     case 'ROTATE':
-    return updateShip(ships, action.index, { rotThrust: action.dir });
+    return updateShip(ships, action.payload.index, { rotThrust: action.payload.dir });
   }
   return ships;
 }
