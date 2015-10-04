@@ -35,13 +35,17 @@ const middlewares = [
         }, {
           id,
         });
-        next({
+        return next({
           type: 'ADD_MESSAGE',
           payload: action.payload,
           meta: { id }
         });
       }
     }
+    if (!action.meta || !action.meta.done) {
+      return send(action.type, action.payload, action.meta);
+    }
+    if (action.type != 'TICK')
     return next(action);
   }
 ];

@@ -18,7 +18,6 @@ let time = Date.now();
 const tick = () => {
   const now = Date.now();
   while (time + 1000/60 < now) {
-    store.dispatch({ type: 'TICK' });
     time += 1000/60
   }
   renderPlayground(store);
