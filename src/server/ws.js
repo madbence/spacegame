@@ -18,7 +18,15 @@ function broadcast(type, payload, meta) {
 
   // send the serialized message to every client
   [...clients].forEach(client => {
-    client.send(message);
+    if (client.readyState !== 1) {
+      console.log(`Client has readyState ${client.readyState}, not sending message`);
+      return;
+    }
+    client.send(message, null, err => {
+      if (err) {
+        console.error(err.stack);
+      }
+    });
   });
 }
 
