@@ -11,16 +11,20 @@ $ npm i
 
 ## run
 
+Starting development server on port `3000`:
+
+### unix
+
 ```sh
-# unix
-$ npm run start:dev # automatic recompile on change, etc
+$ npm run watch # automatic recompile on change, etc
+```
 
-# windows (has no support for sh primitives like & and wait)
-$ npm run build:js
-$ npm run build:css
-$ npm start
+### windows
 
-# open localhost:3000 in the browser
+```sh
+$ npm run build:js  # build js files
+$ npm run build:css # build css
+$ npm start         # start dev server
 ```
 ## lint
 
