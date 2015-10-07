@@ -44,29 +44,22 @@ $ npm run check
 
 ## stack
 
-The app server uses [`koa`](http://koajs.com/) to serve `HTTP` requests,
-and [`ws`](https://www.npmjs.com/package/ws) to manage `WebSocket` connections.
-The code is written in *modern* javascript, and it is compiled down to runnable
-code with [`babel`](http://babeljs.io/). Client-side code is bundled using [`browserify`](http://browserify.org/) ([`watchify`](https://www.npmjs.com/package/watchify) provides incremental builds), using the [`babelify`](https://github.com/babel/babelify) tranform module. Typechecking provided by [`flowtype`](http://flowtype.org).
-HTML is rendered with [`react`](https://facebook.github.io/react/), using [`redux`](http://rackt.github.io/redux/) as state container.
-CSS preprocessor is [`stylus`](https://learnboost.github.io/stylus/). The codebase is linted with [`eslint`](http://eslint.org).
+- [`koa`](http://koajs.com/) to serve `HTTP` requests
+- [`ws`](https://www.npmjs.com/package/ws) to manage `WebSocket` connections
+- [`babel`](http://babeljs.io/) for compiling down to ES5
+- [`browserify`](http://browserify.org/) for bundling browser code
+- [`watchify`](https://www.npmjs.com/package/watchify) for incremental builds
+- [`flowtype`](http://flowtype.org) for static type analysis
+- [`react`](https://facebook.github.io/react/) for rendering ui
+- [`redux`](http://rackt.github.io/redux/) as state container
+- [`stylus`](https://learnboost.github.io/stylus/) as CSS preprocessor
+- [`eslint`](http://eslint.org) for linting the codebase
+- [`ava`](https://npmjs.com/ava) used as test runner
 
 *TODO from here...*
 
-The test runner is [`ava`](https://npmjs.com/ava), test coverage is created by [`istanbul`](https://gotwarlost.github.io/istanbul/) (with the help of [`isparta`](https://github.com/douglasduteil/isparta)).
+- [`istanbul`](https://gotwarlost.github.io/istanbul/) to provide test coverage (with the help of [`isparta`](https://github.com/douglasduteil/isparta))
 
-## docs
+## license
 
-- [`src/server`](src/server)
-- [`src/client`](src/client)
-
-## resources
-
-- https://github.com/substack/browserify-handbook
-- http://www.2ality.com/2014/08/es6-today.html
-- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
-- https://github.com/tj/co
-- https://github.com/lukehoban/ecmascript-asyncawait
-- https://facebook.github.io/react/
-- http://rackt.github.io/redux/
-- http://flowtype.org/
+MIT
