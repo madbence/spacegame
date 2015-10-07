@@ -16,7 +16,7 @@ Starting development server on port `3000`:
 ### unix
 
 ```sh
-$ npm run watch # automatic recompile on change, etc
+$ npm run watch     # automatic recompile on change, etc
 ```
 
 ### windows
