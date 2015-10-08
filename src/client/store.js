@@ -45,7 +45,6 @@ const middlewares = [
     if (!action.meta || !action.meta.done) {
       return send(action.type, action.payload, action.meta);
     }
-    if (action.type != 'TICK')
     return next(action);
   }
 ];
