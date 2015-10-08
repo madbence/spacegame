@@ -24,22 +24,13 @@ const tick = () => {
   requestAnimationFrame(tick);
 };
 
-function accelerate(index, state) {
+function accelerate(index, strength) {
   store.dispatch({
-    type: 'ACCELERATE',
+    type: 'SET_THRUSTER_STRENGTH',
     payload: {
-      index,
-      state,
-    },
-  });
-}
-
-function rotate(index, dir) {
-  store.dispatch({
-    type: 'ROTATE',
-    payload: {
-      index,
-      dir,
+      shipIndex: 0,
+      thrusterIndex: index,
+      strength: strength,
     },
   });
 }
@@ -48,16 +39,16 @@ key((type, e) => {
   switch (type) {
     case 'down':
     switch (e.keyCode) {
-      case 87: accelerate(0, true); break;
-      case 65: rotate(0, -0.001); break;
-      case 68: rotate(0, 0.001); break;
+      case 87: accelerate(0, 0.02); break;
+      case 65: accelerate(1, 0.0005); break;
+      case 68: accelerate(2, 0.0005); break;
     }
     break;
     case 'up':
     switch (e.keyCode) {
-      case 87: accelerate(0, false); break;
-      case 65: rotate(0, 0); break;
-      case 68: rotate(0, 0); break;
+      case 87: accelerate(0, 0); break;
+      case 65: accelerate(1, 0); break;
+      case 68: accelerate(2, 0); break;
     }
   }
 });

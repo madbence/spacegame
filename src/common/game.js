@@ -1,24 +1,17 @@
 /* @flow */
 
 type Ship = {
+  position: Vector,
+  velocity: Vector,
+  orientation: Rotation,
+  rotation: Rotation,
+  thrusters: Array<Thruster>
+}
 
-  // current position
-  pos: Vector,
-
-  // current velocity
-  vel: Vector,
-
-  // current rotation
-  rot: Rotation,
-
-  // current rotational velocity
-  avel: Rotation,
-
-  // are thrusters on?
-  thrust: bool,
-
-  // rotational thrusters direction
-  rotThrust: number
+type Thruster = {
+  strength: number,
+  position: Vector,
+  orientation: Rotation,
 }
 
 type Vector = { x: number, y: number }
@@ -27,41 +20,58 @@ type Rotation = number
 
 type Action =
   { type: 'TICK' } |
-  { type: 'ACCELERATE', index: number, state: bool } |
-  { type: 'ROTATE', index: number, dir: number }
+  { type: 'SET_THRUSTER_STRENGTH', payload: {
+    shipIndex: number, thrusterIndex: number, strength: number } }
+
+function vadd(a: Vector, b: Vector): Vector {
+  return {
+    x: a.x + b.x,
+    y: a.y + b.y,
+  };
+}
+
+function vsub(a: Vector, b: Vector): Vector {
+  return {
+    x: a.x - b.x,
+    y: a.y - b.y,
+  };
+}
+
+function mkForce(orientation: Rotation, strength: number) {
+  return {
+    x: -Math.sin(orientation) * strength,
+    y: Math.cos(orientation) * strength,
+  };
+}
+
+function vcross(a: Vector, b: Vector): number {
+  return a.x * b.y - a.y * b.x;
+}
+
+function rot(a: Vector, f: number): Vector {
+  return {
+    x: -Math.sin(f) * a.y,
+    y: Math.cos(f) * a.y,
+  };
+}
 
 function advanceShip(ship: Ship): Ship {
-
-  // calculate new roational velocity
-  let avel = ship.avel + ship.rotThrust;
-
-  // calculate new velocity
-  let vel = ship.vel;
-  if (ship.thrust) {
-
-    // with active thrusters, velocity should increase in the direction of
-    // the current rotation
-    vel = {
-      x: ship.vel.x + -Math.sin(ship.rot) * 0.01,
-      y: ship.vel.y +  Math.cos(ship.rot) * 0.01,
-    };
-  }
-
-  // calculate new rotation
-  let rot = ship.rot + avel;
-
-  // calculate new position
-  let pos = {
-    x: ship.pos.x + vel.x,
-    y: ship.pos.y + vel.y,
-  };
-
+  const force = ship.thrusters.reduce((force, thruster) => {
+    return vadd(force, mkForce(thruster.orientation, thruster.strength));
+  }, { x: 0, y: 0 });
+  const torqe = ship.thrusters.reduce((momentum, thruster) => {
+    return momentum + vcross(thruster.position, mkForce(thruster.orientation, thruster.strength));
+  }, 0);
+  const rotation = ship.rotation + torqe;
+  const orientation = ship.orientation + rotation;
+  const velocity = vadd(ship.velocity, rot(force, orientation));
+  const position = vadd(ship.position, velocity);
   return {
     ...ship,
-    pos,
-    vel,
-    rot,
-    avel,
+    velocity,
+    position,
+    rotation,
+    orientation,
   };
 }
 
@@ -75,14 +85,31 @@ function updateShip(ships: Array<Ship>, index: number, modification: any): Array
   );
 };
 
+function updateThruster(thrusters: Array<Thruster>, index: number, modification: any): Array<Thruster> {
+  return thrusters.slice(0, index).concat(
+    [{ ...thrusters[index], ...modification }],
+    thrusters.slice(index + 1)
+  );
+};
+
 export default function reduce(ships: Array<Ship> = [], action: Action): Array<Ship> {
   switch (action.type) {
     case 'TICK':
     return ships.map(advanceShip);
-    case 'ACCELERATE':
-    return updateShip(ships, action.payload.index, { thrust: action.payload.state });
-    case 'ROTATE':
-    return updateShip(ships, action.payload.index, { rotThrust: action.payload.dir });
+    case 'SET_THRUSTER_STRENGTH':
+    return updateShip(
+      ships,
+      action.payload.shipIndex, {
+        thrusters: updateThruster(
+          ships[action.payload.shipIndex].thrusters,
+          action.payload.thrusterIndex, {
+            strength: action.payload.strength,
+          }
+        )
+      }
+    );
+    case 'SYNC_STATE':
+    return action.payload.ships;
   }
   return ships;
 }

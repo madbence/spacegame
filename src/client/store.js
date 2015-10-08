@@ -56,12 +56,23 @@ const store = applyMiddleware(...middlewares)(createStore)(combineReducers({
 }), {
   messages: [],
   ships: [{
-    pos: { x: 0, y: 0 },
-    vel: { x: 0, y: 0 },
-    rot: 0,
-    avel: 0,
-    thrust: false,
-    rotThrust: 0,
+    position: { x: 0, y: 0 },
+    velocity: { x: 0, y: 0 },
+    orientation: Math.PI / 2,
+    rotation: 0,
+    thrusters: [{
+      position: { x: 0, y: -10 },
+      orientation: 0,
+      strength: 0,
+    }, {
+      position: { x: 5, y: 8 },
+      orientation: Math.PI / 2,
+      strength: 0
+    }, {
+      position: { x: -5, y: 8 },
+      orientation: -Math.PI / 2,
+      strength: 0
+    }],
   }],
 });
 

@@ -5,35 +5,30 @@ export default function render(store) {
   ctx.save();
   ctx.clearRect(0, 0, 500, 500);
   ctx.translate(250.5, 250.5);
+  ctx.scale(1, -1);
 
   // for each ship
   for (const ship of state.ships) {
     // draw hull
-    ctx.translate(ship.pos.x, ship.pos.y);
-    ctx.rotate(ship.rot);
+    ctx.translate(ship.position.x, ship.position.y);
+    ctx.rotate(ship.orientation);
     ctx.fillRect(-5, -10, 10, 20);
-
-    // draw main thruster if necessary
-    if (ship.thrust) {
+    ctx.beginPath();
+    ctx.moveTo(-5, -10);
+    ctx.lineTo(-5, 10);
+    ctx.lineTo(0, 15);
+    ctx.lineTo(5, 10);
+    ctx.lineTo(5, -10);
+    ctx.fill();
+    for (const thruster of ship.thrusters) {
+      if (thruster.strength === 0) {
+        continue;
+      }
       ctx.save();
       ctx.fillStyle = 'red';
-      ctx.fillRect(-2.5, -20, 5, 10);
-      ctx.restore();
-    }
-
-    // draw rotational thrusters if necessary
-    if (ship.rotThrust < 0) {
-      ctx.save();
-      ctx.fillStyle = 'red';
-      ctx.fillRect(2.5, -7.5, 5, 5);
-      ctx.fillRect(-7.5, 2.5, 5, 5);
-      ctx.restore();
-    }
-    if (ship.rotThrust > 0) {
-      ctx.save();
-      ctx.fillStyle = 'red';
-      ctx.fillRect(-7.5, -7.5, 5, 5);
-      ctx.fillRect(2.5, 2.5, 5, 5);
+      ctx.translate(thruster.position.x, thruster.position.y);
+      ctx.rotate(thruster.orientation);
+      ctx.fillRect(-2, 0, 4, Math.log(10000 * thruster.strength) * -2);
       ctx.restore();
     }
   }
