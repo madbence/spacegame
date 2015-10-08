@@ -84,6 +84,11 @@ export default client => {
   // actually add new client to clients
   clients.add(client);
 
+  // sync state on connect
+  broadcast('SYNC_STATE', state, {
+    done: true,
+  });
+
   client
     // client sent a message to the server
     .on('message', message => {
