@@ -1,3 +1,28 @@
+import game from '../common/game';
+
+let state = {
+  messages: [],
+  ships: [{
+    position: { x: 0, y: 0 },
+    velocity: { x: 0, y: 0 },
+    orientation: Math.PI / 2,
+    rotation: 0,
+    thrusters: [{
+      position: { x: 0, y: -10 },
+      orientation: 0,
+      strength: 0,
+    }, {
+      position: { x: 5, y: 8 },
+      orientation: Math.PI / 2,
+      strength: 0
+    }, {
+      position: { x: -5, y: 8 },
+      orientation: -Math.PI / 2,
+      strength: 0
+    }],
+  }],
+};
+
 // generate user id from uid
 let uid = 0;
 const clients = new Set();
@@ -30,9 +55,20 @@ function broadcast(type, payload, meta) {
   });
 }
 
-setInterval(broadcast, 1000 / 60, 'TICK', undefined, {
-  done: true,
-});
+setInterval(() => {
+  state.ships = game(state.ships, {
+    type: 'TICK',
+  });
+  broadcast('TICK', undefined, {
+    done: true,
+  });
+}, 1000 / 60);
+
+setInterval(() => {
+  broadcast('SYNC_STATE', state, {
+    done: true,
+  });
+}, 10000);
 
 export default client => {
   // assign uniq id to client
@@ -70,21 +106,12 @@ export default client => {
           });
         }, 1000); break;
 
-        case 'ACCELERATE':
-        broadcast('ACCELERATE', {
-          index: action.payload.index,
-          state: action.payload.state,
-        }, {
+        default:
+        // console.log(JSON.stringify(action));
+        state.ships = game(state.ships, action);
+        broadcast(action.type, action.payload, {
           done: true,
         }); break;
-
-        case 'ROTATE':
-        broadcast('ROTATE', {
-          index: action.payload.index,
-          dir: action.payload.dir,
-        }, {
-          done: true,
-        });
       }
     })
 
