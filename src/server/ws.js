@@ -1,6 +1,8 @@
 import game from '../common/game';
 
-let state = {
+let state, initial;
+
+state = initial = {
   messages: [],
   ships: [{
     position: { x: 0, y: 0 },
@@ -108,7 +110,10 @@ export default client => {
 
         default:
         // console.log(JSON.stringify(action));
-        state.ships = game(state.ships, action);
+        state = {
+          ships: game(state.ships, action),
+          messages: state.messages,
+        };
         broadcast(action.type, action.payload, {
           done: true,
         }); break;
@@ -120,6 +125,11 @@ export default client => {
 
       // remove from active clients
       clients.delete(client);
+
+      // reset state when server is empty
+      if (clients.size == 0) {
+        state = initial;
+      }
 
       // broadcast to everyone that client left
       broadcast('DEL_USER', {
