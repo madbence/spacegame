@@ -10,6 +10,7 @@ export default function render(store) {
   // for each ship
   for (const ship of state.game.ships) {
     // draw hull
+    ctx.save();
     ctx.translate(ship.position.x, ship.position.y);
     ctx.rotate(ship.orientation);
     ctx.fillRect(-5, -10, 10, 20);
@@ -31,6 +32,7 @@ export default function render(store) {
       ctx.fillRect(-2, 0, 4, Math.log(10000 * thruster.strength) * -2);
       ctx.restore();
     }
+    ctx.restore();
   }
   ctx.restore();
 }
