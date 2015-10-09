@@ -12,7 +12,7 @@
     "build:js": "browserify -o assets/bundle.js -t [ babelify --optional runtime ] src/client/main.js",
     "build:css": "stylus -o assets/style.css styles/index.styl",
     "watch": "npm run watch:js & npm run watch:css & npm run watch:app & wait",
-    "watch:app": "nodemon -w src/server --exec babel-node src/server/app",
+    "watch:app": "nodemon -w src --exec babel-node src/server/app",
     "watch:js": "watchify -o assets/bundle.js -t [ babelify --optional runtime ] src/client/main.js",
     "watch:css": "stylus -w -o assets/style.css styles/index.styl"
   },
