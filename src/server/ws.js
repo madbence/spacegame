@@ -4,25 +4,28 @@ let state, initial;
 
 state = initial = {
   messages: [],
-  ships: [{
-    position: { x: 0, y: 0 },
-    velocity: { x: 0, y: 0 },
-    orientation: Math.PI / 2,
-    rotation: 0,
-    thrusters: [{
-      position: { x: 0, y: -10 },
-      orientation: 0,
-      strength: 0,
-    }, {
-      position: { x: 5, y: 8 },
+  game: {
+    ships: [{
+      position: { x: 0, y: 0 },
+      velocity: { x: 0, y: 0 },
       orientation: Math.PI / 2,
-      strength: 0
-    }, {
-      position: { x: -5, y: 8 },
-      orientation: -Math.PI / 2,
-      strength: 0
+      rotation: 0,
+      thrusters: [{
+        position: { x: 0, y: -10 },
+        orientation: 0,
+        strength: 0,
+      }, {
+        position: { x: 5, y: 8 },
+        orientation: Math.PI / 2,
+        strength: 0
+      }, {
+        position: { x: -5, y: 8 },
+        orientation: -Math.PI / 2,
+        strength: 0
+      }],
     }],
-  }],
+    projectiles: [],
+  },
 };
 
 // generate user id from uid
@@ -58,7 +61,7 @@ function broadcast(type, payload, meta) {
 }
 
 setInterval(() => {
-  state.ships = game(state.ships, {
+  state.game = game(state.game, {
     type: 'TICK',
   });
   broadcast('TICK', undefined, {
@@ -67,7 +70,7 @@ setInterval(() => {
 }, 1000 / 60);
 
 setInterval(() => {
-  broadcast('SYNC_STATE', state, {
+  broadcast('SYNC_STATE', state.game, {
     done: true,
   });
 }, 10000);
@@ -85,7 +88,7 @@ export default client => {
   clients.add(client);
 
   // sync state on connect
-  broadcast('SYNC_STATE', state, {
+  broadcast('SYNC_STATE', state.game, {
     done: true,
   });
 
@@ -114,9 +117,8 @@ export default client => {
         }, 1000); break;
 
         default:
-        // console.log(JSON.stringify(action));
         state = {
-          ships: game(state.ships, action),
+          game: game(state.game, action),
           messages: state.messages,
         };
         broadcast(action.type, action.payload, {

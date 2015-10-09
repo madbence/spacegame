@@ -1,5 +1,10 @@
 /* @flow */
 
+type State = {
+  ships: Array<Ship>,
+  projectiles: Array<Projectile>,
+}
+
 type Ship = {
   position: Vector,
   velocity: Vector,
@@ -11,6 +16,12 @@ type Ship = {
 type Thruster = {
   strength: number,
   position: Vector,
+  orientation: Rotation,
+}
+
+type Projectile = {
+  position: Vector,
+  velocity: Vector,
   orientation: Rotation,
 }
 
@@ -75,6 +86,14 @@ function advanceShip(ship: Ship): Ship {
   };
 }
 
+function advanceProjectile(projectile: Projectile): Projectile {
+  const position = vadd(projectile.position, projectile.velocity);
+  return {
+    ...projectile,
+    position,
+  };
+}
+
 /**
  * Update ship with the specific index with the given modifications
  */
@@ -92,24 +111,34 @@ function updateThruster(thrusters: Array<Thruster>, index: number, modification:
   );
 };
 
-export default function reduce(ships: Array<Ship> = [], action: Action): Array<Ship> {
+export default function reduce(state: State, action: Action): State {
+  state = state || {
+    ships: [],
+    projectiles: [],
+  };
   switch (action.type) {
     case 'TICK':
-    return ships.map(advanceShip);
+    return {
+      ships: state.ships.map(advanceShip),
+      projectiles: state.projectiles.map(advanceProjectile),
+    };
     case 'SET_THRUSTER_STRENGTH':
-    return updateShip(
-      ships,
-      action.payload.shipIndex, {
-        thrusters: updateThruster(
-          ships[action.payload.shipIndex].thrusters,
-          action.payload.thrusterIndex, {
-            strength: action.payload.strength,
-          }
-        )
-      }
-    );
+    return {
+      projectiles: state.projectiles,
+      ships: updateShip(
+        state.ships,
+        action.payload.shipIndex, {
+          thrusters: updateThruster(
+            state.ships[action.payload.shipIndex].thrusters,
+            action.payload.thrusterIndex, {
+              strength: action.payload.strength,
+            }
+          )
+        }
+      ),
+    };
     case 'SYNC_STATE':
-    return action.payload.ships;
+    return action.payload;
   }
-  return ships;
+  return state;
 }
