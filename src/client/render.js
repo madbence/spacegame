@@ -8,7 +8,7 @@ export default function render(store) {
   ctx.scale(1, -1);
 
   // for each ship
-  for (const ship of state.ships) {
+  for (const ship of state.game.ships) {
     // draw hull
     ctx.translate(ship.position.x, ship.position.y);
     ctx.rotate(ship.orientation);

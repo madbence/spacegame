@@ -3,7 +3,7 @@ import { applyMiddleware, createStore, combineReducers } from 'redux';
 import uuid from 'uuid';
 
 import messages from './reducers';
-import ships from '../common/game';
+import game from '../common/game';
 
 const client = new WS('ws://localhost:3000');
 
@@ -51,28 +51,31 @@ const middlewares = [
 
 const store = applyMiddleware(...middlewares)(createStore)(combineReducers({
   messages,
-  ships,
+  game,
 }), {
   messages: [],
-  ships: [{
-    position: { x: 0, y: 0 },
-    velocity: { x: 0, y: 0 },
-    orientation: Math.PI / 2,
-    rotation: 0,
-    thrusters: [{
-      position: { x: 0, y: -10 },
-      orientation: 0,
-      strength: 0,
-    }, {
-      position: { x: 5, y: 8 },
+  game: {
+    ships: [{
+      position: { x: 0, y: 0 },
+      velocity: { x: 0, y: 0 },
       orientation: Math.PI / 2,
-      strength: 0
-    }, {
-      position: { x: -5, y: 8 },
-      orientation: -Math.PI / 2,
-      strength: 0
+      rotation: 0,
+      thrusters: [{
+        position: { x: 0, y: -10 },
+        orientation: 0,
+        strength: 0,
+      }, {
+        position: { x: 5, y: 8 },
+        orientation: Math.PI / 2,
+        strength: 0
+      }, {
+        position: { x: -5, y: 8 },
+        orientation: -Math.PI / 2,
+        strength: 0
+      }],
     }],
-  }],
+    projectiles: [],
+  },
 });
 
 export default store;
