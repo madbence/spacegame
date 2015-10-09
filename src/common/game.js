@@ -54,34 +54,60 @@ function updateThruster(thrusters: Array<Thruster>, index: number, modification:
   );
 };
 
-export default function reduce(state: State, action: Action): State {
-  state = state || {
-    ships: [],
-    projectiles: [],
-  };
+function handleShips(ships: Array<Ship> = [], action: Action): Array<Ship> {
   switch (action.type) {
     case 'TICK':
-    return {
-      ships: state.ships.map(advanceShip),
-      projectiles: state.projectiles.map(advanceProjectile),
-    };
+      return ships.map(advanceShip);
     case 'SET_THRUSTER_STRENGTH':
-    return {
-      projectiles: state.projectiles,
-      ships: updateShip(
-        state.ships,
+      return updateShip(
+        ships,
         action.payload.shipIndex, {
           thrusters: updateThruster(
-            state.ships[action.payload.shipIndex].thrusters,
+            ships[action.payload.shipIndex].thrusters,
             action.payload.thrusterIndex, {
               strength: action.payload.strength,
             }
           )
         }
-      ),
-    };
+      );
+  }
+  return ships;
+}
+
+function handleProjectiles(projectiles: Array<Projectile> = [], action: Action): Array<Projectile> {
+  switch (action.type) {
+    case 'TICK':
+      return projectiles.map(advanceProjectile);
+  }
+  return projectiles;
+}
+
+function fireWeapon(state: State, action: FireAction): State {
+  return {
+    ships: state.ships,
+    projectiles: state.projectiles.concat([{
+      position: state.ships[action.payload.shipIndex].position,
+      velocity: add(state.ships[action.payload.shipIndex].velocity, unit(state.ships[action.payload.shipIndex].orientation)),
+      orientation: state.ships[action.payload.shipIndex].orientation,
+    }]),
+  };
+}
+
+export default function reduce(state: State, action: Action): State {
+  state = state || {
+    ships: [],
+    projectiles: [],
+  };
+  if (action.type === 'FIRE') {
+    state = fireWeapon(state, action);
+  }
+  state = {
+    ships: handleShips(state.ships, action),
+    projectiles: handleProjectiles(state.projectiles, action),
+  };
+  switch (action.type) {
     case 'SYNC_STATE':
-    return action.payload;
+      return action.payload;
   }
   return state;
 }
