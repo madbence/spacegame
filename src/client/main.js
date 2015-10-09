@@ -35,6 +35,15 @@ function accelerate(index, strength) {
   });
 }
 
+function fire() {
+  store.dispatch({
+    type: 'FIRE',
+    payload: {
+      shipIndex: 0,
+    },
+  });
+}
+
 key((type, e) => {
   switch (type) {
     case 'down':
@@ -42,6 +51,7 @@ key((type, e) => {
       case 87: accelerate(0, 0.02); break;
       case 65: accelerate(1, 0.0005); break;
       case 68: accelerate(2, 0.0005); break;
+      case 32: fire(); break;
     }
     break;
     case 'up':
