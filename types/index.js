@@ -31,8 +31,26 @@ type Projectile = {
 type Position = Vector
 type Rotation = number
 
-type Action =
-  { type: 'TICK' } |
-  { type: 'SET_THRUSTER_STRENGTH', payload: {
-    shipIndex: number, thrusterIndex: number, strength: number } }
+type Action = TickAction |
+              ThrusterAction |
+              FireAction
 
+type TickAction = {
+  type: 'TICK'
+}
+
+type ThrusterAction = {
+  type: 'SET_THRUSTER_STRENGTH',
+  payload: {
+    shipIndex: number,
+    thrusterIndex: number,
+    strength: number
+  }
+}
+
+type FireAction = {
+  type: 'FIRE',
+  payload: {
+    shipIndex: number
+  }
+}
