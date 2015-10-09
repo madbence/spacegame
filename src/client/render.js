@@ -34,5 +34,14 @@ export default function render(store) {
     }
     ctx.restore();
   }
+
+  for (const projectile of state.game.projectiles) {
+    ctx.save();
+    ctx.translate(projectile.position.x, projectile.position.y);
+    ctx.rotate(projectile.orientation);
+    ctx.fillStyle = 'green';
+    ctx.fillRect(-2.5, -10, 5, 20);
+    ctx.restore();
+  }
   ctx.restore();
 }
