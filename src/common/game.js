@@ -1,82 +1,25 @@
 /* @flow */
 
-type State = {
-  ships: Array<Ship>,
-  projectiles: Array<Projectile>,
-}
-
-type Ship = {
-  position: Vector,
-  velocity: Vector,
-  orientation: Rotation,
-  rotation: Rotation,
-  thrusters: Array<Thruster>
-}
-
-type Thruster = {
-  strength: number,
-  position: Vector,
-  orientation: Rotation,
-}
-
-type Projectile = {
-  position: Vector,
-  velocity: Vector,
-  orientation: Rotation,
-}
-
-type Vector = { x: number, y: number }
-type Position = Vector
-type Rotation = number
-
-type Action =
-  { type: 'TICK' } |
-  { type: 'SET_THRUSTER_STRENGTH', payload: {
-    shipIndex: number, thrusterIndex: number, strength: number } }
-
-function vadd(a: Vector, b: Vector): Vector {
-  return {
-    x: a.x + b.x,
-    y: a.y + b.y,
-  };
-}
-
-function vsub(a: Vector, b: Vector): Vector {
-  return {
-    x: a.x - b.x,
-    y: a.y - b.y,
-  };
-}
-
-function mkForce(orientation: Rotation, strength: number) {
-  return {
-    x: -Math.sin(orientation) * strength,
-    y: Math.cos(orientation) * strength,
-  };
-}
-
-function vcross(a: Vector, b: Vector): number {
-  return a.x * b.y - a.y * b.x;
-}
-
-function rot(a: Vector, f: number): Vector {
-  return {
-    x: -Math.sin(f) * a.y,
-    y: Math.cos(f) * a.y,
-  };
-}
+import {
+  add,
+  sub,
+  rotate,
+  multiply,
+  unit,
+  cross,
+} from './util/vector';
 
 function advanceShip(ship: Ship): Ship {
   const force = ship.thrusters.reduce((force, thruster) => {
-    return vadd(force, mkForce(thruster.orientation, thruster.strength));
+    return add(force, multiply(unit(thruster.orientation), thruster.strength));
   }, { x: 0, y: 0 });
   const torqe = ship.thrusters.reduce((momentum, thruster) => {
-    return momentum + vcross(thruster.position, mkForce(thruster.orientation, thruster.strength));
+    return momentum + cross(thruster.position, multiply(unit(thruster.orientation), thruster.strength));
   }, 0);
   const rotation = ship.rotation + torqe;
   const orientation = ship.orientation + rotation;
-  const velocity = vadd(ship.velocity, rot(force, orientation));
-  const position = vadd(ship.position, velocity);
+  const velocity = add(ship.velocity, rotate(force, orientation));
+  const position = add(ship.position, velocity);
   return {
     ...ship,
     velocity,
@@ -87,7 +30,7 @@ function advanceShip(ship: Ship): Ship {
 }
 
 function advanceProjectile(projectile: Projectile): Projectile {
-  const position = vadd(projectile.position, projectile.velocity);
+  const position = add(projectile.position, projectile.velocity);
   return {
     ...projectile,
     position,
