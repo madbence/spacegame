@@ -82,11 +82,25 @@ function handleProjectiles(projectiles: Array<Projectile> = [], action: Action):
   return projectiles;
 }
 
+function fireWeapon(state: State, action: FireAction): State {
+  return {
+    ships: state.ships,
+    projectiles: state.projectiles.concat([{
+      position: state.ships[action.payload.shipIndex].position,
+      velocity: add(state.ships[action.payload.shipIndex].velocity, unit(state.ships[action.payload.shipIndex].orientation)),
+      orientation: state.ships[action.payload.shipIndex].orientation,
+    }]),
+  };
+}
+
 export default function reduce(state: State, action: Action): State {
   state = state || {
     ships: [],
     projectiles: [],
   };
+  if (action.type === 'FIRE') {
+    state = fireWeapon(state, action);
+  }
   state = {
     ships: handleShips(state.ships, action),
     projectiles: handleProjectiles(state.projectiles, action),
