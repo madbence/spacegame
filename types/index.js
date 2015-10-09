@@ -1,4 +1,4 @@
-declare type Vector = {
+type Vector = {
   x: number,
   y: number,
 }
