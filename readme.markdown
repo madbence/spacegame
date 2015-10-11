@@ -55,10 +55,7 @@ $ npm run check
 - [`stylus`](https://learnboost.github.io/stylus/) as CSS preprocessor
 - [`eslint`](http://eslint.org) for linting the codebase
 - [`ava`](https://npmjs.com/ava) used as test runner
-
-*TODO from here...*
-
-- [`istanbul`](https://gotwarlost.github.io/istanbul/) to provide test coverage (with the help of [`isparta`](https://github.com/douglasduteil/isparta))
+- [`istanbul`](https://gotwarlost.github.io/istanbul/) for reporing test coverage (with the help of [`isparta`](https://github.com/douglasduteil/isparta)) (*work in progress*)
 
 ## license
 
