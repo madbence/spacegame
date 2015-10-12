@@ -1,32 +1,5 @@
 import game from '../common/game';
-
-let state, initial;
-
-state = initial = {
-  messages: [],
-  game: {
-    ships: [{
-      position: { x: 0, y: 0 },
-      velocity: { x: 0, y: 0 },
-      orientation: Math.PI / 2,
-      rotation: 0,
-      thrusters: [{
-        position: { x: 0, y: -10 },
-        orientation: 0,
-        strength: 0,
-      }, {
-        position: { x: 5, y: 8 },
-        orientation: Math.PI / 2,
-        strength: 0
-      }, {
-        position: { x: -5, y: 8 },
-        orientation: -Math.PI / 2,
-        strength: 0
-      }],
-    }],
-    projectiles: [],
-  },
-};
+import { create as createGame } from './services/game';
 
 // generate user id from uid
 let uid = 0;
@@ -60,24 +33,29 @@ function broadcast(type, payload, meta) {
   });
 }
 
-setInterval(() => {
-  state.game = game(state.game, {
-    type: 'TICK',
-  });
-  broadcast('TICK', undefined, {
-    done: true,
-  });
-}, 1000 / 60);
-
-setInterval(() => {
-  broadcast('SYNC_STATE', state.game, {
-    done: true,
-  });
-}, 10000);
-
 export default client => {
   // assign uniq id to client
   client.id = uid++;
+
+  const game = createGame();
+
+  const unsubscribe = game.subscribe((action, game) => {
+    const message = JSON.stringify({
+      type: action.type,
+      payload: action.payload,
+      meta: {
+        done: true,
+      },
+    });
+
+    client.send(message, null, err => {
+      if (err) {
+        console.log(err.stack);
+      }
+    });
+  });
+
+  game.start();
 
   // broadcast that a new user connected
   broadcast('ADD_USER', {
@@ -86,11 +64,6 @@ export default client => {
 
   // actually add new client to clients
   clients.add(client);
-
-  // sync state on connect
-  broadcast('SYNC_STATE', state.game, {
-    done: true,
-  });
 
   client
     // client sent a message to the server
@@ -117,13 +90,7 @@ export default client => {
         }, 1000); break;
 
         default:
-        state = {
-          game: game(state.game, action),
-          messages: state.messages,
-        };
-        broadcast(action.type, action.payload, {
-          done: true,
-        }); break;
+        game.step(action);
       }
     })
 
@@ -132,11 +99,7 @@ export default client => {
 
       // remove from active clients
       clients.delete(client);
-
-      // reset state when server is empty
-      if (clients.size == 0) {
-        state = initial;
-      }
+      unsubscribe();
 
       // broadcast to everyone that client left
       broadcast('DEL_USER', {
