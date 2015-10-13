@@ -93,21 +93,36 @@ function fireWeapon(state: State, action: FireAction): State {
   };
 }
 
-export default function reduce(state: State, action: Action): State {
-  state = state || {
-    ships: [],
-    projectiles: [],
-  };
+function handleWeapons(state, action) {
   if (action.type === 'FIRE') {
-    state = fireWeapon(state, action);
-  }
-  state = {
-    ships: handleShips(state.ships, action),
-    projectiles: handleProjectiles(state.projectiles, action),
-  };
-  switch (action.type) {
-    case 'SYNC_STATE':
-      return action.payload;
+    return fireWeapon(state, action);
   }
   return state;
 }
+
+function combine(...reducers) {
+  return function (state: State, action: Action): State {
+    return reducers.reduce((state, reducer) => reducer(state, action), state);
+  };
+}
+
+function combineProps(reducers) {
+  return function (state, action) {
+    return Object.keys(reducers).reduce((state, prop) => ({...state, [prop]: reducers[prop](state[prop], action)}), state);
+  };
+}
+
+export default combine(
+
+  // default empty state
+  function (state) { return state || { ships: [], projectiles: [] }; },
+
+  // handle weapon firing
+  handleWeapons,
+
+  // advance
+  combineProps({
+    ships: handleShips,
+    projectiles: handleProjectiles,
+  })
+);
