@@ -9,6 +9,12 @@ import {
   cross,
 } from './util/vector';
 
+import {
+  createReducer,
+  combine,
+  combineProps,
+} from './util/helpers';
+
 function advanceShip(ship: Ship): Ship {
   const force = ship.thrusters.reduce((force, thruster) => {
     return add(force, multiply(unit(thruster.orientation), thruster.strength));
@@ -76,15 +82,6 @@ function advanceProjectiles(projectiles: Array<Projectile> = [], action: Action)
   return projectiles.map(advanceProjectile);
 }
 
-const handleShips = createReducer([], {
-  'TICK': advanceShips,
-  'SET_THRUSTER_STRENGTH': setThrust,
-});
-
-const handleProjectiles = createReducer([], {
-  'TICK': advanceProjectiles,
-});
-
 function fireWeapon(state: State, action: FireAction): State {
   return {
     ships: state.ships,
@@ -96,33 +93,19 @@ function fireWeapon(state: State, action: FireAction): State {
   };
 }
 
-function handleWeapons(state, action) {
-  if (action.type === 'FIRE') {
-    return fireWeapon(state, action);
-  }
-  return state;
-}
 
-function combine(...reducers) {
-  return function (state: State, action: Action): State {
-    return reducers.reduce((state, reducer) => reducer(state, action), state);
-  };
-}
+const handleShips = createReducer([], {
+  'TICK': advanceShips,
+  'SET_THRUSTER_STRENGTH': setThrust,
+});
 
-function combineProps(reducers) {
-  return function (state, action) {
-    return Object.keys(reducers).reduce((state, prop) => ({...state, [prop]: reducers[prop](state[prop], action)}), state);
-  };
-}
+const handleProjectiles = createReducer([], {
+  'TICK': advanceProjectiles,
+});
 
-function createReducer(initial, reducers) {
-  return function (state = initial, action) {
-    if (reducers[action.type]) {
-      return reducers[action.type](state, action);
-    }
-    return state;
-  }
-}
+const handleWeapons = createReducer(undefined, {
+  'FIRE': fireWeapon,
+});
 
 export default combine(
 
