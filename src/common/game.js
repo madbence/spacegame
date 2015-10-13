@@ -54,33 +54,36 @@ function updateThruster(thrusters: Array<Thruster>, index: number, modification:
   );
 };
 
-function handleShips(ships: Array<Ship> = [], action: Action): Array<Ship> {
-  switch (action.type) {
-    case 'TICK':
-      return ships.map(advanceShip);
-    case 'SET_THRUSTER_STRENGTH':
-      return updateShip(
-        ships,
-        action.payload.shipIndex, {
-          thrusters: updateThruster(
-            ships[action.payload.shipIndex].thrusters,
-            action.payload.thrusterIndex, {
-              strength: action.payload.strength,
-            }
-          )
+function setThrust(ships: Array<Ship> = [], action: Action): Array<Ship> {
+  return updateShip(
+    ships,
+    action.payload.shipIndex, {
+      thrusters: updateThruster(
+        ships[action.payload.shipIndex].thrusters,
+        action.payload.thrusterIndex, {
+          strength: action.payload.strength,
         }
-      );
-  }
-  return ships;
+      )
+    }
+  );
 }
 
-function handleProjectiles(projectiles: Array<Projectile> = [], action: Action): Array<Projectile> {
-  switch (action.type) {
-    case 'TICK':
-      return projectiles.map(advanceProjectile);
-  }
-  return projectiles;
+function advanceShips(ships: Array<Ship> = [], action: Action): Array<Ship> {
+  return ships.map(advanceShip);
 }
+
+function advanceProjectiles(projectiles: Array<Projectile> = [], action: Action): Array<Projectile> {
+  return projectiles.map(advanceProjectile);
+}
+
+const handleShips = createReducer([], {
+  'TICK': advanceShips,
+  'SET_THRUSTER_STRENGTH': setThrust,
+});
+
+const handleProjectiles = createReducer([], {
+  'TICK': advanceProjectiles,
+});
 
 function fireWeapon(state: State, action: FireAction): State {
   return {
@@ -110,6 +113,15 @@ function combineProps(reducers) {
   return function (state, action) {
     return Object.keys(reducers).reduce((state, prop) => ({...state, [prop]: reducers[prop](state[prop], action)}), state);
   };
+}
+
+function createReducer(initial, reducers) {
+  return function (state = initial, action) {
+    if (reducers[action.type]) {
+      return reducers[action.type](state, action);
+    }
+    return state;
+  }
 }
 
 export default combine(
