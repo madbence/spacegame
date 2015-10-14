@@ -9,28 +9,15 @@ import {
   combineProps,
 } from './util/helpers';
 
-/**
- * Update ship with the specific index with the given modifications
- */
-function updateShip(ships: Array<Ship>, index: number, modification: any): Array<Ship> {
-  return ships.slice(0, index - 1).concat(
-    [{ ...ships[index], ...modification }],
-    ships.slice(index + 1)
-  );
-};
-
-function updateThruster(thrusters: Array<Thruster>, index: number, modification: any): Array<Thruster> {
-  return thrusters.slice(0, index).concat(
-    [{ ...thrusters[index], ...modification }],
-    thrusters.slice(index + 1)
-  );
-};
+function updateAt(xs: Array<T>, index: number, modification: any): Array<T> {
+  return [...xs.slice(0, index), { ...xs[index], ...modification }, ...xs.slice(index + 1)];
+}
 
 function setThrust(ships: Array<Ship> = [], action: Action): Array<Ship> {
-  return updateShip(
+  return updateAt(
     ships,
     action.payload.shipIndex, {
-      thrusters: updateThruster(
+      thrusters: updateAt(
         ships[action.payload.shipIndex].thrusters,
         action.payload.thrusterIndex, {
           strength: action.payload.strength,
