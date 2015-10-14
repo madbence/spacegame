@@ -1,47 +1,13 @@
-/* @flow */
-
 import {
-  add,
-  sub,
-  rotate,
-  multiply,
-  unit,
-  cross,
-} from './util/vector';
+  advanceShip,
+  advanceProjectile,
+} from './physics';
 
 import {
   createReducer,
   combine,
   combineProps,
 } from './util/helpers';
-
-function advanceShip(ship: Ship): Ship {
-  const force = ship.thrusters.reduce((force, thruster) => {
-    return add(force, multiply(unit(thruster.orientation), thruster.strength));
-  }, { x: 0, y: 0 });
-  const torqe = ship.thrusters.reduce((momentum, thruster) => {
-    return momentum + cross(thruster.position, multiply(unit(thruster.orientation), thruster.strength));
-  }, 0);
-  const rotation = ship.rotation + torqe;
-  const orientation = ship.orientation + rotation;
-  const velocity = add(ship.velocity, rotate(force, orientation));
-  const position = add(ship.position, velocity);
-  return {
-    ...ship,
-    velocity,
-    position,
-    rotation,
-    orientation,
-  };
-}
-
-function advanceProjectile(projectile: Projectile): Projectile {
-  const position = add(projectile.position, projectile.velocity);
-  return {
-    ...projectile,
-    position,
-  };
-}
 
 /**
  * Update ship with the specific index with the given modifications
