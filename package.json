@@ -8,7 +8,7 @@
     "start": "babel-node src/server/app",
     "check": "flow",
     "lint": "eslint 'src/**/*.js'",
-    "coverage": "isparta cover --report text --report html ava -- test/**/*.test.js",
+    "coverage": "babel-node node_modules/.bin/isparta cover ava -- test/**/*.test.js",
     "build": "npm run build:js & npm run build:css & wait",
     "build:js": "browserify -o assets/bundle.js -t [ babelify --optional runtime ] src/client/main.js",
     "build:css": "stylus -o assets/style.css styles/index.styl",
