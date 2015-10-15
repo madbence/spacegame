@@ -16,13 +16,10 @@ test('vector#add', t => {
     [[1, 1], [0, 0], [1, 1]],
     [[1, 1], [1, 1], [2, 2]],
   ].forEach(([[x1, y1], [x2, y2], [x3, y3]]) => {
-    t.same(v.add({
-      x: x1, y: y1
-    }, {
-      x: x2, y: y2
-    }), {
-      x: x3, y: y3
-    });
+    const a = { x: x1, y: y1 };
+    const b = { x: x2, y: y2 };
+    const c = { x: x3, y: y3 };
+    t.same(v.add(a, b), c);
   });
   t.end();
 });
