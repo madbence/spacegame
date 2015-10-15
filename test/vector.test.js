@@ -4,12 +4,17 @@ import * as v from '../src/common/util/vector';
 test('vector#add', t => {
   const a = { x: 1, y: 0 };
   const b = { x: 1, y: 2 };
+
+  // returns result
   t.same(v.add(a, b), { x: 2, y: 2 });
+
+  // does not mutates arguments
   t.is(a.x, 1);
   t.is(a.y, 0);
   t.is(b.x, 1);
   t.is(b.y, 2);
 
+  // test that add really works
   [
     [[0, 0], [0, 0], [0, 0]],
     [[0, 0], [1, 1], [1, 1]],
@@ -21,5 +26,6 @@ test('vector#add', t => {
     const c = { x: x3, y: y3 };
     t.same(v.add(a, b), c);
   });
+
   t.end();
 });
