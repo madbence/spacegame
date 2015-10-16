@@ -29,3 +29,32 @@ test('vector#add', t => {
 
   t.end();
 });
+
+test('vector#sub', t => {
+  const a = { x: 1, y: 0 };
+  const b = { x: 1, y: 2 };
+
+  // returns result
+  t.same(v.sub(a, b), { x: 0, y: -2 });
+
+  // does not mutates arguments
+  t.is(a.x, 1);
+  t.is(a.y, 0);
+  t.is(b.x, 1);
+  t.is(b.y, 2);
+
+  // test that add really works
+  [
+    [[0, 0], [0, 0], [0, 0]],
+    [[0, 0], [1, 1], [-1, -1]],
+    [[1, 1], [0, 0], [1, 1]],
+    [[1, 1], [1, 1], [0, 0]],
+  ].forEach(([[x1, y1], [x2, y2], [x3, y3]]) => {
+    const a = { x: x1, y: y1 };
+    const b = { x: x2, y: y2 };
+    const c = { x: x3, y: y3 };
+    t.same(v.sub(a, b), c);
+  });
+
+  t.end();
+});
