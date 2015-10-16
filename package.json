@@ -15,7 +15,8 @@
     "watch": "npm run watch:js & npm run watch:css & npm run watch:app & wait",
     "watch:app": "nodemon -w src --exec babel-node src/server/app",
     "watch:js": "watchify -v -d -o assets/bundle.js -t [ babelify --optional runtime ] src/client/main.js",
-    "watch:css": "stylus -w -o assets/style.css styles/index.styl"
+    "watch:css": "stylus -w -o assets/style.css styles/index.styl",
+    "watch:test": "nodemon test/**/*.test.js --exec ava"
   },
   "repository": {
     "type": "git",
