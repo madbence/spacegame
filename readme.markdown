@@ -56,6 +56,7 @@ $ npm run check
 - [`eslint`](http://eslint.org) for linting the codebase
 - [`ava`](https://npmjs.com/ava) used as test runner
 - [`istanbul`](https://gotwarlost.github.io/istanbul/) for reporing test coverage (with the help of [`isparta`](https://github.com/douglasduteil/isparta))
+- [`nodemon`](http://nodemon.io/) for app reloading
 
 ## license
 
