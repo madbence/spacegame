@@ -1,6 +1,13 @@
 import test from 'ava';
 import * as v from '../src/common/util/vector';
 
+function roundVector(v) {
+  return {
+    x: Math.round(v.x * 1000) / 1000,
+    y: Math.round(v.y * 1000) / 1000,
+  };
+}
+
 test('vector#add', t => {
   const a = { x: 1, y: 0 };
   const b = { x: 1, y: 2 };
@@ -56,5 +63,21 @@ test('vector#sub', t => {
     t.same(v.sub(a, b), c);
   });
 
+  t.end();
+});
+
+test('vector#unit', t => {
+  [
+    [0, [0, 1]],
+    [Math.PI * 2, [0, 1]],
+    [Math.PI, [0, -1]],
+    [Math.PI * 3, [0, -1]],
+    [Math.PI / 2, [-1, 0]],
+    [Math.PI * 3 / 2, [1, 0]],
+    [Math.PI / -2, [1, 0]],
+    [Math.PI / 4, [-Math.sqrt(2) / 2, Math.sqrt(2) / 2]],
+  ].forEach(([n, [x, y]]) => {
+    t.same(roundVector(v.unit(n)), roundVector({x, y}));
+  });
   t.end();
 });
