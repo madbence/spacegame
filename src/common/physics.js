@@ -4,7 +4,7 @@ import {
   add,
   sub,
   rotate,
-  multiply,
+  scale,
   unit,
   cross,
 } from './util/vector';
@@ -16,12 +16,12 @@ export function advanceShip(ship: Ship): Ship {
 
   // calculate net force
   const force = ship.thrusters.reduce((force, thruster) => {
-    return add(force, multiply(unit(thruster.orientation), thruster.strength));
+    return add(force, scale(unit(thruster.orientation), thruster.strength));
   }, { x: 0, y: 0 });
 
   // calculate net torque
   const torque = ship.thrusters.reduce((torque, thruster) => {
-    return torque + cross(thruster.position, multiply(unit(thruster.orientation), thruster.strength));
+    return torque + cross(thruster.position, scale(unit(thruster.orientation), thruster.strength));
   }, 0);
 
 
