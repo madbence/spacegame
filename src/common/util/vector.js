@@ -27,8 +27,8 @@ export function cross(a: Vector, b: Vector): number {
 
 export function rotate(a: Vector, f: number): Vector {
   return {
-    x: -Math.sin(f) * a.y,
-    y: Math.cos(f) * a.y,
+    x: Math.cos(f) * a.x - Math.sin(f) * a.y,
+    y: Math.sin(f) * a.x + Math.cos(f) * a.y,
   };
 }
 
