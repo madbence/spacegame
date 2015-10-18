@@ -123,3 +123,21 @@ test('vector#rotate', t => {
   });
   t.end();
 });
+
+test('vector#multiply', t => {
+  const a = { x: 1, y: 0 };
+  t.same(v.multiply(a, 10), { x: 10, y: 0 });
+  t.is(a.x, 1);
+  t.is(a.y, 0);
+
+  [
+    [[1, 1], 0, [0, 0]],
+    [[1, 1], 10, [10, 10]],
+    [[-1, 1], -1, [1, -1]],
+  ].forEach(([[x1, y1], f, [x2, y2]]) => {
+    const a = { x: x1, y: y1 };
+    const b = { x: x2, y: y2 };
+    t.same(roundVector(v.multiply(a, f)), roundVector(b));
+  });
+  t.end();
+});
