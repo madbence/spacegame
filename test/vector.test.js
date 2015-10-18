@@ -103,3 +103,23 @@ test('vector#cross', t => {
   });
   t.end();
 });
+
+test('vector#rotate', t => {
+  const a = { x: 1, y: 0 };
+  t.same(roundVector(v.rotate(a, Math.PI)), { x: -1, y: 0 });
+  t.is(a.x, 1);
+  t.is(a.y, 0);
+
+  [
+    [[1, 0], Math.PI, [-1, 0]],
+    [[0, 1], Math.PI, [0, -1]],
+    [[1, 1], Math.PI, [-1, -1]],
+    [[1, 0], Math.PI / 2, [0, 1]],
+    [[0, 1], Math.PI / -2, [1, 0]],
+  ].forEach(([[x1, y1], f, [x2, y2]]) => {
+    const a = { x: x1, y: y1 };
+    const b = { x: x2, y: y2 };
+    t.same(roundVector(v.rotate(a, f)), roundVector(b));
+  });
+  t.end();
+});
