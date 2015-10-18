@@ -81,3 +81,25 @@ test('vector#unit', t => {
   });
   t.end();
 });
+
+test('vector#cross', t => {
+  const a = { x: 1, y: 0 };
+  const b = { x: 0, y: 1 };
+  t.is(v.cross(a, b), 1);
+  t.is(a.x, 1);
+  t.is(a.y, 0);
+  t.is(b.x, 0);
+  t.is(b.y, 1);
+
+  [
+    [[1, 0], [0, 1], 1],
+    [[0, 1], [1, 0], -1],
+    [[1, 0], [1, 0], 0],
+    [[1, 0], [-1, 0], 0],
+  ].forEach(([[x1, y1], [x2, y2], n]) => {
+    const a = { x: x1, y: y1 };
+    const b = { x: x2, y: y2 };
+    t.is(v.cross(a, b), n);
+  });
+  t.end();
+});
