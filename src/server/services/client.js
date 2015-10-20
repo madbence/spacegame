@@ -6,13 +6,19 @@ class Client {
     this.id = uuid.v4();
     this.listeners = [];
 
+    console.log('Client %s created!', this.id);
+
     this.socket.on('message', message => {
       const action = JSON.parse(message);
       for (const listener of this.listeners) {
         listener(action);
       }
     });
+
+    this.socket.on('close', () => clients.delete(this));
+    this.socket.on('close', () => console.log('Client %s destroyed!', this.id));
   }
+
   async send(message) {
     if (!this.ready) {
       throw new Error('Client not ready!');
@@ -27,6 +33,7 @@ class Client {
       });
     });
   }
+
   dispatch(type, payload, meta) {
     const message = JSON.stringify({
       type, payload, meta
@@ -34,15 +41,28 @@ class Client {
 
     return this.send(message);
   }
+
   get ready() {
     return this.socket && this.socket.readyState === 1;
   }
+
   subscribe(handler) {
     const listeners = this.listeners;
     listeners.push(handler);
     return function unsubscribe() {
       listeners.splice(listeners.indexOf(handler), 1);
     };
+  }
+
+  join(game) {
+    const unsubscribe = game.subscribe((action, game) => {
+      this.dispatch(action.type, action.payload).catch(err => {
+        if (err) {
+          console.log(err.stack);
+        }
+      });
+    });
+    this.socket.on('close', unsubscribe);
   }
 }
 
