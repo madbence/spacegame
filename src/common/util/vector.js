@@ -32,7 +32,7 @@ export function rotate(a: Vector, f: number): Vector {
   };
 }
 
-export function multiply(a: Vector, f: number): Vector {
+export function scale(a: Vector, f: number): Vector {
   return {
     x: a.x * f,
     y: a.y * f,

@@ -1,18 +1,7 @@
-import React from 'react';
-import { Provider } from 'react-redux';
-
-import Chat from './components/chat';
 import store from './store';
 import renderPlayground from './render';
 
 import key from './lib/keypress';
-
-React.render(
-  <Provider store={ store }>
-    { () => <Chat /> }
-  </Provider>,
-  document.getElementById('mount')
-);
 
 let time = Date.now();
 const tick = () => {
