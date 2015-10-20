@@ -7,6 +7,7 @@ class Game {
   constructor() {
     this.id = uuid.v4();
     this.listeners = [];
+    this.players = [];
     this.state = {
       ships: [{
         position: { x: 0, y: 0 },
@@ -29,6 +30,7 @@ class Game {
       }],
       projectiles: [],
     };
+    console.log('Game %s created!', this.id);
   }
 
   step(action) {
@@ -69,11 +71,39 @@ class Game {
         return;
       }
       this.listeners.splice(idx, 1);
+      console.log('Client N/A left game %s', this.id);
+      if (this.listeners.length === 0) {
+        this.destroy();
+      }
     };
+  }
+
+  join(client) {
+    this.players.push(client);
+    console.log('Client %s joined to game %s', client.id, this.id);
+    client.subscribe(action => this.step(action));
+    client.join(this);
+  }
+
+  destroy() {
+    this.stop();
+    games.delete(this);
+    console.log('Game %s destroyed!', this.id);
   }
 }
 
-export function create() {
+const games = new Set();
+
+export function join(client) {
+  for (const game of games) {
+    if (game.players.length < 4) {
+      game.join(client);
+      return game;
+    }
+  }
   const game = new Game();
+  game.join(client);
+  games.add(game);
+  game.start();
   return game;
 }
