@@ -1,6 +1,5 @@
 import WS from 'ws';
 import { applyMiddleware, createStore, combineReducers } from 'redux';
-import uuid from 'uuid';
 
 import messages from './reducers';
 import game from '../common/game';
@@ -17,8 +16,6 @@ function send(type, payload, meta) {
   client.send(message);
 }
 
-const pending = new Map();
-
 client.onmessage = event => {
   const action = JSON.parse(event.data);
   store.dispatch(action);
@@ -26,23 +23,7 @@ client.onmessage = event => {
 
 const middlewares = [
   store => next => action => {
-    switch (action.type) {
-      case 'ADD_MESSAGE':
-      if (!action.meta || action.meta.done !== true) {
-        const id = uuid.v4();
-        send('ADD_MESSAGE', {
-          message: action.payload.message,
-        }, {
-          id,
-        });
-        return next({
-          type: 'ADD_MESSAGE',
-          payload: action.payload,
-          meta: { id }
-        });
-      }
-    }
-    if (!action.meta || !action.meta.done) {
+    if (action.meta && action.meta.pending) {
       return send(action.type, action.payload, action.meta);
     }
     return next(action);

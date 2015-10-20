@@ -21,6 +21,9 @@ function accelerate(index, strength) {
       thrusterIndex: index,
       strength: strength,
     },
+    meta: {
+      pending: true,
+    },
   });
 }
 
@@ -29,6 +32,9 @@ function fire() {
     type: 'FIRE',
     payload: {
       shipIndex: 0,
+    },
+    meta: {
+      pending: true,
     },
   });
 }
