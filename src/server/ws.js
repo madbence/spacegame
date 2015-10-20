@@ -7,7 +7,7 @@ export default socket => {
   const game = createGame();
 
   const unsubscribeGame = game.subscribe((action, game) => {
-    client.dispatch(action.type, action.payload, { done: true }).catch(err => {
+    client.dispatch(action.type, action.payload).catch(err => {
       if (err) {
         console.log(err.stack);
       }

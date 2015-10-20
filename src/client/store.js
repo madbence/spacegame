@@ -23,7 +23,7 @@ client.onmessage = event => {
 
 const middlewares = [
   store => next => action => {
-    if (!action.meta || !action.meta.done) {
+    if (action.meta && action.meta.pending) {
       return send(action.type, action.payload, action.meta);
     }
     return next(action);
