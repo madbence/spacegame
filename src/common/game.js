@@ -59,9 +59,7 @@ const handleProjectiles = createReducer([], {
 const handleWeapons = createReducer(undefined, {
   'FIRE': fireWeapon,
 });
-
-export default combine(
-
+const process = combine(
   // default empty state
   function (state) { return state || { ships: [], projectiles: [] }; },
 
@@ -74,3 +72,30 @@ export default combine(
     projectiles: handleProjectiles,
   })
 );
+
+export default (state, action) => {
+  if (state) return process(state, action);
+  if (action.type === 'INIT_GAME') return {
+    ships: [{
+      position: { x: 0, y: 0 },
+      velocity: { x: 0, y: 0 },
+      orientation: Math.PI / 2,
+      rotation: 0,
+      thrusters: [{
+        position: { x: 0, y: -10 },
+        orientation: 0,
+        strength: 0,
+      }, {
+        position: { x: 5, y: 8 },
+        orientation: Math.PI / 2,
+        strength: 0
+      }, {
+        position: { x: -5, y: 8 },
+        orientation: -Math.PI / 2,
+        strength: 0
+      }],
+    }],
+    projectiles: [],
+  };
+  return null;
+};

@@ -1,62 +1,34 @@
-import WS from 'ws';
 import { applyMiddleware, createStore, combineReducers } from 'redux';
 
-import messages from './reducers';
+import messages from './reducers/chat';
+import route from './reducers/navigation';
 import game from '../common/game';
 
-const client = new WS('ws://localhost:3000');
-
-function send(type, payload, meta) {
-  const message = JSON.stringify({
-    type,
-    payload,
-    meta,
-  });
-
-  client.send(message);
-}
-
-client.onmessage = event => {
-  const action = JSON.parse(event.data);
-  store.dispatch(action);
-};
+import websocket from './middlewares/websocket';
 
 const middlewares = [
   store => next => action => {
-    if (action.meta && action.meta.pending) {
-      return send(action.type, action.payload, action.meta);
+    if (action.type === 'NAVIGATE' &&
+        action.payload.route === '/game') {
+      next(action);
+      store.dispatch({
+        type: 'INIT_GAME',
+      });
+      return;
     }
-    return next(action);
-  }
+    next(action);
+  },
+  websocket,
 ];
 
 const store = applyMiddleware(...middlewares)(createStore)(combineReducers({
   messages,
   game,
+  route,
 }), {
+  route: '/login',
   messages: [],
-  game: {
-    ships: [{
-      position: { x: 0, y: 0 },
-      velocity: { x: 0, y: 0 },
-      orientation: Math.PI / 2,
-      rotation: 0,
-      thrusters: [{
-        position: { x: 0, y: -10 },
-        orientation: 0,
-        strength: 0,
-      }, {
-        position: { x: 5, y: 8 },
-        orientation: Math.PI / 2,
-        strength: 0
-      }, {
-        position: { x: -5, y: 8 },
-        orientation: -Math.PI / 2,
-        strength: 0
-      }],
-    }],
-    projectiles: [],
-  },
+  game: null,
 });
 
 export default store;

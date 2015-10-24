@@ -1,7 +1,10 @@
-const ctx = document.getElementById('canvas').getContext('2d');
+let ctx;
 
 export default function render(store) {
   const state = store.getState();
+  if (!ctx) {
+    ctx = document.getElementById('canvas').getContext('2d');
+  }
   ctx.save();
   ctx.clearRect(0, 0, 500, 500);
   ctx.translate(250.5, 250.5);

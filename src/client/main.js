@@ -1,17 +1,19 @@
+import App from './components/app';
+import { connect, Provider } from 'react-redux';
+import { render } from 'react-dom';
+import React from 'react';
+
 import store from './store';
 import renderPlayground from './render';
 
 import key from './lib/keypress';
 
-let time = Date.now();
 const tick = () => {
-  const now = Date.now();
-  while (time + 1000/60 < now) {
-    time += 1000/60
-  }
+  if (!store.getState().game) return requestAnimationFrame(tick);
   renderPlayground(store);
   requestAnimationFrame(tick);
 };
+tick();
 
 function accelerate(index, strength) {
   store.dispatch({
@@ -58,4 +60,9 @@ key((type, e) => {
   }
 });
 
-tick();
+const ReduxApp = connect(x => x)(App);
+
+render(
+  <Provider store={store}>
+    <ReduxApp />
+  </Provider>, document.getElementById('mount'));
