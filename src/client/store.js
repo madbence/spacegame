@@ -1,9 +1,9 @@
 import WS from 'ws';
 import { applyMiddleware, createStore, combineReducers } from 'redux';
 
-import messages from './reducers';
-import game from '../common/game';
+import messages from './reducers/chat';
 import route from './reducers/navigation';
+import game from '../common/game';
 
 const client = new WS('ws://localhost:3000');
 
