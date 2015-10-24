@@ -3,6 +3,7 @@ import { applyMiddleware, createStore, combineReducers } from 'redux';
 
 import messages from './reducers';
 import game from '../common/game';
+import route from './reducers/navigation';
 
 const client = new WS('ws://localhost:3000');
 
@@ -23,6 +24,17 @@ client.onmessage = event => {
 
 const middlewares = [
   store => next => action => {
+    if (action.type === 'NAVIGATE' &&
+        action.payload.route === '/game') {
+      next(action);
+      store.dispatch({
+        type: 'INIT_GAME',
+      });
+      return;
+    }
+    next(action);
+  },
+  store => next => action => {
     if (action.meta && action.meta.pending) {
       return send(action.type, action.payload, action.meta);
     }
@@ -33,30 +45,11 @@ const middlewares = [
 const store = applyMiddleware(...middlewares)(createStore)(combineReducers({
   messages,
   game,
+  route,
 }), {
+  route: '/login',
   messages: [],
-  game: {
-    ships: [{
-      position: { x: 0, y: 0 },
-      velocity: { x: 0, y: 0 },
-      orientation: Math.PI / 2,
-      rotation: 0,
-      thrusters: [{
-        position: { x: 0, y: -10 },
-        orientation: 0,
-        strength: 0,
-      }, {
-        position: { x: 5, y: 8 },
-        orientation: Math.PI / 2,
-        strength: 0
-      }, {
-        position: { x: -5, y: 8 },
-        orientation: -Math.PI / 2,
-        strength: 0
-      }],
-    }],
-    projectiles: [],
-  },
+  game: null,
 });
 
 export default store;
