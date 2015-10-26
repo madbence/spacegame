@@ -27,75 +27,41 @@ function setThrust(ships: Array<Ship> = [], action: Action): Array<Ship> {
   );
 }
 
-function advanceShips(ships: Array<Ship> = [], action: Action): Array<Ship> {
-  return ships.map(advanceShip);
-}
-
-function advanceProjectiles(projectiles: Array<Projectile> = [], action: Action): Array<Projectile> {
-  return projectiles.map(advanceProjectile);
-}
-
-function fireWeapon(state: State, action: FireAction): State {
+function step(state) {
   return {
-    ships: state.ships,
-    projectiles: state.projectiles.concat([{
-      position: state.ships[action.payload.shipIndex].position,
-      velocity: add(state.ships[action.payload.shipIndex].velocity, unit(state.ships[action.payload.shipIndex].orientation)),
-      orientation: state.ships[action.payload.shipIndex].orientation,
-    }]),
+    ...state,
+    time: state.time + state.step,
+    ships: state.ships.map(advanceShip),
+    projectiles: state.projectiles.map(advanceProjectile),
   };
 }
 
-
-const handleShips = createReducer([], {
-  'TICK': advanceShips,
-  'SET_THRUSTER_STRENGTH': setThrust,
-});
-
-const handleProjectiles = createReducer([], {
-  'TICK': advanceProjectiles,
-});
-
-const handleWeapons = createReducer(undefined, {
-  'FIRE': fireWeapon,
-});
 const process = combine(
-  // default empty state
-  function (state) { return state || { ships: [], projectiles: [] }; },
+  (state, action) => {
+    let i = 0;
+    while (state.time < action.payload.time) {
+      state = step(state);
+      i++;
+    }
+    // console.log('Simulated %d steps', i);
+    return state;
+  },
 
-  // handle weapon firing
-  handleWeapons,
-
-  // advance
-  combineProps({
-    ships: handleShips,
-    projectiles: handleProjectiles,
-  })
+  (state, action) => {
+    switch (action.type) {
+      case 'SET_THRUSTER_STRENGTH':
+        return {
+          ...state,
+          ships: setThrust(state.ships, action),
+        };
+      default:
+        return state;
+    }
+  }
 );
 
 export default (state, action) => {
   if (state) return process(state, action);
-  if (action.type === 'INIT_GAME') return {
-    ships: [{
-      position: { x: 0, y: 0 },
-      velocity: { x: 0, y: 0 },
-      orientation: Math.PI / 2,
-      rotation: 0,
-      thrusters: [{
-        position: { x: 0, y: -10 },
-        orientation: 0,
-        strength: 0,
-      }, {
-        position: { x: 5, y: 8 },
-        orientation: Math.PI / 2,
-        strength: 0
-      }, {
-        position: { x: -5, y: 8 },
-        orientation: -Math.PI / 2,
-        strength: 0
-      }],
-    }],
-    projectiles: [],
-  };
+  if (action.type === 'INIT_GAME') return action.payload;
   return null;
 };

@@ -62,6 +62,7 @@ class Client {
         }
       });
     });
+    this.dispatch('INIT_GAME', game.state);
     this.socket.on('close', unsubscribe);
   }
 }

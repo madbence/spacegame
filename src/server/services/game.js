@@ -1,14 +1,15 @@
 import apply from '../../common/game';
 import uuid from 'uuid';
 
-const DELTA = 1000 / 60;
-
 class Game {
   constructor() {
     this.id = uuid.v4();
     this.listeners = [];
     this.players = [];
+    this.offset = Date.now();
     this.state = {
+      time: 0,
+      step: 20,
       ships: [{
         position: { x: 0, y: 0 },
         velocity: { x: 0, y: 0 },
@@ -34,7 +35,11 @@ class Game {
   }
 
   step(action) {
+    if (!['SET_THRUSTER_STRENGTH', 'JOIN_PLAYER'].includes(action.type)) {
+      return;
+    }
     try {
+      action.payload.time = Date.now() - this.offset;
       this.state = apply(this.state, action);
     } catch (e) {
       //
@@ -42,25 +47,6 @@ class Game {
     for (const listener of this.listeners) {
       listener(action, this);
     }
-  }
-
-  tick() {
-    this.step({ type: 'TICK' });
-  }
-
-  start() {
-    this._start = this._current = Date.now();
-    this._timer = setInterval(() => {
-      const current = Date.now();
-      while (this._current + DELTA  < current) {
-        this._current += DELTA;
-        this.tick();
-      }
-    }, DELTA);
-  }
-
-  stop() {
-    clearTimeout(this._timer);
   }
 
   subscribe(listener) {
@@ -81,12 +67,15 @@ class Game {
   join(client) {
     this.players.push(client);
     console.log('Client %s joined to game %s', client.id, this.id);
+    this.step({
+      type: 'JOIN_PLAYER',
+      payload: {},
+    });
     client.subscribe(action => this.step(action));
     client.join(this);
   }
 
   destroy() {
-    this.stop();
     games.delete(this);
     console.log('Game %s destroyed!', this.id);
   }
@@ -104,6 +93,5 @@ export function join(client) {
   const game = new Game();
   game.join(client);
   games.add(game);
-  game.start();
   return game;
 }
