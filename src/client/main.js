@@ -4,16 +4,7 @@ import { render } from 'react-dom';
 import React from 'react';
 
 import store from './store';
-import renderPlayground from './render';
-
 import key from './lib/keypress';
-
-const tick = () => {
-  if (!store.getState().game) return requestAnimationFrame(tick);
-  renderPlayground(store);
-  requestAnimationFrame(tick);
-};
-tick();
 
 function accelerate(index, strength) {
   store.dispatch({

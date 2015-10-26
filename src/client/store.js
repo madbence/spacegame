@@ -5,6 +5,7 @@ import route from './reducers/navigation';
 import game from '../common/game';
 
 import websocket from './middlewares/websocket';
+import initRender from './render';
 
 const middlewares = [
   store => next => action => {
@@ -13,12 +14,19 @@ const middlewares = [
       next(action);
       store.dispatch({
         type: 'INIT_GAME',
+        meta: {
+          pending: true,
+        }
       });
       return;
     }
     next(action);
   },
   websocket,
+  store => next => action => {
+    if (action.type === 'INIT_GAME') initRender(Date.now() - action.payload.time, store);
+    return next(action);
+  }
 ];
 
 const store = applyMiddleware(...middlewares)(createStore)(combineReducers({
