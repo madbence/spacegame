@@ -38,12 +38,9 @@ function step(state) {
 
 const process = combine(
   (state, action) => {
-    let i = 0;
     while (state.time < action.payload.time) {
       state = step(state);
-      i++;
     }
-    // console.log('Simulated %d steps', i);
     return state;
   },
 
