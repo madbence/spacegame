@@ -4,11 +4,19 @@ export default function render(offset, store) {
   const ctx = document.getElementById('canvas').getContext('2d');
   console.log('Game started at %s', new Date(offset));
 
+  let lastTime;
+  let localState;
+
   function render() {
     let state = store.getState().game;
     if (!state) return;
 
-    state = simulate(state, {
+    if (state.time !== lastTime || lastTime === undefined) {
+      localState = state;
+      lastTime = state.time;
+    }
+
+    state = localState = simulate(localState, {
       type: 'NOOP',
       payload: {
         time: Date.now() - offset,
