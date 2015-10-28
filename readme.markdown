@@ -5,7 +5,8 @@
 Right now, Windows is not fully supported (Flowtype has no pre-built windows binaries), everything else should work.
 
 ```sh
-$ git clone ...
+$ git clone git@github.com:madbence/spacegame.git
+# or https://github.com/madbence/spacegame.git
 $ npm i
 ```
 
