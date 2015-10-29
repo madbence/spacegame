@@ -6,9 +6,14 @@ import React from 'react';
 import store from './store';
 import key from './lib/keypress';
 
+import {
+  SET_THRUST,
+  FIRE_WEAPON,
+} from '../common/actions';
+
 function accelerate(index, strength) {
   store.dispatch({
-    type: 'SET_THRUSTER_STRENGTH',
+    type: SET_THRUST,
     payload: {
       shipIndex: 0,
       thrusterIndex: index,
@@ -22,7 +27,7 @@ function accelerate(index, strength) {
 
 function fire() {
   store.dispatch({
-    type: 'FIRE',
+    type: FIRE_WEAPON,
     payload: {
       shipIndex: 0,
     },

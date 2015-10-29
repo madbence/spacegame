@@ -1,5 +1,8 @@
 import apply from '../../common/game';
 import uuid from 'uuid';
+import * as actions from '../../common/actions';
+
+const validActions = Object.keys(actions).map(key => actions[key]);
 
 class Game {
   constructor() {
@@ -10,32 +13,15 @@ class Game {
     this.state = {
       time: 0,
       step: 20,
-      ships: [{
-        position: { x: 0, y: 0 },
-        velocity: { x: 0, y: 0 },
-        orientation: Math.PI / 2,
-        rotation: 0,
-        thrusters: [{
-          position: { x: 0, y: -10 },
-          orientation: 0,
-          strength: 0,
-        }, {
-          position: { x: 5, y: 8 },
-          orientation: Math.PI / 2,
-          strength: 0
-        }, {
-          position: { x: -5, y: 8 },
-          orientation: -Math.PI / 2,
-          strength: 0
-        }],
-      }],
+      ships: [],
       projectiles: [],
     };
     console.log('Game %s created!', this.id);
   }
 
   step(action) {
-    if (!['FIRE', 'SET_THRUSTER_STRENGTH', 'JOIN_PLAYER'].includes(action.type)) {
+    if (!validActions.includes(action.type) ||
+        action.type === actions.INIT_GAME) {
       return;
     }
     try {
@@ -65,14 +51,13 @@ class Game {
   }
 
   join(client) {
-    this.players.push(client);
     console.log('Client %s joined to game %s', client.id, this.id);
     this.step({
-      type: 'JOIN_PLAYER',
+      type: actions.JOIN_PLAYER,
       payload: {},
     });
+    this.players.push(client);
     client.subscribe(action => this.step(action));
-    client.join(this);
   }
 
   destroy() {
@@ -83,15 +68,13 @@ class Game {
 
 const games = new Set();
 
-export function join(client) {
+export function create() {
   for (const game of games) {
     if (game.players.length < 4) {
-      game.join(client);
       return game;
     }
   }
   const game = new Game();
-  game.join(client);
   games.add(game);
   return game;
 }

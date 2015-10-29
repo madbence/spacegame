@@ -43,11 +43,11 @@ class Client {
 let client;
 
 export default store => next => action => {
-  if (action.meta && action.meta.pending) {
-    if (!client) {
-      client = new Client(store);
-    }
+  if (client && action.meta && action.meta.pending) {
     return client.send(action);
+  }
+  if (action.type === 'NAVIGATE' && action.payload.route === '/game' && !client) {
+      client = new Client(store);
   }
   return next(action);
 };

@@ -1,8 +1,9 @@
 import game from '../common/game';
-import { join } from './services/game';
-import { create } from './services/client';
+import { create as createGame } from './services/game';
+import { create as createClient } from './services/client';
 
 export default socket => {
-  const client = create(socket);
-  const game = join(client);
+  const client = createClient(socket);
+  const game = createGame();
+  client.join(game);
 }

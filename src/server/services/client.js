@@ -1,5 +1,9 @@
 import uuid from 'uuid';
 
+import {
+  SYNC_GAME,
+} from '../../common/actions';
+
 class Client {
   constructor(socket) {
     this.socket = socket;
@@ -55,6 +59,7 @@ class Client {
   }
 
   join(game) {
+    game.join(this);
     const unsubscribe = game.subscribe((action, game) => {
       this.dispatch(action.type, action.payload).catch(err => {
         if (err) {
@@ -62,8 +67,8 @@ class Client {
         }
       });
     });
-    this.dispatch('INIT_GAME', game.state);
     this.socket.on('close', unsubscribe);
+    this.dispatch(SYNC_GAME, game.state);
   }
 }
 
