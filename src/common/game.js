@@ -9,6 +9,12 @@ import {
   combineProps,
 } from './util/helpers';
 
+import {
+  FIRE_WEAPON,
+  SET_THRUST,
+  SYNC_GAME,
+} from './actions';
+
 function updateAt(xs: Array<T>, index: number, modification: any): Array<T> {
   return [...xs.slice(0, index), { ...xs[index], ...modification }, ...xs.slice(index + 1)];
 }
@@ -58,12 +64,12 @@ const process = combine(
 
   (state, action) => {
     switch (action.type) {
-      case 'SET_THRUSTER_STRENGTH':
+      case SET_THRUST:
         return {
           ...state,
           ships: setThrust(state.ships, action),
         };
-      case 'FIRE':
+      case FIRE_WEAPON:
         return {
           ...state,
           projectiles: addProjectile(state.projectiles, state.ships[action.payload.shipIndex]),
@@ -76,6 +82,6 @@ const process = combine(
 
 export default (state, action) => {
   if (state) return process(state, action);
-  if (action.type === 'INIT_GAME') return action.payload;
+  if (action.type === SYNC_GAME) return action.payload;
   return null;
 };
