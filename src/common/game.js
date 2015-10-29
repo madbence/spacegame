@@ -13,6 +13,7 @@ import {
   FIRE_WEAPON,
   SET_THRUST,
   SYNC_GAME,
+  JOIN_PLAYER,
 } from './actions';
 
 function updateAt(xs: Array<T>, index: number, modification: any): Array<T> {
@@ -41,6 +42,28 @@ function makeProjectile(ship: Ship): Projectile {
   };
 }
 
+function makeShip(): Ship {
+  return {
+    position: {x: 0, y: 0},
+    velocity: {x: 0, y: 0},
+    orientation: 0,
+    rotation: 0,
+    thrusters: [{
+      position: { x: 0, y: -10 },
+      orientation: 0,
+      strength: 0,
+    }, {
+      position: { x: 5, y: 8 },
+      orientation: Math.PI / 2,
+      strength: 0
+    }, {
+      position: { x: -5, y: 8 },
+      orientation: -Math.PI / 2,
+      strength: 0
+    }],
+  }
+}
+
 function addProjectile(projectiles: Array<Projectile> = [], ship: Ship): Array<Projectile> {
   return projectiles.concat([makeProjectile(ship)])
 }
@@ -55,6 +78,7 @@ function step(state) {
 }
 
 const process = combine(
+
   (state, action) => {
     while (state.time < action.payload.time) {
       state = step(state);
@@ -73,6 +97,11 @@ const process = combine(
         return {
           ...state,
           projectiles: addProjectile(state.projectiles, state.ships[action.payload.shipIndex]),
+        };
+      case JOIN_PLAYER:
+        return {
+          ...state,
+          ships: state.ships.concat([makeShip()]),
         };
       default:
         return state;
