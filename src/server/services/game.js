@@ -35,7 +35,7 @@ class Game {
   }
 
   step(action) {
-    if (!['SET_THRUSTER_STRENGTH', 'JOIN_PLAYER'].includes(action.type)) {
+    if (!['FIRE', 'SET_THRUSTER_STRENGTH', 'JOIN_PLAYER'].includes(action.type)) {
       return;
     }
     try {

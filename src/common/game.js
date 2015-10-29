@@ -27,6 +27,18 @@ function setThrust(ships: Array<Ship> = [], action: Action): Array<Ship> {
   );
 }
 
+function makeProjectile(ship: Ship): Projectile {
+  return {
+    position: ship.position,
+    velocity: ship.velocity,
+    orientation: ship.orientation,
+  };
+}
+
+function addProjectile(projectiles: Array<Projectile> = [], ship: Ship): Array<Projectile> {
+  return projectiles.concat([makeProjectile(ship)])
+}
+
 function step(state) {
   return {
     ...state,
@@ -50,6 +62,11 @@ const process = combine(
         return {
           ...state,
           ships: setThrust(state.ships, action),
+        };
+      case 'FIRE':
+        return {
+          ...state,
+          projectiles: addProjectile(state.projectiles, state.ships[action.payload.shipIndex]),
         };
       default:
         return state;
