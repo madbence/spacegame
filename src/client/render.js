@@ -61,7 +61,7 @@ export default function render(offset, store) {
       ctx.translate(projectile.position.x, projectile.position.y);
       ctx.rotate(projectile.orientation);
       ctx.fillStyle = 'green';
-      ctx.fillRect(-2.5, -10, 5, 20);
+      ctx.fillRect(-2.5, -5, 5, 10);
       ctx.restore();
     }
     ctx.restore();
