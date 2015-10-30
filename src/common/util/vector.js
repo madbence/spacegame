@@ -38,3 +38,11 @@ export function scale(a: Vector, f: number): Vector {
     y: a.y * f,
   }
 }
+
+export function length(a: Vector): number {
+  return Math.sqrt(a.x * a.x + a.y * a.y);
+}
+
+export function distance(a: Vector, b: Vector): number {
+  return length(sub(a, b));
+}

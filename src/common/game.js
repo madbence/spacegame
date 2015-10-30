@@ -13,6 +13,7 @@ import {
   unit,
   add,
   scale,
+  distance,
 } from './util/vector';
 
 import {
@@ -78,18 +79,35 @@ function addProjectile(projectiles: Array<Projectile> = [], ship: Ship, time: nu
   return projectiles.concat([makeProjectile(ship, time)])
 }
 
+function handleCollisions(state) {
+  const shipDamage = {};
+  return {
+    ...state,
+    projectiles: state.projectiles.map(p => ({
+      ...p,
+      state: state.ships.filter(s => s.id !== p.owner && distance(p.position, s.position) < 10).forEach(s => shipDamage[s.id] = 1) > 1 ? 0 : 1,
+    })),
+    ships: state.ships.map(s => ({
+      ...s,
+      hull: s.hull - (shipDamage[s.id] || 0) * 20
+    })),
+  };
+}
+
 function step(state) {
 
   function oldProjectiles(projectile) {
     return projectile.time + 1000 > state.time;
   }
 
-  return {
+  state = {
     ...state,
     time: state.time + state.step,
     ships: state.ships.map(advanceShip),
     projectiles: state.projectiles.filter(oldProjectiles).map(advanceProjectile),
   };
+
+  return handleCollisions(state);
 }
 
 const process = combine(
