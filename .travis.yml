@@ -5,4 +5,5 @@ cache:
 language: node_js
 
 node_js:
-  - stable
+  - "4"
+  - "5"
