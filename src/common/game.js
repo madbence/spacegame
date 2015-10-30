@@ -40,11 +40,12 @@ function setThrust(ships: Array<Ship> = [], action: Action): Array<Ship> {
   );
 }
 
-function makeProjectile(ship: Ship): Projectile {
+function makeProjectile(ship: Ship, time: number): Projectile {
   return {
     position: ship.position,
     velocity: add(ship.velocity, scale(unit(ship.orientation), 5)),
     orientation: ship.orientation,
+    time,
   };
 }
 
@@ -70,16 +71,21 @@ function makeShip(): Ship {
   }
 }
 
-function addProjectile(projectiles: Array<Projectile> = [], ship: Ship): Array<Projectile> {
-  return projectiles.concat([makeProjectile(ship)])
+function addProjectile(projectiles: Array<Projectile> = [], ship: Ship, time: number): Array<Projectile> {
+  return projectiles.concat([makeProjectile(ship, time)])
 }
 
 function step(state) {
+
+  function oldProjectiles(projectile) {
+    return projectile.time + 1000 > state.time;
+  }
+
   return {
     ...state,
     time: state.time + state.step,
     ships: state.ships.map(advanceShip),
-    projectiles: state.projectiles.map(advanceProjectile),
+    projectiles: state.projectiles.filter(oldProjectiles).map(advanceProjectile),
   };
 }
 
@@ -102,7 +108,7 @@ const process = combine(
       case FIRE_WEAPON:
         return {
           ...state,
-          projectiles: addProjectile(state.projectiles, state.ships[action.payload.shipIndex]),
+          projectiles: addProjectile(state.projectiles, state.ships[action.payload.shipIndex], state.time),
         };
       case JOIN_PLAYER:
         return {
