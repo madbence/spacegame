@@ -49,8 +49,9 @@ function makeProjectile(ship: Ship, time: number): Projectile {
   };
 }
 
-function makeShip(): Ship {
+function makeShip(state: State): Ship {
   return {
+    id: state.uid,
     position: {x: 0, y: 0},
     velocity: {x: 0, y: 0},
     orientation: 0,
@@ -114,7 +115,8 @@ const process = combine(
       case JOIN_PLAYER:
         return {
           ...state,
-          ships: state.ships.concat([makeShip()]),
+          ships: state.ships.concat([makeShip(state)]),
+          uid: state.uid + 1,
         };
       default:
         return state;

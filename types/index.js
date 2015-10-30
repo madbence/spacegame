@@ -6,9 +6,11 @@ type Vector = {
 type State = {
   ships: Array<Ship>,
   projectiles: Array<Projectile>,
+  uid: number,
 }
 
 type Ship = {
+  id: number,
   position: Vector,
   velocity: Vector,
   orientation: Rotation,

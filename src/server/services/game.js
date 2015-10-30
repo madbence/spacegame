@@ -13,6 +13,7 @@ class Game {
     this.state = {
       time: 0,
       step: 20,
+      uid: 0,
       ships: [],
       projectiles: [],
     };
