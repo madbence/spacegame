@@ -98,12 +98,16 @@ function oldProjectiles(projectile) {
   return projectile.ttl > 0;
 }
 
+function destoryedShips(ship) {
+  return ship.hull > 0;
+}
+
 function step(state) {
 
   state = {
     ...state,
     time: state.time + state.step,
-    ships: state.ships.map(advanceShip),
+    ships: state.ships.filter(destoryedShips).map(advanceShip),
     projectiles: state.projectiles.filter(oldProjectiles).map(advanceProjectile),
   };
 
