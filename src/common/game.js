@@ -46,6 +46,7 @@ function makeProjectile(ship: Ship, time: number): Projectile {
     velocity: add(ship.velocity, scale(unit(ship.orientation), 5)),
     orientation: ship.orientation,
     time,
+    owner: ship.id
   };
 }
 
