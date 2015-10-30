@@ -30,6 +30,7 @@ type Projectile = {
   velocity: Vector,
   orientation: Rotation,
   owner: number,
+  ttl: number,
 }
 
 type Position = Vector

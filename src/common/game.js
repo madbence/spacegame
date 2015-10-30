@@ -41,12 +41,12 @@ function setThrust(ships: Array<Ship> = [], action: Action): Array<Ship> {
   );
 }
 
-function makeProjectile(ship: Ship, time: number): Projectile {
+function makeProjectile(ship: Ship): Projectile {
   return {
     position: ship.position,
     velocity: add(ship.velocity, scale(unit(ship.orientation), 5)),
     orientation: ship.orientation,
-    time,
+    ttl: 50,
     owner: ship.id
   };
 }
@@ -75,8 +75,8 @@ function makeShip(state: State): Ship {
   }
 }
 
-function addProjectile(projectiles: Array<Projectile> = [], ship: Ship, time: number): Array<Projectile> {
-  return projectiles.concat([makeProjectile(ship, time)])
+function addProjectile(projectiles: Array<Projectile> = [], ship: Ship): Array<Projectile> {
+  return projectiles.concat([makeProjectile(ship)])
 }
 
 function handleCollisions(state) {
@@ -85,7 +85,7 @@ function handleCollisions(state) {
     ...state,
     projectiles: state.projectiles.map(p => ({
       ...p,
-      state: state.ships.filter(s => s.id !== p.owner && distance(p.position, s.position) < 10).forEach(s => shipDamage[s.id] = 1) > 1 ? 0 : 1,
+      ttl: state.ships.filter(s => s.id !== p.owner && distance(p.position, s.position) < 10).map(s => shipDamage[s.id] = 1) > 0 ? 0 : p.ttl,
     })),
     ships: state.ships.map(s => ({
       ...s,
@@ -94,11 +94,11 @@ function handleCollisions(state) {
   };
 }
 
-function step(state) {
+function oldProjectiles(projectile) {
+  return projectile.ttl > 0;
+}
 
-  function oldProjectiles(projectile) {
-    return projectile.time + 1000 > state.time;
-  }
+function step(state) {
 
   state = {
     ...state,
@@ -129,7 +129,7 @@ const process = combine(
       case FIRE_WEAPON:
         return {
           ...state,
-          projectiles: addProjectile(state.projectiles, state.ships[action.payload.shipIndex], state.time),
+          projectiles: addProjectile(state.projectiles, state.ships[action.payload.shipIndex]),
         };
       case JOIN_PLAYER:
         return {

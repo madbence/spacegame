@@ -50,5 +50,6 @@ export function advanceProjectile(projectile: Projectile): Projectile {
   return {
     ...projectile,
     position,
+    ttl: projectile.ttl - 1,
   };
 }
