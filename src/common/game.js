@@ -10,6 +10,12 @@ import {
 } from './util/helpers';
 
 import {
+  unit,
+  add,
+  scale,
+} from './util/vector';
+
+import {
   FIRE_WEAPON,
   SET_THRUST,
   SYNC_GAME,
@@ -37,7 +43,7 @@ function setThrust(ships: Array<Ship> = [], action: Action): Array<Ship> {
 function makeProjectile(ship: Ship): Projectile {
   return {
     position: ship.position,
-    velocity: ship.velocity,
+    velocity: add(ship.velocity, scale(unit(ship.orientation), 5)),
     orientation: ship.orientation,
   };
 }
