@@ -13,7 +13,8 @@ type Ship = {
   velocity: Vector,
   orientation: Rotation,
   rotation: Rotation,
-  thrusters: Array<Thruster>
+  thrusters: Array<Thruster>,
+  hull: number,
 }
 
 type Thruster = {

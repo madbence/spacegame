@@ -68,6 +68,7 @@ function makeShip(): Ship {
       orientation: -Math.PI / 2,
       strength: 0
     }],
+    hull: 100,
   }
 }
 
