@@ -11,6 +11,7 @@ test('stationary ship stays stationary', t => {
       orientation: 0,
       rotation: 0,
       thrusters: [],
+      hull: 1,
     }],
     projectiles: [],
   };
@@ -39,6 +40,7 @@ test('moving ship does not lose energy', t => {
       orientation: 0,
       rotation: 1,
       thrusters: [],
+      hull: 1,
     }],
     projectiles: [],
   };
