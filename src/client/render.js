@@ -33,6 +33,12 @@ export default function render(offset, store) {
       // draw hull
       ctx.save();
       ctx.translate(ship.position.x, ship.position.y);
+      ctx.save();
+      ctx.fillStyle = 'green';
+      ctx.fillRect(-20, 20, ship.hull * 0.4, 3);
+      ctx.fillStyle = 'red';
+      ctx.fillRect(-20 + ship.hull * 0.4, 20, (100 - ship.hull) * 0.4, 3);
+      ctx.restore();
       ctx.rotate(ship.orientation);
       ctx.fillRect(-5, -10, 10, 20);
       ctx.beginPath();
