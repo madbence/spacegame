@@ -39,6 +39,11 @@ export default function render(offset, store) {
       ctx.fillStyle = 'red';
       ctx.fillRect(-20 + ship.hull * 0.4, 20, (100 - ship.hull) * 0.4, 3);
       ctx.restore();
+      ctx.save();
+      ctx.rotate(Math.PI);
+      ctx.scale(-1, 1);
+      ctx.fillText(ship.id, -20, -25);
+      ctx.restore();
       ctx.rotate(ship.orientation);
       ctx.fillRect(-5, -10, 10, 20);
       ctx.beginPath();
