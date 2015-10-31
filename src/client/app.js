@@ -15,7 +15,6 @@ function accelerate(index, strength) {
   store.dispatch({
     type: SET_THRUST,
     payload: {
-      shipIndex: 0,
       thrusterIndex: index,
       strength: strength,
     },
@@ -28,9 +27,7 @@ function accelerate(index, strength) {
 function fire() {
   store.dispatch({
     type: FIRE_WEAPON,
-    payload: {
-      shipIndex: 0,
-    },
+    payload: {},
     meta: {
       pending: true,
     },

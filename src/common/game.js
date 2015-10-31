@@ -27,14 +27,14 @@ function updateAt(xs: Array<T>, index: number, modification: any): Array<T> {
   return [...xs.slice(0, index), { ...xs[index], ...modification }, ...xs.slice(index + 1)];
 }
 
-function setThrust(ships: Array<Ship> = [], action: Action): Array<Ship> {
+function setThrust(ships: Array<Ship> = [], shipIndex: number, thrusterIndex: number, strength: number): Array<Ship> {
   return updateAt(
     ships,
-    action.payload.shipIndex, {
+    shipIndex, {
       thrusters: updateAt(
-        ships[action.payload.shipIndex].thrusters,
-        action.payload.thrusterIndex, {
-          strength: action.payload.strength,
+        ships[shipIndex].thrusters,
+        thrusterIndex, {
+          strength,
         }
       )
     }
@@ -125,16 +125,25 @@ const process = combine(
   },
 
   (state, action) => {
+    let index;
+    if (action.type === SET_THRUST ||
+        action.type === FIRE_WEAPON) {
+      const ship = state.ships.filter(s => s.client === action.meta.client)[0];
+      if (!ship) {
+        return state;
+      }
+      index = state.ships.indexOf(ship);
+    }
     switch (action.type) {
       case SET_THRUST:
         return {
           ...state,
-          ships: setThrust(state.ships, action),
+          ships: setThrust(state.ships, index, action.payload.thrusterIndex, action.payload.strength),
         };
       case FIRE_WEAPON:
         return {
           ...state,
-          projectiles: addProjectile(state.projectiles, state.ships[action.payload.shipIndex]),
+          projectiles: addProjectile(state.projectiles, state.ships[index]),
         };
       case JOIN_PLAYER:
         return {

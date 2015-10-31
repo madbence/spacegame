@@ -14,6 +14,7 @@ class Client {
 
     this.socket.on('message', message => {
       const action = JSON.parse(message);
+      action.meta.client = this.id;
       for (const listener of this.listeners) {
         listener(action);
       }
@@ -61,7 +62,9 @@ class Client {
   join(game) {
     game.join(this);
     const unsubscribe = game.subscribe((action, game) => {
-      this.dispatch(action.type, action.payload).catch(err => {
+      this.dispatch(action.type, action.payload, {
+        client: action.meta && action.meta.client,
+      }).catch(err => {
         if (err) {
           console.log(err.stack);
         }

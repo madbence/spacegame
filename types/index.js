@@ -48,7 +48,6 @@ type TickAction = {
 type ThrusterAction = {
   type: 'SET_THRUSTER_STRENGTH',
   payload: {
-    shipIndex: number,
     thrusterIndex: number,
     strength: number
   }
@@ -56,7 +55,5 @@ type ThrusterAction = {
 
 type FireAction = {
   type: 'FIRE',
-  payload: {
-    shipIndex: number
-  }
+  payload: {},
 }
