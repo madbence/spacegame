@@ -43,6 +43,7 @@ export default function render(offset, store) {
       ctx.rotate(Math.PI);
       ctx.scale(-1, 1);
       ctx.fillText(ship.id, -20, -25);
+      ctx.fillText(ship.client, -20, -35);
       ctx.restore();
       ctx.rotate(ship.orientation);
       ctx.fillRect(-5, -10, 10, 20);

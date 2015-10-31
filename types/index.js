@@ -11,6 +11,7 @@ type State = {
 
 type Ship = {
   id: number,
+  client: string,
   position: Vector,
   velocity: Vector,
   orientation: Rotation,

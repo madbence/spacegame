@@ -55,7 +55,9 @@ class Game {
     console.log('Client %s joined to game %s', client.id, this.id);
     this.step({
       type: actions.JOIN_PLAYER,
-      payload: {},
+      payload: {
+        client: client.id,
+      },
     });
     this.players.push(client);
     client.subscribe(action => this.step(action));
