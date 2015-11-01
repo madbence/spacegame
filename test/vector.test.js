@@ -141,3 +141,41 @@ test('vector#scale', t => {
   });
   t.end();
 });
+
+test('vector#length', t => {
+  const a = { x: 1, y: 0 }
+  t.is(v.length(a), 1);
+  t.is(a.x, 1);
+  t.is(a.y, 0);
+  [
+    [[1, 0], 1],
+    [[0, 1], 1],
+    [[4, 3], 5],
+  ].forEach(([[x, y], l]) => {
+    t.is(v.length({x, y}), l);
+  });
+  t.end();
+});
+
+test('vector#distance', t => {
+  const a = { x: 1, y: 0 };
+  const b = { x: 2, y: 0 };
+  t.is(v.distance(a, b), 1);
+  t.is(a.x, 1);
+  t.is(b.x, 2);
+  t.is(a.y, 0);
+  t.is(b.y, 0);
+
+  [
+    [[1, 0], [2, 0], 1],
+    [[2, 0,], [1, 0], 1],
+    [[0, 1], [0, 2], 1],
+    [[0, 2], [0, 1], 1],
+    [[1, 1], [4, 5], 5],
+  ].forEach(([[x1, y1], [x2, y2], d]) => {
+    const a = { x: x1, y: y1 };
+    const b = { x: x2, y: y2 };
+    t.is(v.distance(a, b), d);
+  });
+  t.end();
+});
