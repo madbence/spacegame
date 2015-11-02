@@ -8,15 +8,16 @@ export default function render(offset, store) {
   let localState;
 
   function render() {
-    let state = store.getState().game;
-    if (!state) return;
+    const state = store.getState();
+    let game = state.game;
+    if (!game) return;
 
-    if (state.time !== lastTime || lastTime === undefined) {
-      localState = state;
-      lastTime = state.time;
+    if (game.time !== lastTime || lastTime === undefined) {
+      localState = game;
+      lastTime = game.time;
     }
 
-    state = localState = simulate(localState, {
+    game = localState = simulate(localState, {
       type: 'NOOP',
       payload: {
         time: Date.now() - offset,
@@ -28,22 +29,46 @@ export default function render(offset, store) {
     ctx.translate(500.5, 250.5);
     ctx.scale(1, -1);
 
+    const currentShip = game.ships.filter(ship => ship.client === state.client.id)[0] || {
+      position: { x: 0, y: 0 },
+      orientation: 0,
+    };
+    ctx.rotate(-currentShip.orientation);
+    ctx.translate(-currentShip.position.x, -currentShip.position.y);
+
+    ctx.save();
+    ctx.strokeStyle = 'gray';
+    ctx.beginPath();
+    for (let x = -500; x <= 500; x += 20) {
+      ctx.moveTo(x, -500);
+      ctx.lineTo(x, 500);
+    }
+    for (let y = -500; y <= 500; y += 20) {
+      ctx.moveTo(-500, y);
+      ctx.lineTo(500, y);
+    }
+    ctx.stroke();
+    ctx.restore();
+
     // for each ship
-    for (const ship of state.ships) {
+    for (const ship of game.ships) {
       // draw hull
       ctx.save();
       ctx.translate(ship.position.x, ship.position.y);
       ctx.save();
-      ctx.fillStyle = 'green';
-      ctx.fillRect(-20, 20, ship.hull * 0.4, 3);
-      ctx.fillStyle = 'red';
-      ctx.fillRect(-20 + ship.hull * 0.4, 20, (100 - ship.hull) * 0.4, 3);
-      ctx.restore();
-      ctx.save();
-      ctx.rotate(Math.PI);
-      ctx.scale(-1, 1);
-      ctx.fillText(ship.id, -20, -25);
-      ctx.fillText(ship.client, -20, -35);
+      ctx.rotate(currentShip.orientation);
+        ctx.save();
+        ctx.fillStyle = 'green';
+        ctx.fillRect(-20, 20, ship.hull * 0.4, 3);
+        ctx.fillStyle = 'red';
+        ctx.fillRect(-20 + ship.hull * 0.4, 20, (100 - ship.hull) * 0.4, 3);
+        ctx.restore();
+        ctx.save();
+        ctx.rotate(Math.PI);
+        ctx.scale(-1, 1);
+        ctx.fillText(ship.id, -20, -25);
+        ctx.fillText(ship.client, -20, -35);
+        ctx.restore();
       ctx.restore();
       ctx.rotate(ship.orientation);
       ctx.fillRect(-5, -10, 10, 20);
@@ -68,7 +93,7 @@ export default function render(offset, store) {
       ctx.restore();
     }
 
-    for (const projectile of state.projectiles) {
+    for (const projectile of game.projectiles) {
       ctx.save();
       ctx.translate(projectile.position.x, projectile.position.y);
       ctx.rotate(projectile.orientation);
