@@ -16,7 +16,7 @@ test('stationary ship stays stationary', t => {
     projectiles: [],
   };
   let next = game(initial, {
-    type: 'TICK',
+    type: 'NOOP',
     payload: {
       time: 1,
     },
@@ -45,7 +45,7 @@ test('moving ship does not lose energy', t => {
     projectiles: [],
   };
   let next = game(initial, {
-    type: 'TICK',
+    type: 'NOOP',
     payload: {
       time: 1,
     },
