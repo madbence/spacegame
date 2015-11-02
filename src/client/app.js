@@ -59,8 +59,8 @@ key((type, e) => {
     case 'down':
     switch (e.keyCode) {
       case 87: accelerate(0, 0.02); break;
-      case 65: accelerate(1, 0.0005); break;
-      case 68: accelerate(2, 0.0005); break;
+      case 65: accelerate(1, 0.0002); break;
+      case 68: accelerate(2, 0.0002); break;
       case 32: fire(); break;
     }
     break;
