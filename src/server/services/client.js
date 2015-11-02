@@ -4,6 +4,10 @@ import {
   SYNC_GAME,
 } from '../../common/actions';
 
+import {
+  CLIENT_INIT,
+} from '../../client/actions';
+
 class Client {
   constructor(socket) {
     this.socket = socket;
@@ -22,6 +26,10 @@ class Client {
 
     this.socket.on('close', () => clients.delete(this));
     this.socket.on('close', () => console.log('Client %s destroyed!', this.id));
+
+    this.dispatch(CLIENT_INIT, {
+      id: this.id,
+    });
   }
 
   async send(message) {

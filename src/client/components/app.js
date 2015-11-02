@@ -9,6 +9,7 @@ export default (props) => {
       },
     });
   }
+
   switch (props.route) {
     case '/login': return (
       <div>
@@ -25,7 +26,7 @@ export default (props) => {
     );
     case '/game': return (
       <div>
-        <h1>Game</h1>
+        <h1>Game {JSON.stringify(props.client)}</h1>
         <canvas id='canvas' width='500' height='500'>Canvas not supported by your browser!</canvas>
       </div>
     );

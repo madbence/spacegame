@@ -1,4 +1,8 @@
 import WS from 'ws';
+import {
+  CLIENT_CONNECT,
+  CLIENT_DISCONNECT,
+} from '../actions';
 
 class Client {
   constructor(store) {
@@ -29,6 +33,9 @@ class Client {
   }
 
   _drain() {
+    this.store.dispatch({
+      type: CLIENT_CONNECT,
+    });
     for (const message of this.queue) {
       this.socket.send(message);
     }
@@ -36,6 +43,9 @@ class Client {
   }
 
   _close() {
+    this.store.dispatch({
+      type: CLIENT_DISCONNECT,
+    });
     setTimeout(this.connect.bind(this), 1000);
   }
 }

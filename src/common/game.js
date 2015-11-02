@@ -23,6 +23,9 @@ import {
   JOIN_PLAYER,
 } from './actions';
 
+import * as gameActions from './actions';
+const actionList = Object.keys(gameActions).map(name => gameActions[name]);
+
 function updateAt(xs: Array<T>, index: number, modification: any): Array<T> {
   return [...xs.slice(0, index), { ...xs[index], ...modification }, ...xs.slice(index + 1)];
 }
@@ -157,8 +160,9 @@ const process = combine(
   }
 );
 
-export default (state, action) => {
-  if (state) return process(state, action);
+export default (state = null, action) => {
   if (action.type === SYNC_GAME) return action.payload;
+  if (action.type !== 'NOOP' && actionList.indexOf(action.type) === -1) return state;
+  if (state) return process(state, action);
   return null;
 };
