@@ -24,8 +24,8 @@ export default function render(offset, store) {
     });
 
     ctx.save();
-    ctx.clearRect(0, 0, 500, 500);
-    ctx.translate(250.5, 250.5);
+    ctx.clearRect(0, 0, 1000, 500);
+    ctx.translate(500.5, 250.5);
     ctx.scale(1, -1);
 
     // for each ship

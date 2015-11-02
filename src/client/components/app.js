@@ -27,7 +27,7 @@ export default (props) => {
     case '/game': return (
       <div>
         <h1>Game {JSON.stringify(props.client)}</h1>
-        <canvas id='canvas' width='500' height='500'>Canvas not supported by your browser!</canvas>
+        <canvas id='canvas' width='1000' height='500'>Canvas not supported by your browser!</canvas>
       </div>
     );
     default: return (
