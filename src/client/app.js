@@ -11,12 +11,26 @@ import {
   FIRE_WEAPON,
 } from '../common/actions';
 
+function getCurrentShipId() {
+  const state = store.getState();
+  const id = state.client.id;
+  if (!id) {
+    return;
+  }
+  return store.getState().game.ships.filter(ship => ship.client === id).map(ship => ship.id)[0]
+}
+
 function accelerate(index, strength) {
+  const shipId = getCurrentShipId();
+  if (!shipId) {
+    return;
+  }
   store.dispatch({
     type: SET_THRUST,
     payload: {
       thrusterIndex: index,
       strength: strength,
+      shipId,
     },
     meta: {
       pending: true,
@@ -25,9 +39,15 @@ function accelerate(index, strength) {
 }
 
 function fire() {
+  const shipId = getCurrentShipId();
+  if (!shipId) {
+    return;
+  }
   store.dispatch({
     type: FIRE_WEAPON,
-    payload: {},
+    payload: {
+      shipId,
+    },
     meta: {
       pending: true,
     },

@@ -13,7 +13,7 @@ class Game {
     this.state = {
       time: 0,
       step: 20,
-      uid: 0,
+      uid: 1,
       ships: [],
       projectiles: [],
     };
@@ -25,6 +25,9 @@ class Game {
         action.type === actions.INIT_GAME) {
       return;
     }
+    if (!this.allowed(action)) {
+      return;
+    }
     try {
       action.payload.time = Date.now() - this.offset;
       this.state = apply(this.state, action);
@@ -34,6 +37,17 @@ class Game {
     for (const listener of this.listeners) {
       listener(action, this);
     }
+  }
+
+  allowed(action) {
+    if (!action.meta || !action.meta.client) {
+      return true;
+    }
+    const ship = this.state.ships.filter(ship => ship.client === action.meta.client)[0];
+    if (!ship || ship.id !== action.payload.shipId) {
+      return false;
+    }
+    return true;
   }
 
   subscribe(listener) {

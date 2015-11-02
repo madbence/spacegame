@@ -70,9 +70,7 @@ class Client {
   join(game) {
     game.join(this);
     const unsubscribe = game.subscribe((action, game) => {
-      this.dispatch(action.type, action.payload, {
-        client: action.meta && action.meta.client,
-      }).catch(err => {
+      this.dispatch(action.type, action.payload).catch(err => {
         if (err) {
           console.log(err.stack);
         }

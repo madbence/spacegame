@@ -131,7 +131,7 @@ const process = combine(
     let index;
     if (action.type === SET_THRUST ||
         action.type === FIRE_WEAPON) {
-      const ship = state.ships.filter(s => s.client === action.meta.client)[0];
+      const ship = state.ships.filter(s => s.id === action.payload.shipId)[0];
       if (!ship) {
         return state;
       }
