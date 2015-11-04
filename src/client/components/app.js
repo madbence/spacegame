@@ -3,6 +3,7 @@ import React from 'react';
 import Login from './login';
 import Lobby from './lobby';
 import Game from './game';
+import Placeholder from './placeholder';
 
 export default (props) => {
   function navigate(route) {
@@ -16,7 +17,7 @@ export default (props) => {
 
   switch (props.route) {
     case '/login': return (
-      <Login onLogin={() => navigate('/lobby')} />
+      <Login onLogin={() => navigate('/lobby')} onSignup={() => navigate('/signup')} />
     );
     case '/lobby': return (
       <Lobby onJoin={() => navigate('/game')} />
@@ -24,13 +25,11 @@ export default (props) => {
     case '/game': return (
       <Game {...props} />
     );
+    case '/signup': return (
+      <Placeholder image='signup' />
+    );
     default: return (
-      <div>
-        <h1>Unknown route...</h1>
-        <h3>Current state:</h3>
-        <pre>{JSON.stringify(props, null, 2)}</pre>
-        <button onClick={() => navigate('/login')}>Home</button>
-      </div>
+      <Placeholder />
     );
   }
 };
