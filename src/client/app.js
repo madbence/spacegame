@@ -55,6 +55,7 @@ function fire() {
 }
 
 key((type, e) => {
+  e.preventDefault();
   switch (type) {
     case 'down':
     switch (e.keyCode) {
