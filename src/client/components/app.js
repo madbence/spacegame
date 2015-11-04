@@ -1,5 +1,9 @@
 import React from 'react';
 
+import Login from './login';
+import Lobby from './lobby';
+import Game from './game';
+
 export default (props) => {
   function navigate(route) {
     props.dispatch({
@@ -12,24 +16,13 @@ export default (props) => {
 
   switch (props.route) {
     case '/login': return (
-      <div>
-        <h1>Hello! Please log in or register!</h1>
-        <button onClick={() => navigate('/lobby')}>Login</button>
-      </div>
+      <Login onLogin={() => navigate('/lobby')} />
     );
     case '/lobby': return (
-      <div>
-        <h1>Lobby</h1>
-        <h3>You can chat with other player while you wait</h3>
-        <button onClick={() => navigate('/game')}>Join game!</button>
-      </div>
+      <Lobby onJoin={() => navigate('/game')} />
     );
     case '/game': return (
-      <div>
-        <h1>Game</h1>
-        <canvas id='canvas' width='1000' height='500'>Canvas not supported by your browser!</canvas>
-        <pre>{JSON.stringify(props, null, 2)}</pre>
-      </div>
+      <Game {...props} />
     );
     default: return (
       <div>

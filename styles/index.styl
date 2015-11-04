@@ -1,6 +1,10 @@
 *
   padding 0
   margin 0
+  box-sizing border-box
+
+html, body
+  min-height 100%
 
 body
   color #444
@@ -36,10 +40,41 @@ body
 canvas
   display inline-block
   margin 30px
-  box-shadow 0 0 20px rgba(0, 0, 0, 0.2)
+  border 1px solid #666
 
 pre
   font-size 10px
   margin 30px
+  padding 10px
+
+button, input, textarea
+  outline none
+
+button
+  padding 10px
+  background #eee
+  border none
+  cursor pointer
+  transition background .5s
+  &:hover
+    background #ddd
+
+
+#login
+  width 480px
+  margin 100px auto
+  padding 10px
+  text-align center
+  box-shadow 0 0 20px rgba(0, 0, 0, 0.2)
+
+  button
+    display block
+    width 100%
+    margin-top 10px
+
+#lobby, #game
+  width 1100px
+  min-height 100%
+  margin 0 auto
   padding 10px
   box-shadow 0 0 20px rgba(0, 0, 0, 0.2)
