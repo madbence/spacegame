@@ -1,3 +1,5 @@
+/* @flow */
+
 import {
   advanceShip,
   advanceProjectile,
@@ -25,9 +27,11 @@ import type {
   Ship,
   Projectile,
   State,
+  Action,
 } from '../../types';
 
 import * as gameActions from './actions';
+
 const actionList = Object.keys(gameActions).map(name => gameActions[name]);
 
 function updateAt<T>(xs: Array<T>, index: number, modification: any): Array<T> {
@@ -132,22 +136,24 @@ const process = combine(
   },
 
   (state, action) => {
-    let index;
-    if (action.type === SET_THRUST ||
-        action.type === FIRE_WEAPON) {
-      const ship = state.ships.filter(s => s.id === action.payload.shipId)[0];
-      if (!ship) {
-        return state;
-      }
-      index = state.ships.indexOf(ship);
-    }
+    let ship, index;
     switch (action.type) {
       case SET_THRUST:
+        ship = state.ships.filter(s => s.id === action.payload.shipId)[0];
+        if (!ship) {
+          return state;
+        }
+        index = state.ships.indexOf(ship);
         return {
           ...state,
           ships: setThrust(state.ships, index, action.payload.thrusterIndex, action.payload.strength),
         };
       case FIRE_WEAPON:
+        ship = state.ships.filter(s => s.id === action.payload.shipId)[0];
+        if (!ship) {
+          return state;
+        }
+        index = state.ships.indexOf(ship);
         return {
           ...state,
           projectiles: addProjectile(state.projectiles, state.ships[index]),
@@ -164,7 +170,7 @@ const process = combine(
   }
 );
 
-export default (state = null, action) => {
+export default (state: State, action: Action) => {
   if (action.type === SYNC_GAME) {
     return action.payload;
   }
