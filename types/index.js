@@ -1,15 +1,15 @@
-type Vector = {
+export type Vector = {
   x: number,
   y: number,
 }
 
-type State = {
+export type State = {
   ships: Array<Ship>,
   projectiles: Array<Projectile>,
   uid: number,
 }
 
-type Ship = {
+export type Ship = {
   id: number,
   client: string,
   position: Vector,
@@ -20,13 +20,13 @@ type Ship = {
   hull: number,
 }
 
-type Thruster = {
+export type Thruster = {
   strength: number,
   position: Vector,
   orientation: Rotation,
 }
 
-type Projectile = {
+export type Projectile = {
   position: Vector,
   velocity: Vector,
   orientation: Rotation,
@@ -37,15 +37,15 @@ type Projectile = {
 type Position = Vector
 type Rotation = number
 
-type Action = TickAction |
+export type Action = TickAction |
               ThrusterAction |
               FireAction
 
-type TickAction = {
+export type TickAction = {
   type: 'TICK'
 }
 
-type ThrusterAction = {
+export type ThrusterAction = {
   type: 'SET_THRUSTER_STRENGTH',
   payload: {
     thrusterIndex: number,
@@ -53,7 +53,7 @@ type ThrusterAction = {
   }
 }
 
-type FireAction = {
+export type FireAction = {
   type: 'FIRE',
   payload: {},
 }

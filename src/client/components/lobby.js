@@ -6,4 +6,4 @@ export default props => (
     <p>Chat with other players, blah blah blah...</p>
     <button onClick={props.onJoin}>Join game</button>
   </div>
-)
+);

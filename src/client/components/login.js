@@ -7,4 +7,4 @@ export default props => (
     <button onClick={props.onLogin}>Log in</button>
     <button onClick={props.onSignup}>Sign up</button>
   </div>
-)
+);

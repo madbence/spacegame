@@ -1,5 +1,4 @@
 import koa from 'koa';
-import http from 'http';
 import { get } from 'koa-route';
 import mount from 'koa-mount';
 import assets from './routes/assets';

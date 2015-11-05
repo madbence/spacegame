@@ -1,5 +1,7 @@
 /* @flow */
 
+import type { Vector } from '../../../types';
+
 export function add(a: Vector, b: Vector): Vector {
   return {
     x: a.x + b.x,
@@ -36,7 +38,7 @@ export function scale(a: Vector, f: number): Vector {
   return {
     x: a.x * f,
     y: a.y * f,
-  }
+  };
 }
 
 export function length(a: Vector): number {

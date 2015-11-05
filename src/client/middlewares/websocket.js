@@ -20,7 +20,7 @@ class Client {
 
   send(action) {
     const message = JSON.stringify(action);
-    if (!this.socket || this.socket.readyState != 1) {
+    if (!this.socket || this.socket.readyState !== 1) {
       this.queue.push(message);
       return;
     }

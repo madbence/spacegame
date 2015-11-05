@@ -7,4 +7,4 @@ export default props => (
     </canvas>
     <pre>{JSON.stringify(props, null, 2)}</pre>
   </div>
-)
+);

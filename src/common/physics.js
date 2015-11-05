@@ -2,12 +2,16 @@
 
 import {
   add,
-  sub,
   rotate,
   scale,
   unit,
   cross,
 } from './util/vector';
+
+import type {
+  Ship,
+  Projectile,
+} from '../../types';
 
 /**
  * Simulates ship movement

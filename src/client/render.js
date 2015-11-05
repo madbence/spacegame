@@ -10,7 +10,9 @@ export default function render(offset, store) {
   function render() {
     const state = store.getState();
     let game = state.game;
-    if (!game) return;
+    if (!game) {
+      return;
+    }
 
     if (game.time !== lastTime || lastTime === undefined) {
       localState = game;

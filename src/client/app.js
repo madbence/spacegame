@@ -17,7 +17,7 @@ function getCurrentShipId() {
   if (!id) {
     return;
   }
-  return store.getState().game.ships.filter(ship => ship.client === id).map(ship => ship.id)[0]
+  return store.getState().game.ships.filter(ship => ship.client === id).map(ship => ship.id)[0];
 }
 
 function accelerate(index, strength) {

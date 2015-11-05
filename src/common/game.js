@@ -4,9 +4,7 @@ import {
 } from './physics';
 
 import {
-  createReducer,
   combine,
-  combineProps,
 } from './util/helpers';
 
 import {
@@ -23,10 +21,16 @@ import {
   JOIN_PLAYER,
 } from './actions';
 
+import type {
+  Ship,
+  Projectile,
+  State,
+} from '../../types';
+
 import * as gameActions from './actions';
 const actionList = Object.keys(gameActions).map(name => gameActions[name]);
 
-function updateAt(xs: Array<T>, index: number, modification: any): Array<T> {
+function updateAt<T>(xs: Array<T>, index: number, modification: any): Array<T> {
   return [...xs.slice(0, index), { ...xs[index], ...modification }, ...xs.slice(index + 1)];
 }
 
@@ -76,11 +80,11 @@ function makeShip(state: State, client: string): Ship {
       strength: 0
     }],
     hull: 100,
-  }
+  };
 }
 
 function addProjectile(projectiles: Array<Projectile> = [], ship: Ship): Array<Projectile> {
-  return projectiles.concat([makeProjectile(ship)])
+  return projectiles.concat([makeProjectile(ship)]);
 }
 
 function handleCollisions(state) {
@@ -161,8 +165,14 @@ const process = combine(
 );
 
 export default (state = null, action) => {
-  if (action.type === SYNC_GAME) return action.payload;
-  if (action.type !== 'NOOP' && actionList.indexOf(action.type) === -1) return state;
-  if (state) return process(state, action);
+  if (action.type === SYNC_GAME) {
+    return action.payload;
+  }
+  if (action.type !== 'NOOP' && actionList.indexOf(action.type) === -1) {
+    return state;
+  }
+  if (state) {
+    return process(state, action);
+  }
   return null;
 };

@@ -15,7 +15,9 @@ import {
 const middlewares = [
   websocket,
   store => next => action => {
-    if (action.type === SYNC_GAME) initRender(Date.now() - action.payload.time, store);
+    if (action.type === SYNC_GAME) {
+      initRender(Date.now() - action.payload.time, store);
+    }
     return next(action);
   }
 ];

@@ -3,4 +3,4 @@ export default (state = '/', action) => {
     case 'NAVIGATE': return action.payload.route;
     default: return state;
   }
-}
+};
