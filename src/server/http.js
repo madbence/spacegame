@@ -3,8 +3,18 @@ import http from 'http';
 import { get } from 'koa-route';
 import mount from 'koa-mount';
 import assets from './routes/assets';
+import {readFile} from 'fs';
 
 const app = koa();
+
+var asyncReadFile = src => {
+	return new Promise((resolve, reject) => {
+		readFile(src, {"encoding" : "utf8"}, (err, data) => {
+			if(err) return reject(err);
+			resolve(data);
+		});
+	});
+}
 
 app
 
@@ -14,7 +24,7 @@ app
   // serve main page, it's nothing fancy
   // this should be definitely improved :)
   .use(get('/', function* () {
-    this.body = '<link rel=stylesheet href=style.css /><div id=mount></div></canvas><script src=bundle.js></script>';
+    this.body = yield asyncReadFile("./assets/index.html");
   }));
 
 export default app;
