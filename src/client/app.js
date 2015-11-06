@@ -55,14 +55,13 @@ function fire() {
 }
 
 key((type, e) => {
-  e.preventDefault();
   switch (type) {
     case 'down':
     switch (e.keyCode) {
       case 87: accelerate(0, 0.02); break;
       case 65: accelerate(1, 0.0002); break;
       case 68: accelerate(2, 0.0002); break;
-      case 32: fire(); break;
+      case 32: fire(); e.preventDefault(); break;
     }
     break;
     case 'up':
