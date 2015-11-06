@@ -20,7 +20,18 @@ export default (props) => {
       <Login onLogin={() => navigate('/lobby')} onSignup={() => navigate('/signup')} />
     );
     case '/lobby': return (
-      <Lobby onJoin={() => navigate('/game')} />
+      <Lobby onJoin={(name) => {
+        navigate('/game');
+        props.dispatch({
+          type: 'join-game',
+          payload: {
+            name,
+          },
+          meta: {
+            pending: true,
+          },
+        });
+      }} />
     );
     case '/game': return (
       <Game {...props} />

@@ -12,6 +12,7 @@ export type State = {
 export type Ship = {
   id: number,
   client: string,
+  name: string,
   position: Vector,
   velocity: Vector,
   orientation: Rotation,

@@ -1,4 +1,5 @@
 import uuid from 'uuid';
+import { create as createGame } from './game';
 
 import {
   SYNC_GAME,
@@ -19,6 +20,9 @@ class Client {
     this.socket.on('message', message => {
       const action = JSON.parse(message);
       action.meta.client = this.id;
+      if (action.type === 'join-game') {
+        this.join(createGame(), action.payload.name);
+      }
       for (const listener of this.listeners) {
         listener(action);
       }
@@ -67,8 +71,8 @@ class Client {
     };
   }
 
-  join(game) {
-    game.join(this);
+  join(game, name) {
+    game.join(this, name);
     const unsubscribe = game.subscribe(action => {
       this.dispatch(action.type, action.payload).catch(err => {
         if (err) {

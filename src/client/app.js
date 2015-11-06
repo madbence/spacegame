@@ -14,7 +14,7 @@ import {
 function getCurrentShipId() {
   const state = store.getState();
   const id = state.client.id;
-  if (!id) {
+  if (!id || !state.game) {
     return;
   }
   return store.getState().game.ships.filter(ship => ship.client === id).map(ship => ship.id)[0];
