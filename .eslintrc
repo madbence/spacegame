@@ -299,7 +299,7 @@
     "semi": [2, "always"],
 
     // sort vars alphabetically!
-    "sort-vars": 2,
+    "sort-vars": 1,
 
     // never use spaces for arrays
     "array-bracket-spacing": [2, "never"],
