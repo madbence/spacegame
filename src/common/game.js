@@ -175,7 +175,7 @@ export default (state: State, action: Action) => {
     return action.payload;
   }
   if (action.type !== 'NOOP' && actionList.indexOf(action.type) === -1) {
-    return state;
+    return state || null;
   }
   if (state) {
     return process(state, action);
