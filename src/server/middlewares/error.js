@@ -8,4 +8,4 @@ export default function* (next) {
       stack: e.stack,
     };
   }
-};
+}
