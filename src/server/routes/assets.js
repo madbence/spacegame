@@ -1,5 +1,6 @@
 import koa from 'koa';
 import { get } from 'koa-route';
+import mount from 'koa-mount';
 import fs from 'fs';
 
 const app = koa();
@@ -27,4 +28,4 @@ app
   .use(serve('/style.css', './assets/style.css', 'text/css'))
   .use(serve('/images/placeholder-signup.jpg', './assets/images/placeholder-signup.jpg', 'image/jpeg'));
 
-export default app;
+export default mount(app);
