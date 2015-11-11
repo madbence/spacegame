@@ -73,7 +73,7 @@ key((type, e) => {
   }
 });
 
-window.addEventListener('popstate', (event) => {
+window.addEventListener('popstate', () => {
   store.dispatch({
     type: 'NAVIGATE',
     payload: {

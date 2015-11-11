@@ -14,7 +14,7 @@ import {
 
 const middlewares = [
   websocket,
-  store => next => action => {
+  () => next => action => {
     if (action.type === 'NAVIGATE' && window.location.pathname !== action.payload.route) {
       window.history.pushState({}, '', action.payload.route);
     }
