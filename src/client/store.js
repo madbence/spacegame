@@ -15,6 +15,12 @@ import {
 const middlewares = [
   websocket,
   store => next => action => {
+    if (action.type === 'NAVIGATE' && window.location.pathname !== action.payload.route) {
+      window.history.pushState({}, '', action.payload.route);
+    }
+    return next(action);
+  },
+  store => next => action => {
     if (action.type === SYNC_GAME) {
       initRender(Date.now() - action.payload.time, store);
     }

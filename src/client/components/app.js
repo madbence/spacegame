@@ -16,6 +16,7 @@ export default (props) => {
   }
 
   switch (props.route) {
+    case '/':
     case '/login': return (
       <Login onLogin={() => navigate('/lobby')} onSignup={() => navigate('/signup')} />
     );

@@ -73,6 +73,15 @@ key((type, e) => {
   }
 });
 
+window.addEventListener('popstate', (event) => {
+  store.dispatch({
+    type: 'NAVIGATE',
+    payload: {
+      route: window.location.pathname,
+    },
+  });
+});
+
 const ReduxApp = connect(x => x)(App);
 
 render(
