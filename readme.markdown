@@ -10,6 +10,8 @@ $ git clone git@github.com:madbence/spacegame.git
 $ npm i
 ```
 
+Copy `.env.example` to `.env` to use the default development config.
+
 ## run
 
 Starting development server on port `3000`:
