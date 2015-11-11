@@ -33,9 +33,8 @@
     "koa": "^1.1.1",
     "koa-mount": "^1.3.0",
     "koa-route": "^2.4.2",
-    "ws": "^0.8.0",
-    "jquery": "^2.1.4",
-    "bootstrap": "3.3.5"
+    "mongoose": "^4.2.5",
+    "ws": "^0.8.0"
   },
   "devDependencies": {
     "ava": "^0.2.0",

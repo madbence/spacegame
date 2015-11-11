@@ -1,11 +1,64 @@
 import app from './http';
 import handler from './ws';
-
 import http from 'http';
 import ws from 'ws';
+import {initialize as dbinit, models} from './services/persist';
 
-const server = http.createServer(app.callback());
-const wss = new ws.Server({server});
-wss.on('connection', handler);
+function startService(name, callback, ...args) {
+	const msg = 'starting ' + name + ' service...';
+	let result : String;
+	let ex = null;
+	process.stdout.write(msg);
+	try {
+		callback(...args);
+		result = '[OK]';
+	} catch(exception) {
+		ex = exception;
+		result = '[FAIL]\n' + ex.toString();
+	} finally {
+		console.log('%s%s', ' '.repeat(80 - msg.length - result.length), result);
+		return ex === null;
+	}
+}
 
-server.listen(3000);
+// Initialize http server, and socket server
+function initWebServices() {
+	startService('web server & socket server', () => {
+		const server = http.createServer(app.callback());
+		const wss = new ws.Server({server});
+		wss.on('connection', handler);
+		server.listen(3000);
+	});
+}
+
+const limit = 10;
+dbinit('mongodb://localhost/test').then(
+	function() {
+		console.log('mongoose connection established');
+        initWebServices();
+        const currentBoot = new models.Boot();
+        currentBoot.save((err, boot) => {
+            if(err) {
+                console.log('Failed to log server startup date.');
+            }
+            models.Boot
+                .find()
+                .limit(limit + 1)
+                .sort({ date: -1 })
+                .exec((err, boots) => {
+                    if(err) {
+                        console.log('Failed to load previous boots.');
+                    }
+                    let counter = 0;
+                    for(let boot of boots) {
+                        let current = boot.date == currentBoot.date;
+                        if(++counter > limit)
+                            console.log('...');
+                        else
+                            console.log('   ' + (current ? '*' : ' ') + boot.date);
+                    }
+                });
+        });
+	},
+	console.error.bind(console, 'mongoose connection error:')
+);
