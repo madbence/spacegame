@@ -1,4 +1,3 @@
-import { get } from 'koa-route';
 import config from '../../../config';
 
 const conf = {
@@ -16,6 +15,15 @@ const spa =
 <script>window.__CONFIG__ = ${JSON.stringify(conf)}</script>
 <script src=bundle.js></script>`;
 
-export default get('/', function* () {
-  this.body = spa;
-});
+export default function* (next) {
+  switch (this.url) {
+    case '/':
+    case '/login':
+    case '/lobby':
+    case '/game':
+      this.body = spa;
+      break;
+    default:
+      yield* next;
+  }
+}
