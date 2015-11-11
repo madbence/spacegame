@@ -3,6 +3,7 @@ import {
   CLIENT_CONNECT,
   CLIENT_DISCONNECT,
 } from '../actions';
+import config from '../config';
 
 class Client {
   constructor(store) {
@@ -12,7 +13,7 @@ class Client {
   }
 
   connect() {
-    const socket = this.socket = new WS('ws://localhost:3000');
+    const socket = this.socket = new WS(config.ws.url);
     socket.onmessage = this._read.bind(this);
     socket.onopen = this._drain.bind(this);
     socket.onclose = this._close.bind(this);
