@@ -17,7 +17,7 @@ export default (props) => {
 
   switch (props.route) {
     case '/login': return (
-      <Login onLogin={() => navigate('/lobby')} onSignup={() => navigate('/signup')} />
+      <Login dispatch={props.dispatch} site={props.site} />
     );
     case '/lobby': return (
       <Lobby onJoin={() => navigate('/game')} />

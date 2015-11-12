@@ -60,7 +60,16 @@ button
     background #ddd
 
 
-#login, #placeholder
+#login
+  margin-top 100px
+  .login-panel-sub
+    width 50%
+    .login-option :first-child
+      margin auto
+    &:not(:fist-child)
+      border-left 1px solid black
+
+#placeholder
   width 480px
   margin 100px auto
   padding 10px
@@ -76,6 +85,10 @@ button
     display block
     width 100%
     margin-top 10px
+
+  .part
+    float left
+    width 50%
 
 #lobby, #game
   width 1100px

@@ -25,6 +25,7 @@ function serve(url: string, path: string, type: string) {
 app
   .use(serve('/bundle.js', './assets/bundle.js', 'application/javascript'))
   .use(serve('/style.css', './assets/style.css', 'text/css'))
+  .use(serve('/bootstrap.css', './node_modules/bootstrap/dist/css/bootstrap.min.css'), 'text/css')
   .use(serve('/images/placeholder-signup.jpg', './assets/images/placeholder-signup.jpg', 'image/jpeg'));
 
 export default app;
