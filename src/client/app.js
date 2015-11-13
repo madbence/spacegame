@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import React from 'react';
 
 import store from './store';
-import key from './lib/keypress';
+import { bind as bindKey } from './lib/keypress';
 
 import {
   SET_THRUST,
@@ -54,25 +54,11 @@ function fire() {
   });
 }
 
-key((type, e) => {
-  e.preventDefault();
-  switch (type) {
-    case 'down':
-    switch (e.keyCode) {
-      case 87: accelerate(0, 0.02); break;
-      case 65: accelerate(1, 0.0002); break;
-      case 68: accelerate(2, 0.0002); break;
-      case 32: fire(); break;
-    }
-    break;
-    case 'up':
-    switch (e.keyCode) {
-      case 87: accelerate(0, 0); break;
-      case 65: accelerate(1, 0); break;
-      case 68: accelerate(2, 0); break;
-    }
-  }
-});
+bindKey(87, accelerate.bind(null, 0, 0.02), accelerate.bind(null, 0, 0));
+bindKey(65, accelerate.bind(null, 1, 0.0002), accelerate.bind(null, 1, 0));
+bindKey(68, accelerate.bind(null, 2, 0.0002), accelerate.bind(null, 2, 0));
+bindKey(32, fire, null);
+
 
 const ReduxApp = connect(x => x)(App);
 

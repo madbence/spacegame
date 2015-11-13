@@ -12,7 +12,6 @@ const initialState = {
         until: 0
     },
     login: {
-        busy: false,
         errors: [],
         session_id: ''
     },
@@ -20,7 +19,8 @@ const initialState = {
         name: '',
         email: '',
         photo: ''
-    }
+    },
+    busy: false,
 };
 
 function session(state = initialState.session, action) {
@@ -46,6 +46,16 @@ function user(state = initialState.user, action) {
     return state;
 }
 
-const reducers = combineReducers({session, login, user});
+function busy(state = initialState.busy, action) {
+    switch(action.type) {
+        case actions.SITE_LOGIN_SETBUSY:
+            return true;
+        case actions.SITE_LOGIN_UNSETBUSY:
+            return false;
+    }
+    return state;
+}
+
+const reducers = combineReducers({session, login, user, busy});
 
 export default reducers;

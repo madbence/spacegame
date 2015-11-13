@@ -59,6 +59,14 @@ button
   &:hover
     background #ddd
 
+.overlay
+  position fixed
+  left 0
+  top 0
+  background white
+  .my-dialog
+    text-align center
+    width 50%
 
 #login
   margin-top 100px
@@ -96,3 +104,12 @@ button
   margin 0 auto
   padding 10px
   box-shadow 0 0 20px rgba(0, 0, 0, 0.2)
+
+.glyphicon-refresh-animate
+  -animation: spin .7s infinite linear
+  -webkit-animation: spin .7s infinite linear
+
+@keyframes spin {
+  from { transform: scale(1) rotate(0deg);}
+  to { transform: scale(1) rotate(360deg);}
+}

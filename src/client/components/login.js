@@ -3,7 +3,7 @@ import * as actions from '../actions/index';
 
 let component = null;
 
-function renderButton(component) {
+function onGoogleButtonRender(component) {
     window.onSignIn = (googleUser) => {
         const profile = googleUser.getBasicProfile();
         console.log("ID: " + profile.getId()); // Don't send this directly to your server!
@@ -38,8 +38,7 @@ const alertdanger = "alert alert-danger";
 
 export default React.createClass({
     render() {
-        return <div id='login' className="container-fluid">
-            <div className="row">
+        return <div id='login' className="row">
                 <div className="col-md-4"></div>
                 <div className="col-md-4">
                     <div className="panel panel-default">
@@ -56,8 +55,7 @@ export default React.createClass({
                             </div>
                             <div className="pull-left login-panel-sub">
                                 <div className="g-signin2 center-block login-option" data-theme="light"
-                                     data-onsuccess="onSignIn"
-                                     data-onfailure="onSignInFail"></div>
+                                     data-onsuccess="onSignIn" data-onfailure="onSignInFail"></div>
                             </div>
                             <div className="clearfix" ></div>
                         </div>
@@ -65,11 +63,19 @@ export default React.createClass({
                 </div>
                 <div className="col-md-4"></div>
             </div>
-        </div>
+    },
+    setBusy(isBusy) {
+        this.props.dispatch({
+            type: actions[isBusy ? 'SITE_LOGIN_SETBUSY' : 'SITE_LOGIN_UNSETBUSY']
+        });
     },
     login() {
         this.loginBegins();
+        let that = this;
+        //setTimeout(function() {
+        //    that.setBusy(false);
         this.navigate('/lobby');
+        //}, 2500);
     },
     navigate(route)
     {
@@ -91,5 +97,5 @@ export default React.createClass({
             messages
         });
     },
-    componentDidMount: function() { renderButton(this); }
+    componentDidMount: function() { onGoogleButtonRender(this); }
 });

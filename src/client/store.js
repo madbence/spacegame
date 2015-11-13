@@ -42,7 +42,6 @@ const store = applyMiddleware(...middlewares)(createStore)(combineReducers({
             until: 0
         },
         login: {
-            busy: false,
             errors: [],
             session_id: ''
         },
@@ -50,7 +49,8 @@ const store = applyMiddleware(...middlewares)(createStore)(combineReducers({
             name: '',
             email: '',
             photo: ''
-        }
+        },
+        busy: false
     }
 });
 

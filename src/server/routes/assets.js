@@ -24,6 +24,11 @@ function serve(url: string, path: string, type: string) {
 
 app
   .use(serve('/bundle.js', './assets/bundle.js', 'application/javascript'))
+  .use(serve('/fonts/glyphicons-halflings-regular.eot', './node_modules/bootstrap/fonts/glyphicons-halflings-regular.eot', 'application/vnd.ms-fontobject'))
+  .use(serve('/fonts/glyphicons-halflings-regular.svg', './node_modules/bootstrap/fonts/glyphicons-halflings-regular.svg', 'image/svg+xml'))
+  .use(serve('/fonts/glyphicons-halflings-regular.ttf', './node_modules/bootstrap/fonts/glyphicons-halflings-regular.ttf', 'application/font-sfnt'))
+  .use(serve('/fonts/glyphicons-halflings-regular.woff', './node_modules/bootstrap/fonts/glyphicons-halflings-regular.woff', 'application/font-woff'))
+  .use(serve('/fonts/glyphicons-halflings-regular.woff2', './node_modules/bootstrap/fonts/glyphicons-halflings-regular.woff2', 'application/font-woff'))
   .use(serve('/style.css', './assets/style.css', 'text/css'))
   .use(serve('/bootstrap.css', './node_modules/bootstrap/dist/css/bootstrap.min.css'), 'text/css')
   .use(serve('/images/placeholder-signup.jpg', './assets/images/placeholder-signup.jpg', 'image/jpeg'));
