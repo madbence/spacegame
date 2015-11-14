@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import React from 'react';
 
 import store from './store';
-import key from './lib/keypress';
+import subscribe from './lib/keypress';
 
 import {
   SET_THRUST,
@@ -21,21 +21,23 @@ function getCurrentShipId() {
 }
 
 function accelerate(index, strength) {
-  const shipId = getCurrentShipId();
-  if (!shipId) {
-    return;
-  }
-  store.dispatch({
-    type: SET_THRUST,
-    payload: {
-      thrusterIndex: index,
-      strength: strength,
-      shipId,
-    },
-    meta: {
-      pending: true,
-    },
-  });
+  return function () {
+    const shipId = getCurrentShipId();
+    if (!shipId) {
+      return;
+    }
+    store.dispatch({
+      type: SET_THRUST,
+      payload: {
+        thrusterIndex: index,
+        strength: strength,
+        shipId,
+      },
+      meta: {
+        pending: true,
+      },
+    });
+  };
 }
 
 function fire() {
@@ -54,24 +56,10 @@ function fire() {
   });
 }
 
-key((type, e) => {
-  switch (type) {
-    case 'down':
-    switch (e.keyCode) {
-      case 87: accelerate(0, 0.02); break;
-      case 65: accelerate(1, 0.0002); break;
-      case 68: accelerate(2, 0.0002); break;
-      case 32: fire(); e.preventDefault(); break;
-    }
-    break;
-    case 'up':
-    switch (e.keyCode) {
-      case 87: accelerate(0, 0); break;
-      case 65: accelerate(1, 0); break;
-      case 68: accelerate(2, 0); break;
-    }
-  }
-});
+subscribe(87, accelerate(0, 0.02), accelerate(0, 0));
+subscribe(65, accelerate(1, 0.0002), accelerate(1, 0));
+subscribe(68, accelerate(2, 0.0002), accelerate(2, 0));
+subscribe(32, fire, undefined, true);
 
 window.addEventListener('popstate', () => {
   store.dispatch({

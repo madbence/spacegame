@@ -1,20 +1,28 @@
-export default f => {
-  const state = new Map();
+const noop = () => {};
 
-  document.body.addEventListener('keydown', e => {
-    if (state.has(e.keyCode)) {
+export default (code, down = noop, up = noop, preventDefault = false) => {
+  let pressed = false;
+  const onDown = e => {
+    if (e.keyCode !== code || pressed) {
       return;
     }
-    state.set(e.keyCode, true);
-    f('down', e);
-  });
-
-  document.body.addEventListener('keyup', e => {
-    if (!state.has(e.keyCode)) {
+    pressed = true;
+    down();
+    if (preventDefault) {
+      e.preventDefault();
+    }
+  };
+  const onUp = e => {
+    if (e.keyCode !== code || !pressed) {
       return;
     }
+    pressed = false;
+    up();
+    if (preventDefault) {
+      e.preventDefault();
+    }
+  };
 
-    state.delete(e.keyCode);
-    f('up', e);
-  });
-};
+  document.body.addEventListener('keydown', onDown);
+  document.body.addEventListener('keyup', onUp);
+}
