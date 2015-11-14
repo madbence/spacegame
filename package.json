@@ -7,6 +7,7 @@
     "test": "ava test/**/*.test.js",
     "start": "babel-node src/server/app",
     "flow": "flow",
+    "flow:single": "flow check",
     "flow:stop": "flow stop",
     "flow:init": "flow init",
     "lint": "eslint 'src/**/*.js'",
