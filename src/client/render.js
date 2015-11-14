@@ -141,10 +141,10 @@ export default function render(offset, store) {
           continue;
         }
         ctx.save();
-        ctx.fillStyle = 'red';
+        ctx.fillStyle = 'rgba(255, 0, 0, 0.8)';
         ctx.translate(thruster.position.x, thruster.position.y);
         ctx.rotate(thruster.orientation);
-        ctx.fillRect(-2, 0, 4, Math.log(10000 * thruster.strength) * -2);
+        ctx.fillRect(-2, 0, 4, Math.log(20000 * thruster.strength) * -2);
         ctx.restore();
       }
       ctx.restore();
@@ -154,7 +154,7 @@ export default function render(offset, store) {
       ctx.save();
       ctx.translate(projectile.position.x, projectile.position.y);
       ctx.rotate(projectile.orientation);
-      ctx.fillStyle = 'green';
+      ctx.fillStyle = 'rgba(0, 128, 0, 0.5)';
       ctx.fillRect(-2.5, -5, 5, 10);
       ctx.restore();
     }
