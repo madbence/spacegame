@@ -97,7 +97,7 @@ export default function render(offset, store) {
       orientation: 0,
     };
     ctx.rotate(-currentShip.orientation);
-    const s = Math.min(1, Math.max(0.1, 1 / length(currentShip.velocity)));
+    const s = Math.min(1, Math.max(0.5, 1 / (1 + length(currentShip.velocity) / 10)));
     ctx.scale(s, s);
     ctx.translate(-currentShip.position.x, -currentShip.position.y);
 
