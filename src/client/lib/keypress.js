@@ -1,15 +1,16 @@
 /* @flow */
-type cb = () => any;
-const noop = () => {};
+type callback = () => any;
 
-export default (code: number, down: cb  = noop, up: cb = noop, preventDefault: bool = false) => {
+export default (code: number, down: ?callback, up: ?callback, preventDefault: ?boolean) => {
   let pressed = false;
   const onDown = e => {
     if (e.keyCode !== code || pressed) {
       return;
     }
     pressed = true;
-    down();
+    if (down) {
+      down();
+    }
     if (preventDefault) {
       e.preventDefault();
     }
@@ -19,7 +20,9 @@ export default (code: number, down: cb  = noop, up: cb = noop, preventDefault: b
       return;
     }
     pressed = false;
-    up();
+    if (up) {
+      up();
+    }
     if (preventDefault) {
       e.preventDefault();
     }
