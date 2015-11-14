@@ -30,4 +30,4 @@ export default (code: number, down: ?callback, up: ?callback, preventDefault: ?b
 
   document.body.addEventListener('keydown', onDown);
   document.body.addEventListener('keyup', onUp);
-}
+};
