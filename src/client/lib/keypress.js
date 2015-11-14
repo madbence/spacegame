@@ -1,6 +1,8 @@
+/* @flow */
+type cb = () => any;
 const noop = () => {};
 
-export default (code, down = noop, up = noop, preventDefault = false) => {
+export default (code: number, down: cb  = noop, up: cb = noop, preventDefault: bool = false) => {
   let pressed = false;
   const onDown = e => {
     if (e.keyCode !== code || pressed) {
