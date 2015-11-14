@@ -53,8 +53,8 @@ export default function render(offset, store) {
   }
 
   subscribe(87, accelerate(0, 0.02), accelerate(0, 0));
-  subscribe(65, accelerate(1, 0.0002), accelerate(1, 0));
-  subscribe(68, accelerate(2, 0.0002), accelerate(2, 0));
+  subscribe(65, accelerate(1, 0.0001), accelerate(1, 0));
+  subscribe(68, accelerate(2, 0.0001), accelerate(2, 0));
   subscribe(32, fire, undefined, true);
 
   const ctx = document.getElementById('canvas').getContext('2d');
