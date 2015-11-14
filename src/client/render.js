@@ -2,6 +2,10 @@ import simulate from '../common/game';
 import subscribe from './lib/keypress';
 
 import {
+  length,
+} from '../common/util/vector';
+
+import {
   SET_THRUST,
   FIRE_WEAPON,
 } from '../common/actions';
@@ -89,9 +93,12 @@ export default function render(offset, store) {
 
     const currentShip = game.ships.filter(ship => ship.client === state.client.id)[0] || {
       position: { x: 0, y: 0 },
+      velocity: { x: 0, y: 0 },
       orientation: 0,
     };
     ctx.rotate(-currentShip.orientation);
+    const s = Math.min(1, Math.max(0.1, 1 / length(currentShip.velocity)));
+    ctx.scale(s, s);
     ctx.translate(-currentShip.position.x, -currentShip.position.y);
 
     ctx.save();
