@@ -2,7 +2,7 @@ import { applyMiddleware, createStore, combineReducers } from 'redux';
 
 import messages from './reducers/chat';
 import route from './reducers/navigation';
-import game from '../common/game';
+import game from '../shared/game';
 import client from './reducers/client';
 
 import websocket from './middlewares/websocket';
@@ -10,7 +10,7 @@ import initRender from './render';
 
 import {
   SYNC_GAME,
-} from '../common/actions';
+} from '../shared/actions';
 
 const middlewares = [
   websocket,

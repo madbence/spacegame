@@ -1,6 +1,6 @@
-import apply from '../../common/game';
+import apply from '../../shared/game';
 import uuid from 'uuid';
-import * as actions from '../../common/actions';
+import * as actions from '../../shared/actions';
 
 const validActions = Object.keys(actions).map(key => actions[key]);
 

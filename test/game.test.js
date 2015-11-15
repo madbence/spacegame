@@ -1,5 +1,5 @@
 import test from 'ava';
-import game from '../src/common/game';
+import game from '../src/shared/game';
 
 test('stationary ship stays stationary', t => {
   const initial = {

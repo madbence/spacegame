@@ -1,5 +1,5 @@
 import test from 'ava';
-import * as v from '../src/common/util/vector';
+import * as v from '../src/shared/util/vector';
 
 function roundVector(v) {
   return {

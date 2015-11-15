@@ -3,7 +3,7 @@ import { create as createGame } from './game';
 
 import {
   SYNC_GAME,
-} from '../../common/actions';
+} from '../../shared/actions';
 
 import {
   CLIENT_INIT,

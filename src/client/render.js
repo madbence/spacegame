@@ -1,14 +1,14 @@
-import simulate from '../common/game';
+import simulate from '../shared/game';
 import subscribe from './lib/keypress';
 
 import {
   length,
-} from '../common/util/vector';
+} from '../shared/util/vector';
 
 import {
   SET_THRUST,
   FIRE_WEAPON,
-} from '../common/actions';
+} from '../shared/actions';
 
 export default function render(offset, store) {
   function getCurrentShipId() {
