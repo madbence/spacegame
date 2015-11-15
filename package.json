@@ -13,8 +13,11 @@
     "lint": "eslint 'src/**/*.js'",
     "coverage": "babel-node node_modules/.bin/isparta cover ava -- test/**/*.test.js",
     "build": "npm run build:js & npm run build:css & wait",
+    "build:prod": "npm run build:js:prod & npm run build:css:prod & wait",
     "build:js": "browserify -o assets/bundle.js -t [ babelify --optional runtime ] src/client/app.js",
+    "build:js:prod": "NODE_ENV=production browserify -d -o assets/bundle.inlined.js -t [ babelify --optional runtime ] src/client/app.js && cat assets/bundle.inlined.js | exorcist assets/bundle.js.map -b . > assets/bundle.js && uglifyjs --source-map-root . --in-source-map assets/bundle.js.map --source-map assets/bundle.min.js.map --source-map-url bundle.js.map -o assets/bundle.min.js --compress --mangle -- assets/bundle.js && mv assets/bundle.min.js assets/bundle.js && mv assets/bundle.min.js.map assets/bundle.js.map",
     "build:css": "stylus -o assets/style.css styles/index.styl",
+    "build:css:prod": "stylus -o assets/style.css styles/index.styl && cleancss -o assets/style.css assets/style.css",
     "watch": "npm run watch:js & npm run watch:css & npm run watch:app & wait",
     "watch:app": "nodemon -w src --exec babel-node src/server/app.js",
     "watch:js": "watchify -v -d -o assets/bundle.js -t [ babelify --optional runtime ] src/client/app.js",
@@ -47,8 +50,10 @@
     "babel-runtime": "^5.8.29",
     "babelify": "^6.4.0",
     "browserify": "^12.0.0",
+    "clean-css": "^3.4.8",
     "eslint": "^1.8.0",
     "eslint-plugin-react": "^3.6.3",
+    "exorcist": "^0.4.0",
     "flow-bin": "^0.18.1",
     "isparta": "^3.1.0",
     "istanbul": "gotwarlost/istanbul#source-map",
@@ -58,6 +63,7 @@
     "react-redux": "^4.0.0",
     "redux": "^3.0.4",
     "stylus": "^0.52.4",
+    "uglify-js": "^2.6.0",
     "watchify": "^3.5.0"
   }
 }
