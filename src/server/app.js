@@ -2,7 +2,7 @@ import app from './http';
 import handler from './ws';
 import http from 'http';
 import ws from 'ws';
-import {initialize as dbinit, models} from './services/persist';
+import persistence from './services/persist';
 
 function startService(name, callback, ...args) {
 	const msg = 'starting ' + name + ' service...';
@@ -32,16 +32,16 @@ function initWebServices() {
 }
 
 const limit = 10;
-dbinit('mongodb://localhost/test').then(
+persistence.initialize('mongodb://localhost/test').then(
 	function() {
 		console.log('mongoose connection established');
         initWebServices();
-        const currentBoot = new models.Boot();
+        const currentBoot = new persistence.BootModel();
         currentBoot.save((err, boot) => {
             if(err) {
                 console.log('Failed to log server startup date.');
             }
-            models.Boot
+            persistence.BootModel
                 .find()
                 .limit(limit + 1)
                 .sort({ date: -1 })
