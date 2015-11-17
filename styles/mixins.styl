@@ -1,0 +1,10 @@
+z-depth(n)
+  if n == 0
+    box-shadow none
+  else
+    p = ((n - 1) / 4)
+    box-shadow 0 (2 + 25*p)px (5 + 19*p)px rgba(0, 0, 0, 0.16 + 0.04*p), 0 (2 + 38*p)px (10 + 66*p)px rgba(0, 0, 0, (0.12 + 0.1*p))
+
+card()
+  z-depth(1)
+  padding 20px
