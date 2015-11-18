@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-const Schema = mongoose.Schema;
 
 let initialized: boolean = false;
 
@@ -11,7 +10,7 @@ export function initialize(addr: string): Promise {
   return new Promise((resolve, reject) => {
     mongoose.connect(addr);
     const db = mongoose.connection;
-    db.on("error", reject);
+    db.on('error', reject);
     db.once('open', function() {
       resolve();
     });
