@@ -1,12 +1,13 @@
 /* global gapi */
 import React from 'react';
+import config from '../config';
 
 let auth;
 
 gapi.load('auth2', () => {
   gapi.auth2.init({
     /* eslint-disable camelcase */
-    client_id: '657677068615-gi549u3m2i94c0h10pq5dips2qqjbnlm.apps.googleusercontent.com',
+    client_id: config.google.clientId,
     /* eslint-enable camelcase */
   });
   auth = gapi.auth2.getAuthInstance();

@@ -9,4 +9,7 @@ export default {
   ws: {
     url: process.env.WS_URL,
   },
+  google: {
+    clientId: process.env.GOOGLE_CLIENT_ID,
+  },
 };

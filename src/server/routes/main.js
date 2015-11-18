@@ -4,6 +4,9 @@ const conf = {
   ws: {
     url: config.ws.url,
   },
+  google: {
+    clientId: config.google.clientId,
+  },
 };
 
 const spa =
