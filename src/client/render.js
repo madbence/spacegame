@@ -169,6 +169,15 @@ export default function render(offset, store) {
       ctx.fillRect(-2.5, -5, 5, 10);
       ctx.restore();
     }
+    if (!currentShip) {
+      ctx.save();
+      ctx.font = '72px Helvetica, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.baseLine = 'middle';
+      ctx.scale(1, -1);
+      ctx.fillText('You\'re dead!  ͡° ͜ʖ ͡°', 0, 0);
+      ctx.restore();
+    }
     ctx.restore();
   }
 
