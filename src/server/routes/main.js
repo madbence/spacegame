@@ -13,6 +13,7 @@ const spa =
 <title>SpaceGame</title>
 <div id=mount></div>
 <script>window.__CONFIG__ = ${JSON.stringify(conf)}</script>
+<script src=https://apis.google.com/js/platform.js></script>
 <script src=bundle.js></script>`;
 
 export default function* (next) {
