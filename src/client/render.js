@@ -91,15 +91,19 @@ export default function render(offset, store) {
     ctx.translate(500.5, 250.5);
     ctx.scale(1, -1);
 
-    const currentShip = game.ships.filter(ship => ship.client === state.client.id)[0] || {
+    const currentShip = game.ships.filter(ship => ship.client === state.client.id)[0];
+    const viewport = currentShip ? {
+      position: currentShip.position,
+      scale: Math.min(1, Math.max(0.5, 1 / (1 + length(currentShip.velocity) / 10))),
+      orientation: currentShip.orientation,
+    } : {
       position: { x: 0, y: 0 },
-      velocity: { x: 0, y: 0 },
+      scale: 0.4,
       orientation: 0,
     };
-    ctx.rotate(-currentShip.orientation);
-    const s = Math.min(1, Math.max(0.5, 1 / (1 + length(currentShip.velocity) / 10)));
-    ctx.scale(s, s);
-    ctx.translate(-currentShip.position.x, -currentShip.position.y);
+    ctx.rotate(-viewport.orientation);
+    ctx.scale(viewport.scale, viewport.scale);
+    ctx.translate(-viewport.position.x, -viewport.position.y);
 
     ctx.save();
     ctx.strokeStyle = 'gray';
@@ -121,7 +125,7 @@ export default function render(offset, store) {
       ctx.save();
       ctx.translate(ship.position.x, ship.position.y);
       ctx.save();
-      ctx.rotate(currentShip.orientation);
+      ctx.rotate(viewport.orientation);
         ctx.save();
         ctx.fillStyle = 'green';
         ctx.fillRect(-20, 20, ship.hull * 0.4, 3);
