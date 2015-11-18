@@ -1,35 +1,18 @@
 import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
-export const schemas = {};
-export const models = {};
+let initialized: boolean = false;
 
-function initModels() {
-  for (let name in schemas) {
-    if(schemas.hasOwnProperty(name)) {
-      models[name] = mongoose.model(name, schemas[name]);
-    }
+export function initialize(addr: string): Promise {
+  if (initialized) {
+    throw new Error('Can not initialize persistence service more than once');
   }
-}
-
-function initSchemas() {
-  initModels();
-}
-
-let _initialized : boolean = false;
-
-export function initialize(connstr) : Promise {
-  if(_initialized) {
-    const message = 'Can not initialize persistence service more than once'; 
-    throw {message, toString: () => message};
-  }
-  _initialized = true;
+  initialized = true;
   return new Promise((resolve, reject) => {
-    mongoose.connect(connstr);
+    mongoose.connect(addr);
     const db = mongoose.connection;
     db.on("error", reject);
     db.once('open', function() {
-      initSchemas();
       resolve();
     });
   });
