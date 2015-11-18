@@ -57,7 +57,7 @@ function makeProjectile(ship: Ship): Projectile {
     position: ship.position,
     velocity: add(ship.velocity, scale(unit(ship.orientation), 5)),
     orientation: ship.orientation,
-    ttl: 50,
+    ttl: 200,
     owner: ship.id
   };
 }
