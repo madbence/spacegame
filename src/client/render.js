@@ -56,9 +56,9 @@ export default function render(offset, store) {
     });
   }
 
-  subscribe(87, accelerate(0, 0.02), accelerate(0, 0));
-  subscribe(65, accelerate(1, 0.0001), accelerate(1, 0));
-  subscribe(68, accelerate(2, 0.0001), accelerate(2, 0));
+  subscribe(87, accelerate(0, 40), accelerate(0, 0));
+  subscribe(65, accelerate(1, 0.1), accelerate(1, 0));
+  subscribe(68, accelerate(2, 0.1), accelerate(2, 0));
   subscribe(32, fire, undefined, true);
 
   const ctx = document.getElementById('canvas').getContext('2d');
@@ -94,7 +94,7 @@ export default function render(offset, store) {
     const currentShip = game.ships.filter(ship => ship.client === state.client.id)[0];
     const viewport = currentShip ? {
       position: currentShip.position,
-      scale: Math.min(1, Math.max(0.5, 1 / (1 + length(currentShip.velocity) / 10))),
+      scale: Math.min(1, Math.max(0.5, 1 / (1 + length(currentShip.velocity) / 100))),
       orientation: currentShip.orientation,
     } : {
       position: { x: 0, y: 0 },
@@ -155,7 +155,7 @@ export default function render(offset, store) {
         ctx.fillStyle = 'rgba(255, 0, 0, 0.8)';
         ctx.translate(thruster.position.x, thruster.position.y);
         ctx.rotate(thruster.orientation);
-        ctx.fillRect(-2, 0, 4, Math.log(20000 * thruster.strength) * -2);
+        ctx.fillRect(-2, 0, 4, Math.log(200 * thruster.strength) * -2);
         ctx.restore();
       }
       ctx.restore();
