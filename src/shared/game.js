@@ -55,9 +55,9 @@ function setThrust(ships: Array<Ship> = [], shipIndex: number, thrusterIndex: nu
 function makeProjectile(ship: Ship): Projectile {
   return {
     position: ship.position,
-    velocity: add(ship.velocity, scale(unit(ship.orientation), 5)),
+    velocity: add(ship.velocity, scale(unit(ship.orientation), 200)),
     orientation: ship.orientation,
-    ttl: 200,
+    ttl: 2,
     owner: ship.id
   };
 }
@@ -124,8 +124,8 @@ function step(state) {
   state = {
     ...state,
     time: state.time + state.step,
-    ships: state.ships.filter(destoryedShips).map(advanceShip),
-    projectiles: state.projectiles.filter(oldProjectiles).map(advanceProjectile),
+    ships: state.ships.filter(destoryedShips).map(ship => advanceShip(ship, state.step / 1000)),
+    projectiles: state.projectiles.filter(oldProjectiles).map(projectile => advanceProjectile(projectile, state.step / 1000)),
   };
 
   return handleCollisions(state);

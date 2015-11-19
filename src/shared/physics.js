@@ -16,7 +16,7 @@ import type {
 /**
  * Simulates ship movement
  */
-export function advanceShip(ship: Ship): Ship {
+export function advanceShip(ship: Ship, step: number): Ship {
 
   // calculate net force
   const force = ship.thrusters.reduce((force, thruster) => {
@@ -29,10 +29,10 @@ export function advanceShip(ship: Ship): Ship {
   }, 0);
 
 
-  const rotation = ship.rotation + torque;
-  const orientation = ship.orientation + rotation;
-  const velocity = add(ship.velocity, rotate(force, orientation));
-  const position = add(ship.position, velocity);
+  const rotation = ship.rotation + torque * step;
+  const orientation = ship.orientation + rotation * step;
+  const velocity = add(ship.velocity, rotate(scale(force, step), orientation));
+  const position = add(ship.position, scale(velocity, step));
 
   // return modified ship
   return {
@@ -47,13 +47,13 @@ export function advanceShip(ship: Ship): Ship {
 /**
  * Simulates projectile movement
  */
-export function advanceProjectile(projectile: Projectile): Projectile {
-  const position = add(projectile.position, projectile.velocity);
+export function advanceProjectile(projectile: Projectile, step: number): Projectile {
+  const position = add(projectile.position, scale(projectile.velocity, step));
 
   // return modified projectile
   return {
     ...projectile,
     position,
-    ttl: projectile.ttl - 1,
+    ttl: projectile.ttl - step,
   };
 }

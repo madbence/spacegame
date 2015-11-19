@@ -33,7 +33,7 @@ test('stationary ship stays stationary', t => {
 test('moving ship does not lose energy', t => {
   const initial = {
     time: 0,
-    step: 1,
+    step: 1000,
     ships: [{
       position: { x: 0, y: 0 },
       velocity: { x: 1, y: 1 },
