@@ -57,17 +57,21 @@ function makeProjectile(ship: Ship): Projectile {
     position: ship.position,
     velocity: add(ship.velocity, scale(unit(ship.orientation), 5)),
     orientation: ship.orientation,
-    ttl: 50,
+    ttl: 200,
     owner: ship.id
   };
 }
 
 function makeShip(state: State, client: string, name: string): Ship {
+  const count = state.ships.length;
   return {
     id: state.uid,
     client,
     name,
-    position: {x: 0, y: 0},
+    position: {
+      x: count % 2 * 500 - 250,
+      y: Math.floor(count / 2) * 500 - 250,
+    },
     velocity: {x: 0, y: 0},
     orientation: 0,
     rotation: 0,
