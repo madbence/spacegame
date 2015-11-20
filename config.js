@@ -6,6 +6,9 @@ dotenv.load({
 
 export default {
   port: process.env.PORT,
+  session: {
+    secret: process.env.SESSION_SECRET,
+  },
   ws: {
     url: process.env.WS_URL,
   },
