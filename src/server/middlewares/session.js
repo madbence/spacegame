@@ -2,6 +2,10 @@ import jwt from 'jsonwebtoken';
 import config from '../../../config';
 const secret = config.session.secret;
 
+if (!secret) {
+  throw new Error('Please provide session.secret!');
+}
+
 function verify(token) {
   return new Promise((resolve, reject) => {
     jwt.verify(token, secret, {
