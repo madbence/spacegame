@@ -28,7 +28,6 @@ class Client {
       }
     });
 
-    this.socket.on('close', () => clients.delete(this));
     this.socket.on('close', () => console.log('Client %s destroyed!', this.id));
 
     this.dispatch(CLIENT_INIT, {
@@ -83,10 +82,23 @@ class Client {
     this.socket.on('close', unsubscribe);
     this.dispatch(SYNC_GAME, game.state);
   }
+
+  toJSON() {
+    return {
+      id: this.id,
+    };
+  }
 }
 
-const clients = new Set();
+const clients = [];
 
 export function create(socket) {
-  return new Client(socket);
+  const client = new Client(socket);
+  client.socket.on('close', () => clients.splice(clients.indexOf(client), 1));
+  clients.push(client);
+  return client;
+}
+
+export function list() {
+  return clients;
 }
