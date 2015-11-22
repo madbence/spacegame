@@ -21,8 +21,7 @@ class Game {
   }
 
   step(action) {
-    if (!validActions.includes(action.type) ||
-        action.type === actions.INIT_GAME) {
+    if (!validActions.includes(action.type)) {
       return;
     }
     if (!this.allowed(action)) {
