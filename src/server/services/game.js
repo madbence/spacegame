@@ -18,6 +18,10 @@ class Game {
       projectiles: [],
     };
     console.log('Game %s created!', this.id);
+    this.heartbeat = setInterval(this.step.bind(this), 5000, {
+      type: actions.HEARTBEAT,
+      payload: {},
+    });
   }
 
   step(action) {
@@ -79,6 +83,7 @@ class Game {
 
   destroy() {
     games.delete(this);
+    this.clearInterval(this.heartbeat);
     console.log('Game %s destroyed!', this.id);
   }
 }
