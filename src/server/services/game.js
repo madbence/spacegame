@@ -83,7 +83,7 @@ class Game {
 
   destroy() {
     games.delete(this);
-    this.clearInterval(this.heartbeat);
+    clearInterval(this.heartbeat);
     console.log('Game %s destroyed!', this.id);
   }
 }
