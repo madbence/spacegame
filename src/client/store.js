@@ -6,11 +6,6 @@ import game from '../shared/game';
 import client from './reducers/client';
 
 import websocket from './middlewares/websocket';
-import initRender from './render';
-
-import {
-  SYNC_GAME,
-} from '../shared/actions';
 
 const middlewares = [
   websocket,
@@ -20,12 +15,6 @@ const middlewares = [
     }
     return next(action);
   },
-  store => next => action => {
-    if (action.type === SYNC_GAME) {
-      initRender(Date.now() - action.payload.time, store);
-    }
-    return next(action);
-  }
 ];
 
 const store = applyMiddleware(...middlewares)(createStore)(combineReducers({

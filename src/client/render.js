@@ -1,5 +1,6 @@
 import simulate from '../shared/game';
 import subscribe from './lib/keypress';
+import store from './store';
 
 import {
   length,
@@ -10,81 +11,97 @@ import {
   FIRE_WEAPON,
 } from '../shared/actions';
 
-export default function render(offset, store) {
-  function getCurrentShipId() {
-    const state = store.getState();
-    const id = state.client.id;
-    if (!id || !state.game) {
-      return;
-    }
-    return store.getState().game.ships.filter(ship => ship.client === id).map(ship => ship.id)[0];
-  }
+class GameClient {
+  constructor(store, el) {
+    this.ctx = el.getContext('2d');
+    this.store = store;
+    this.cachedState = null;
+    this.lastKnownTime = null;
 
-  function accelerate(index, strength) {
-    return function () {
-      const shipId = getCurrentShipId();
-      if (!shipId) {
+    const getCurrentShip = () => {
+      const clientId = store.getState().client.id;
+      const game = store.getState().game;
+      if (!clientId || !game) {
+        return null;
+      }
+      return game.ships.filter(ship => ship.client === clientId)[0] || null;
+    };
+
+    const dispatch = (type, payload) => {
+      const currentShip = getCurrentShip();
+      if (!currentShip) {
         return;
       }
       store.dispatch({
-        type: SET_THRUST,
+        type,
         payload: {
-          thrusterIndex: index,
-          strength: strength,
-          shipId,
+          ...payload,
+          shipId: currentShip.id,
         },
         meta: {
           pending: true,
         },
       });
     };
+
+    const accelerate = (thrusterIndex, strength) => () => {
+      dispatch(SET_THRUST, {
+        thrusterIndex,
+        strength,
+      });
+    };
+
+    const fire = () => {
+      dispatch(FIRE_WEAPON, {});
+    };
+
+    subscribe(87, accelerate(0, 40), accelerate(0, 0));
+    subscribe(65, accelerate(1, 0.1), accelerate(1, 0));
+    subscribe(68, accelerate(2, 0.1), accelerate(2, 0));
+    subscribe(32, fire, undefined, true);
+
+    this.loop = this.loop.bind(this);
   }
 
-  function fire() {
-    const shipId = getCurrentShipId();
-    if (!shipId) {
-      return;
-    }
-    store.dispatch({
-      type: FIRE_WEAPON,
-      payload: {
-        shipId,
-      },
-      meta: {
-        pending: true,
-      },
-    });
+  loop() {
+    this.render();
+    requestAnimationFrame(this.loop);
   }
 
-  subscribe(87, accelerate(0, 40), accelerate(0, 0));
-  subscribe(65, accelerate(1, 0.1), accelerate(1, 0));
-  subscribe(68, accelerate(2, 0.1), accelerate(2, 0));
-  subscribe(32, fire, undefined, true);
+  renderLoadScreen() {
+    const ctx = this.ctx;
+    ctx.save();
+    ctx.font = '72px Helvetica, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.baseLine = 'middle';
+    ctx.translate(500, 250);
+    ctx.fillText('Loading...', 0, 0);
+    ctx.restore();
+  }
 
-  const ctx = document.getElementById('canvas').getContext('2d');
-  console.log('Game started at %s', new Date(offset));
-
-  let lastTime;
-  let localState;
-
-  function render() {
-    const state = store.getState();
+  render() {
+    const state = this.store.getState();
     let game = state.game;
+
     if (!game) {
-      return;
+      return this.renderLoadScreen();
     }
 
-    if (game.time !== lastTime || lastTime === undefined) {
-      localState = game;
-      lastTime = game.time;
+    if (!this.lastKnownTime || this.lastKnownTime < game.time) {
+      this.offset = Date.now() - game.time;
+      this.lastKnownTime = game.time;
+      this.cachedState = game;
+    } else {
+      game = this.cachedState = simulate(this.cachedState, {
+        type: 'NOOP',
+        payload: {
+          time: Date.now() - this.offset,
+        },
+      });
     }
 
-    game = localState = simulate(localState, {
-      type: 'NOOP',
-      payload: {
-        time: Date.now() - offset,
-      },
-    });
+
+    const ctx = this.ctx;
 
     ctx.save();
     ctx.clearRect(0, 0, 1000, 500);
@@ -180,11 +197,14 @@ export default function render(offset, store) {
     }
     ctx.restore();
   }
+}
 
-  function tick() {
-    render();
-    requestAnimationFrame(tick);
-  }
+let client;
+export function attach(el) {
+  client = new GameClient(store, el);
+  client.loop();
+}
 
-  tick();
+export function detach() {
+  client = null;
 }
