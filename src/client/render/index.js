@@ -4,6 +4,7 @@ import store from '../store';
 
 import renderLoadScreen from './load';
 import renderShip from './ship';
+import renderProjectile from './projectile';
 
 import {
   length,
@@ -136,12 +137,7 @@ class GameClient {
     }
 
     for (const projectile of game.projectiles) {
-      ctx.save();
-      ctx.translate(projectile.position.x, projectile.position.y);
-      ctx.rotate(projectile.orientation);
-      ctx.fillStyle = 'rgba(0, 128, 0, 0.5)';
-      ctx.fillRect(-2.5, -5, 5, 10);
-      ctx.restore();
+      renderProjectile(ctx, projectile);
     }
     if (!currentShip) {
       ctx.save();
