@@ -1,15 +1,17 @@
-import simulate from '../shared/game';
-import subscribe from './lib/keypress';
-import store from './store';
+import simulate from '../../shared/game';
+import subscribe from '../lib/keypress';
+import store from '../store';
+
+import renderLoadScreen from './load';
 
 import {
   length,
-} from '../shared/util/vector';
+} from '../../shared/util/vector';
 
 import {
   SET_THRUST,
   FIRE_WEAPON,
-} from '../shared/actions';
+} from '../../shared/actions';
 
 class GameClient {
   constructor(store, el) {
@@ -68,23 +70,12 @@ class GameClient {
     requestAnimationFrame(this.loop);
   }
 
-  renderLoadScreen() {
-    const ctx = this.ctx;
-    ctx.save();
-    ctx.font = '72px Helvetica, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.baseLine = 'middle';
-    ctx.translate(500, 250);
-    ctx.fillText('Loading...', 0, 0);
-    ctx.restore();
-  }
-
   render() {
     const state = this.store.getState();
     let game = state.game;
 
     if (!game) {
-      return this.renderLoadScreen();
+      return renderLoadScreen(this.ctx);
     }
 
     if (!this.lastKnownTime || this.lastKnownTime < game.time) {
