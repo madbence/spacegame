@@ -74,8 +74,16 @@ class GameClient {
     const state = this.store.getState();
     let game = state.game;
 
+    const ctx = this.ctx;
+
+    ctx.save();
+    ctx.clearRect(0, 0, 1000, 500);
+    ctx.translate(500.5, 250.5);
+
     if (!game) {
-      return renderLoadScreen(this.ctx);
+      renderLoadScreen(this.ctx);
+      ctx.restore();
+      return;
     }
 
     if (!this.lastKnownTime || this.lastKnownTime < game.time) {
@@ -92,11 +100,6 @@ class GameClient {
     }
 
 
-    const ctx = this.ctx;
-
-    ctx.save();
-    ctx.clearRect(0, 0, 1000, 500);
-    ctx.translate(500.5, 250.5);
     ctx.scale(1, -1);
 
     const currentShip = game.ships.filter(ship => ship.client === state.client.id)[0];
