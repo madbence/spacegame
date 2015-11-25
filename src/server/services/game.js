@@ -82,13 +82,20 @@ class Game {
   }
 
   destroy() {
-    games.delete(this);
+    games.splice(games.indexOf(this), 1);
     clearInterval(this.heartbeat);
     console.log('Game %s destroyed!', this.id);
   }
+
+  toJSON() {
+    return {
+      id: this.id,
+      state: this.state,
+    };
+  }
 }
 
-const games = new Set();
+const games = [];
 
 export function create() {
   for (const game of games) {
@@ -97,6 +104,10 @@ export function create() {
     }
   }
   const game = new Game();
-  games.add(game);
+  games.push(game);
   return game;
+}
+
+export function list() {
+  return games;
 }
