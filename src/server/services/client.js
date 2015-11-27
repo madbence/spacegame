@@ -20,7 +20,7 @@ class Client {
     this.socket.on('message', message => {
       const action = JSON.parse(message);
       action.meta.client = this.id;
-      if (action.type === 'join-game') {
+      if (!this.game && action.type === 'join-game') {
         this.join(createGame(), action.payload.name);
       }
       for (const listener of this.listeners) {
@@ -81,6 +81,7 @@ class Client {
     });
     this.socket.on('close', unsubscribe);
     this.dispatch(SYNC_GAME, game.state);
+    this.game = game;
   }
 
   toJSON() {
