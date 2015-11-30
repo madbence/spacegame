@@ -1,12 +1,12 @@
 import React from 'react';
-import { attach } from '../render';
+import { attach, detach } from '../render';
 
 export default class Game extends React.Component {
   componentDidMount() {
     attach(this.refs.canvas);
   }
   componentWillUnmount() {
-    // ...
+    detach();
   }
   render() {
     return (

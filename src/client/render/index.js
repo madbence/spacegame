@@ -14,11 +14,15 @@ import {
 } from '../../shared/actions';
 
 class GameClient {
-  constructor(store, el) {
-    this.ctx = el.getContext('2d');
+  constructor(store) {
     this.store = store;
     this.cachedState = null;
     this.lastKnownTime = null;
+    this.loop = this.loop.bind(this);
+  }
+
+  attach(el) {
+    this.ctx = el.getContext('2d');
 
     const getCurrentShip = () => {
       const clientId = store.getState().client.id;
@@ -57,12 +61,18 @@ class GameClient {
       dispatch(FIRE_WEAPON, {});
     };
 
-    subscribe(87, accelerate(0, 40), accelerate(0, 0));
-    subscribe(65, accelerate(1, 0.1), accelerate(1, 0));
-    subscribe(68, accelerate(2, 0.1), accelerate(2, 0));
-    subscribe(32, fire, undefined, true);
+    this.listeners = [
+      subscribe(87, accelerate(0, 40), accelerate(0, 0)),
+      subscribe(65, accelerate(1, 0.1), accelerate(1, 0)),
+      subscribe(68, accelerate(2, 0.1), accelerate(2, 0)),
+      subscribe(32, fire, undefined, true),
+    ];
+  }
 
-    this.loop = this.loop.bind(this);
+  detach() {
+    for (const unsubscribe of this.listeners) {
+      unsubscribe();
+    }
   }
 
   loop() {
@@ -108,10 +118,12 @@ class GameClient {
 
 let client;
 export function attach(el) {
-  client = new GameClient(store, el);
+  client = new GameClient(store);
+  client.attach(el);
   client.loop();
 }
 
 export function detach() {
+  client.detach();
   client = null;
 }

@@ -1,7 +1,7 @@
 /* @flow */
 type callback = () => any;
 
-export default (code: number, down: ?callback, up: ?callback, preventDefault: ?boolean) => {
+export default function subscribe(code: number, down: ?callback, up: ?callback, preventDefault: ?boolean): callback {
   let pressed = false;
   const onDown = e => {
     if (e.keyCode !== code || pressed) {
@@ -30,4 +30,9 @@ export default (code: number, down: ?callback, up: ?callback, preventDefault: ?b
 
   document.body.addEventListener('keydown', onDown);
   document.body.addEventListener('keyup', onUp);
-};
+
+  return () => {
+    document.body.removeEventListener('keydown', onDown);
+    document.body.removeEventListener('keyup', onUp);
+  };
+}
