@@ -97,17 +97,50 @@ function addProjectile(projectiles: Array<Projectile> = [], ship: Ship): Array<P
 }
 
 function handleCollisions(state) {
-  const shipDamage = {};
+
+  // from projectiles, get the remaining projectiles and dealt damages
+  const [projectiles, damages] = state.projectiles.reduce(([projectiles, damages], projectile) => {
+
+    // collisions with ships (avoiding self-collisions)
+    const collisions = state.ships.filter(ship => ship.id !== projectile.owner && distance(projectile.position, ship.position) < 10);
+
+    // if there are no collisions, the projectile remains on the field
+    if (collisions.length < 1) {
+      return [projectiles.concat([projectile]), damages];
+    }
+
+    // if there are collisions, add them to the damages
+    return [projectiles, damages.concat(collisions.map(ship => ({
+      target: ship.id,
+      source: projectile.owner,
+    })))];
+  }, [[], []]);
+
+  // remaining ships after applying dealt damages
+  const ships = state.ships.reduce((ships, ship) => {
+    const damagedShip = damages
+
+      // only relevant damages are checked
+      .filter(damage => damage.target === ship.id)
+
+      // every damage deals constant damage to the hull
+      .reduce(ship => ({
+        ...ship,
+        hull: ship.hull - 20,
+      }), ship);
+
+    // remove ship if hull broken
+    if (damagedShip.hull < 1) {
+      return ships;
+    }
+
+    return [...ships, damagedShip];
+  }, []);
+
   return {
     ...state,
-    projectiles: state.projectiles.map(p => ({
-      ...p,
-      ttl: state.ships.filter(s => s.id !== p.owner && distance(p.position, s.position) < 10).map(s => shipDamage[s.id] = 1) > 0 ? 0 : p.ttl,
-    })),
-    ships: state.ships.map(s => ({
-      ...s,
-      hull: s.hull - (shipDamage[s.id] || 0) * 20
-    })),
+    projectiles,
+    ships,
   };
 }
 
