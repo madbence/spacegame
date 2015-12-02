@@ -97,18 +97,21 @@ function addProjectile(projectiles: Array<Projectile> = [], ship: Ship): Array<P
 }
 
 function handleCollisions(state) {
+  const events = [];
 
   // from projectiles, get the remaining projectiles and dealt damages
   const [projectiles, damages] = state.projectiles.reduce(([projectiles, damages], projectile) => {
-
     // collisions with ships (avoiding self-collisions)
     const collisions = state.ships.filter(ship => ship.id !== projectile.owner && distance(projectile.position, ship.position) < 10);
-
     // if there are no collisions, the projectile remains on the field
     if (collisions.length < 1) {
       return [projectiles.concat([projectile]), damages];
     }
-
+    events.push(...collisions.map(() => ({
+      type: 'collision',
+      time: state.time,
+      position: projectile.position,
+    })));
     // if there are collisions, add them to the damages
     return [projectiles, damages.concat(collisions.map(ship => ({
       target: ship.id,
@@ -119,21 +122,22 @@ function handleCollisions(state) {
   // remaining ships after applying dealt damages
   const ships = state.ships.reduce((ships, ship) => {
     const damagedShip = damages
-
       // only relevant damages are checked
       .filter(damage => damage.target === ship.id)
-
       // every damage deals constant damage to the hull
       .reduce(ship => ({
         ...ship,
         hull: ship.hull - 20,
       }), ship);
-
     // remove ship if hull broken
     if (damagedShip.hull < 1) {
+      events.push({
+        type: 'explosion',
+        time: state.time,
+        position: ship.position,
+      });
       return ships;
     }
-
     return [...ships, damagedShip];
   }, []);
 
@@ -141,6 +145,7 @@ function handleCollisions(state) {
     ...state,
     projectiles,
     ships,
+    events: state.events.concat(events),
   };
 }
 
@@ -167,6 +172,7 @@ function step(state) {
 const process = combine(
 
   (state, action) => {
+    state.events = [];
     while (state.time < action.payload.time) {
       state = step(state);
     }

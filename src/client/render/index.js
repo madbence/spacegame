@@ -18,6 +18,7 @@ class GameClient {
     this.store = store;
     this.cachedState = null;
     this.lastKnownTime = null;
+    this.decorations = [];
     this.loop = this.loop.bind(this);
   }
 
@@ -99,6 +100,10 @@ class GameClient {
       }
     }
 
+    if (game) {
+      this.decorations = this.decorations.concat(game.events);
+    }
+
     const currentShip = game && game.ships.filter(ship => ship.client === state.client.id)[0];
     const viewport = currentShip ? {
       position: currentShip.position,
@@ -112,7 +117,7 @@ class GameClient {
       alive: false,
     };
 
-    renderScene(this.ctx, game, viewport);
+    renderScene(this.ctx, game, this.decorations, viewport);
   }
 }
 
