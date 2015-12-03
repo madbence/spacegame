@@ -1,6 +1,7 @@
 import renderLoadScreen from './load';
 import renderShip from './ship';
 import renderProjectile from './projectile';
+import renderCrosshair from './crosshair';
 
 export default (ctx, scene, decorations, viewport) => {
   ctx.save();
@@ -60,6 +61,8 @@ export default (ctx, scene, decorations, viewport) => {
     ctx.scale(1, -1);
     ctx.fillText('You\'re dead!  ͡° ͜ʖ ͡°', 0, 0);
     ctx.restore();
+  } else {
+    renderCrosshair(ctx, viewport);
   }
   ctx.restore();
 };
