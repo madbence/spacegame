@@ -18,7 +18,7 @@ export default (ctx, scene, decorations, particles, viewport) => {
   ctx.scale(viewport.scale, viewport.scale);
   ctx.translate(-viewport.position.x, -viewport.position.y);
 
-  renderSpace(ctx, particles);
+  renderSpace(ctx, viewport, particles);
 
   for (const ship of scene.ships) {
     renderShip(ctx, ship, viewport);
