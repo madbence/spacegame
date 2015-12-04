@@ -13,6 +13,10 @@ import {
   FIRE_WEAPON,
 } from '../../shared/actions';
 
+function rand() {
+  return Math.floor(Math.random() * 2000 - 1000);
+}
+
 class GameClient {
   constructor(store) {
     this.store = store;
@@ -20,6 +24,12 @@ class GameClient {
     this.lastKnownTime = null;
     this.decorations = [];
     this.loop = this.loop.bind(this);
+    this.particles = Array(1000).fill().map(() => ({
+      position: {
+        x: rand(),
+        y: rand(),
+      },
+    }));
   }
 
   attach(el) {
@@ -117,7 +127,7 @@ class GameClient {
       alive: false,
     };
 
-    renderScene(this.ctx, game, this.decorations, viewport);
+    renderScene(this.ctx, game, this.decorations, this.particles, viewport);
   }
 }
 

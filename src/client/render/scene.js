@@ -2,8 +2,9 @@ import renderLoadScreen from './load';
 import renderShip from './ship';
 import renderProjectile from './projectile';
 import renderCrosshair from './crosshair';
+import renderSpace from './space';
 
-export default (ctx, scene, decorations, viewport) => {
+export default (ctx, scene, decorations, particles, viewport) => {
   ctx.save();
   ctx.clearRect(0, 0, 1000, 500);
   ctx.translate(500.5, 250.5);
@@ -17,19 +18,7 @@ export default (ctx, scene, decorations, viewport) => {
   ctx.scale(viewport.scale, viewport.scale);
   ctx.translate(-viewport.position.x, -viewport.position.y);
 
-  ctx.save();
-  ctx.strokeStyle = 'gray';
-  ctx.beginPath();
-  for (let x = -500; x <= 500; x += 20) {
-    ctx.moveTo(x, -500);
-    ctx.lineTo(x, 500);
-  }
-  for (let y = -500; y <= 500; y += 20) {
-    ctx.moveTo(-500, y);
-    ctx.lineTo(500, y);
-  }
-  ctx.stroke();
-  ctx.restore();
+  renderSpace(ctx, particles);
 
   for (const ship of scene.ships) {
     renderShip(ctx, ship, viewport);
