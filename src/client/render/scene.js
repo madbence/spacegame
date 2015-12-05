@@ -3,6 +3,7 @@ import renderShip from './ship';
 import renderProjectile from './projectile';
 import renderCrosshair from './crosshair';
 import renderSpace from './space';
+import renderMap from './map';
 
 export default (ctx, scene, decorations, particles, viewport) => {
   ctx.save();
@@ -52,6 +53,7 @@ export default (ctx, scene, decorations, particles, viewport) => {
     ctx.restore();
   } else {
     renderCrosshair(ctx, viewport);
+    renderMap(ctx, scene, viewport);
   }
   ctx.restore();
 };
