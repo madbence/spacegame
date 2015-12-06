@@ -20,11 +20,9 @@ export default (ctx, scene, viewport) => {
     if (length(diff) > 50) {
       diff = scale(diff, 1 / length(diff) * 50);
     }
-    ctx.fillRect(
-      diff.x - 5,
-      diff.y - 5,
-      10, 10
-    );
+    ctx.beginPath();
+    ctx.arc(diff.x, diff.y, 5, 0, Math.PI * 2);
+    ctx.fill();
   }
   ctx.restore();
 };
