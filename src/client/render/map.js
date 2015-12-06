@@ -16,6 +16,23 @@ export default (ctx, scene, viewport) => {
   ctx.arc(0, 0, 50, 0, Math.PI * 2);
   ctx.stroke();
   ctx.clip();
+  ctx.save();
+  const dx = viewport.position.x * 0.05 % 10;
+  const dy = viewport.position.y * 0.05 % 10;
+  ctx.strokeStyle = 'gray';
+  for (var x = -50; x <= 50; x += 10) {
+    ctx.beginPath();
+    ctx.moveTo(dx + x, -50);
+    ctx.lineTo(dx + x, 50);
+    ctx.stroke();
+  }
+  for (var y = -50; y <= 50; y += 10) {
+    ctx.beginPath();
+    ctx.moveTo(-50, dy + y);
+    ctx.lineTo(50, dy + y);
+    ctx.stroke();
+  }
+  ctx.restore();
   for (const ship of scene.ships) {
     let diff = scale(sub(viewport.position, ship.position), 0.05);
     if (length(diff) > 50) {
