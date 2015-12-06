@@ -15,6 +15,7 @@ export default (ctx, scene, viewport) => {
   ctx.beginPath();
   ctx.arc(0, 0, 50, 0, Math.PI * 2);
   ctx.stroke();
+  ctx.clip();
   for (const ship of scene.ships) {
     let diff = scale(sub(viewport.position, ship.position), 0.05);
     if (length(diff) > 50) {
