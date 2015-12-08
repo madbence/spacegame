@@ -107,11 +107,11 @@ function handleCollisions(state) {
     if (collisions.length < 1) {
       return [projectiles.concat([projectile]), damages];
     }
-    events.push(...collisions.map(() => ({
+    events.push({
       type: 'collision',
       time: state.time,
       position: projectile.position,
-    })));
+    });
     // if there are collisions, add them to the damages
     return [projectiles, damages.concat(collisions.map(ship => ({
       target: ship.id,
