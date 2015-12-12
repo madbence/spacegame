@@ -78,15 +78,18 @@ function makeShip(state: State, client: string, name: string): Ship {
     thrusters: [{
       position: { x: 0, y: -10 },
       orientation: 0,
+      thrust: 40,
       strength: 0,
     }, {
       position: { x: 5, y: 8 },
       orientation: Math.PI / 2,
-      strength: 0
+      thrust: 0.1,
+      strength: 0,
     }, {
       position: { x: -5, y: 8 },
       orientation: -Math.PI / 2,
-      strength: 0
+      thrust: 0.1,
+      strength: 0,
     }],
     hull: 100,
   };

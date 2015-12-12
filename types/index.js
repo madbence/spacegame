@@ -22,6 +22,7 @@ export type Ship = {
 }
 
 export type Thruster = {
+  thrust: number,
   strength: number,
   position: Vector,
   orientation: Rotation,

@@ -73,9 +73,9 @@ class GameClient {
     };
 
     this.listeners = [
-      subscribe(87, accelerate(0, 40), accelerate(0, 0)),
-      subscribe(65, accelerate(1, 0.1), accelerate(1, 0)),
-      subscribe(68, accelerate(2, 0.1), accelerate(2, 0)),
+      subscribe(87, accelerate(0, 1), accelerate(0, 0)),
+      subscribe(65, accelerate(1, 1), accelerate(1, 0)),
+      subscribe(68, accelerate(2, 1), accelerate(2, 0)),
       subscribe(32, fire, undefined, true),
     ];
   }
