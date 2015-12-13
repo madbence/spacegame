@@ -117,7 +117,7 @@ class GameClient {
     const currentShip = game && game.ships.filter(ship => ship.client === state.client.id)[0];
     const viewport = currentShip ? {
       position: currentShip.position,
-      scale: Math.min(1, Math.max(0.5, 1 / (1 + length(currentShip.velocity) / 100))),
+      scale: 0.8 + Math.pow(0.2, 1 + length(currentShip.velocity) / 100),
       orientation: currentShip.orientation,
       alive: true,
     } : {
