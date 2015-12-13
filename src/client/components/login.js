@@ -5,6 +5,6 @@ export default props => (
     <h1>SpaceGame</h1>
     <p>Lorem impsum blah blah blah</p>
     <button onClick={props.onLogin}>Log in</button>
-    <button onClick={props.onSignup}>Sign up</button>
+    <button>Sign up</button>
   </div>
 );
