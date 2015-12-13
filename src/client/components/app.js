@@ -37,9 +37,6 @@ export default (props) => {
     case '/game': return (
       <Game {...props} />
     );
-    case '/signup': return (
-      <Placeholder image='signup' />
-    );
     default: return (
       <Placeholder />
     );
