@@ -26,7 +26,7 @@ const spa =
 <script src=bundle.js></script>${analytics}`;
 
 export default function* (next) {
-  switch (this.url) {
+  switch (this.path) {
     case '/':
     case '/login':
     case '/lobby':
