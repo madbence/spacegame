@@ -12,4 +12,7 @@ export default {
   ws: {
     url: process.env.WS_URL,
   },
+  analytics: {
+    id: process.env.ANALYTICS_ID,
+  },
 };
