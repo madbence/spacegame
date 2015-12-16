@@ -7,10 +7,12 @@ import client from './reducers/client';
 
 import websocket from './middlewares/websocket';
 
+import { NAVIGATE } from './actions';
+
 const middlewares = [
   websocket,
   () => next => action => {
-    if (action.type === 'NAVIGATE' && window.location.pathname !== action.payload.route) {
+    if (action.type === NAVIGATE && window.location.pathname !== action.payload.route) {
       window.history.pushState({}, '', action.payload.route);
     }
     return next(action);

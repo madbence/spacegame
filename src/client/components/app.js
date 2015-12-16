@@ -5,10 +5,12 @@ import Lobby from './lobby';
 import Game from './game';
 import Placeholder from './placeholder';
 
+import { NAVIGATE } from '../actions';
+
 export default (props) => {
   function navigate(route) {
     props.dispatch({
-      type: 'NAVIGATE',
+      type: NAVIGATE,
       payload: {
         route,
       },
