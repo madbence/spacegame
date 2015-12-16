@@ -21,6 +21,7 @@ import {
   SET_THRUST,
   SYNC_GAME,
   JOIN_PLAYER,
+  NOOP,
 } from './actions';
 
 import type {
@@ -221,7 +222,7 @@ export default (state: State, action: Action) => {
   if (action.type === SYNC_GAME) {
     return action.payload;
   }
-  if (action.type !== 'NOOP' && actionList.indexOf(action.type) === -1) {
+  if (action.type !== NOOP && actionList.indexOf(action.type) === -1) {
     return state || null;
   }
   if (state) {

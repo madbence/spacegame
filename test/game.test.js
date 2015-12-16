@@ -1,5 +1,6 @@
 import test from 'ava';
 import game from '../src/shared/game';
+import { noop } from '../src/shared/actions';
 
 test('stationary ship stays stationary', t => {
   const initial = {
@@ -15,12 +16,7 @@ test('stationary ship stays stationary', t => {
     }],
     projectiles: [],
   };
-  let next = game(initial, {
-    type: 'NOOP',
-    payload: {
-      time: 1,
-    },
-  }).ships;
+  let next = game(initial, noop(1)).ships;
 
   t.same(next[0].position, { x: 0, y: 0 });
   t.same(next[0].velocity, { x: 0, y: 0 });
@@ -44,12 +40,7 @@ test('moving ship does not lose energy', t => {
     }],
     projectiles: [],
   };
-  let next = game(initial, {
-    type: 'NOOP',
-    payload: {
-      time: 1,
-    },
-  }).ships;
+  let next = game(initial, noop(1)).ships;
 
   t.same(next[0].position, { x: 1, y: 1 });
   t.same(next[0].velocity, { x: 1, y: 1 });

@@ -11,6 +11,7 @@ import {
 import {
   setThrust,
   fireWeapon,
+  noop,
 } from '../../shared/actions';
 
 function rand() {
@@ -86,12 +87,7 @@ class GameClient {
         this.lastKnownTime = game.time;
         this.cachedState = game;
       } else {
-        game = this.cachedState = simulate(this.cachedState, {
-          type: 'NOOP',
-          payload: {
-            time: Date.now() - this.offset,
-          },
-        });
+        game = this.cachedState = simulate(this.cachedState, noop(Date.now() - this.offset));
       }
     }
 
