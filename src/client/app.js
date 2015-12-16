@@ -3,16 +3,11 @@ import { connect, Provider } from 'react-redux';
 import { render } from 'react-dom';
 import React from 'react';
 
-import { NAVIGATE } from './actions'
+import { navigate } from './actions';
 import store from './store';
 
 window.addEventListener('popstate', () => {
-  store.dispatch({
-    type: NAVIGATE,
-    payload: {
-      route: window.location.pathname,
-    },
-  });
+  store.dispatch(navigate(window.location.pathname));
 });
 
 const ReduxApp = connect(x => x)(App);

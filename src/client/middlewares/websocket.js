@@ -1,7 +1,7 @@
 import WS from 'ws';
 import {
-  CLIENT_CONNECT,
-  CLIENT_DISCONNECT,
+  clientConnect,
+  clientDisconnect,
   NAVIGATE,
 } from '../actions';
 import config from '../config';
@@ -35,9 +35,7 @@ class Client {
   }
 
   _drain() {
-    this.store.dispatch({
-      type: CLIENT_CONNECT,
-    });
+    this.store.dispatch(clientConnect());
     for (const message of this.queue) {
       this.socket.send(message);
     }
@@ -45,9 +43,7 @@ class Client {
   }
 
   _close() {
-    this.store.dispatch({
-      type: CLIENT_DISCONNECT,
-    });
+    this.store.dispatch(clientDisconnect());
     setTimeout(this.connect.bind(this), 1000);
   }
 }

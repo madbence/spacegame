@@ -2,12 +2,12 @@ import uuid from 'uuid';
 import { create as createGame } from './game';
 
 import {
-  SYNC_GAME,
+  syncGame,
   JOIN_GAME,
 } from '../../shared/actions';
 
 import {
-  CLIENT_INIT,
+  clientInit,
 } from '../../shared/actions';
 
 class Client {
@@ -31,9 +31,7 @@ class Client {
 
     this.socket.on('close', () => console.log('Client %s destroyed!', this.id));
 
-    this.dispatch(CLIENT_INIT, {
-      id: this.id,
-    });
+    this.dispatch(clientInit(this.id));
   }
 
   async send(message) {
@@ -51,12 +49,8 @@ class Client {
     });
   }
 
-  dispatch(type, payload, meta) {
-    const message = JSON.stringify({
-      type, payload, meta
-    });
-
-    return this.send(message);
+  dispatch(action) {
+    return this.send(JSON.stringify(action));
   }
 
   get ready() {
@@ -74,14 +68,15 @@ class Client {
   join(game, name) {
     game.join(this, name);
     const unsubscribe = game.subscribe(action => {
-      this.dispatch(action.type, action.payload).catch(err => {
+      action.meta.pending = false;
+      this.dispatch(action).catch(err => {
         if (err) {
           console.log(err.stack);
         }
       });
     });
     this.socket.on('close', unsubscribe);
-    this.dispatch(SYNC_GAME, game.state);
+    this.dispatch(syncGame(game.state));
     this.game = game;
   }
 

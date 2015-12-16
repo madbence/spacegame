@@ -5,35 +5,22 @@ import Lobby from './lobby';
 import Game from './game';
 import Placeholder from './placeholder';
 
-import { NAVIGATE } from '../actions';
+import { navigate } from '../actions';
+import { joinGame } from '../../shared/actions';
 
 export default (props) => {
-  function navigate(route) {
-    props.dispatch({
-      type: NAVIGATE,
-      payload: {
-        route,
-      },
-    });
-  }
-
   switch (props.route) {
     case '/':
     case '/login': return (
-      <Login onLogin={() => navigate('/lobby')} onSignup={() => navigate('/signup')} />
+      <Login
+        onLogin={() => props.dispatch(navigate('/lobby'))}
+        onSignup={() => props.dispatch(navigate('/signup'))}
+      />
     );
     case '/lobby': return (
       <Lobby onJoin={(name) => {
-        navigate('/game');
-        props.dispatch({
-          type: 'join-game',
-          payload: {
-            name,
-          },
-          meta: {
-            pending: true,
-          },
-        });
+        props.dispatch(navigate('/game'));
+        props.dispatch(joinGame(name));
       }} />
     );
     case '/game': return (

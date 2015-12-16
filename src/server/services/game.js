@@ -1,8 +1,10 @@
 import apply from '../../shared/game';
 import uuid from 'uuid';
-import * as actions from '../../shared/actions';
-
-const validActions = Object.keys(actions).map(key => actions[key]);
+import {
+  validGameActions as validActions,
+  joinPlayer,
+  heartbeat,
+} from '../../shared/actions';
 
 class Game {
   constructor() {
@@ -18,10 +20,7 @@ class Game {
       projectiles: [],
     };
     console.log('Game %s created!', this.id);
-    this.heartbeat = setInterval(this.step.bind(this), 5000, {
-      type: actions.HEARTBEAT,
-      payload: {},
-    });
+    this.heartbeat = setInterval(this.step.bind(this), 5000, heartbeat());
   }
 
   step(action) {
@@ -70,13 +69,7 @@ class Game {
 
   join(client, name) {
     console.log('Client %s joined to game %s', client.id, this.id);
-    this.step({
-      type: actions.JOIN_PLAYER,
-      payload: {
-        client: client.id,
-        name,
-      },
-    });
+    this.step(joinPlayer(client.id, name));
     this.players.push(client);
     client.subscribe(action => this.step(action));
   }

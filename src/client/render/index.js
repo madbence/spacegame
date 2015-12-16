@@ -9,8 +9,8 @@ import {
 } from '../../shared/util/vector';
 
 import {
-  SET_THRUST,
-  FIRE_WEAPON,
+  setThrust,
+  fireWeapon,
 } from '../../shared/actions';
 
 function rand() {
@@ -44,33 +44,18 @@ class GameClient {
       return game.ships.filter(ship => ship.client === clientId)[0] || null;
     };
 
-    const dispatch = (type, payload) => {
+    const dispatch = (action) => {
       const currentShip = getCurrentShip();
       if (!currentShip) {
         return;
       }
-      store.dispatch({
-        type,
-        payload: {
-          ...payload,
-          shipId: currentShip.id,
-        },
-        meta: {
-          pending: true,
-        },
-      });
+
+      action.payload.shipId = currentShip.id;
+      store.dispatch(action);
     };
 
-    const accelerate = (thrusterIndex, strength) => () => {
-      dispatch(SET_THRUST, {
-        thrusterIndex,
-        strength,
-      });
-    };
-
-    const fire = () => {
-      dispatch(FIRE_WEAPON, {});
-    };
+    const accelerate = (thrusterIndex, strength) => () => dispatch(setThrust(thrusterIndex, strength));
+    const fire = () => dispatch(fireWeapon());
 
     this.listeners = [
       subscribe(87, accelerate(0, 1), accelerate(0, 0)),
