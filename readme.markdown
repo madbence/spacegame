@@ -1,4 +1,4 @@
-# spacegame [![Build Status][travis-badge]][travis-repo]
+# spacegame [![Build Status][travis-badge]][travis-repo] [![Join the chat at https://gitter.im/madbence/spacegame][gitter-badge]][gitter-room]
 
 ## install
 
@@ -81,3 +81,5 @@ MIT
 [nodemon]: http://nodemon.io
 [travis-badge]: https://travis-ci.org/madbence/spacegame.svg
 [travis-repo]: https://travis-ci.org/madbence/spacegame
+[gitter-badge]: https://badges.gitter.im/madbence/spacegame.svg
+[gitter-room]: https://gitter.im/madbence/spacegame
