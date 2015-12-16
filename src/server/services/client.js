@@ -3,6 +3,7 @@ import { create as createGame } from './game';
 
 import {
   SYNC_GAME,
+  JOIN_GAME,
 } from '../../shared/actions';
 
 import {
@@ -20,7 +21,7 @@ class Client {
     this.socket.on('message', message => {
       const action = JSON.parse(message);
       action.meta.client = this.id;
-      if (!this.game && action.type === 'join-game') {
+      if (!this.game && action.type === JOIN_GAME) {
         this.join(createGame(), action.payload.name);
       }
       for (const listener of this.listeners) {
