@@ -1,4 +1,4 @@
-# spacegame [![Build Status](https://travis-ci.org/madbence/spacegame.svg)](https://travis-ci.org/madbence/spacegame)
+# spacegame [![Build Status][travis-badge]][travis-repo]
 
 ## install
 
@@ -31,7 +31,7 @@ $ npm start         # start dev server
 ```
 ## lint
 
-Lint code style with [ESLint](http://eslint.org):
+Lint code style with [ESLint][eslint]:
 
 ```sh
 $ npm run lint
@@ -39,7 +39,7 @@ $ npm run lint
 
 ## check
 
-Run static typechecker ([Flowtype](http://flowtype.org)):
+Run static typechecker ([Flowtype][flowtype]):
 
 ```sh
 $ npm run check
@@ -47,20 +47,37 @@ $ npm run check
 
 ## stack
 
-- [`koa`](http://koajs.com/) to serve `HTTP` requests
-- [`ws`](https://www.npmjs.com/package/ws) to manage `WebSocket` connections
-- [`babel`](http://babeljs.io/) for compiling down to ES5
-- [`browserify`](http://browserify.org/) for bundling browser code
-- [`watchify`](https://www.npmjs.com/package/watchify) for incremental builds
-- [`flowtype`](http://flowtype.org) for static type analysis
-- [`react`](https://facebook.github.io/react/) for rendering ui
-- [`redux`](http://rackt.github.io/redux/) as state container
-- [`stylus`](https://learnboost.github.io/stylus/) as CSS preprocessor
-- [`eslint`](http://eslint.org) for linting the codebase
-- [`ava`](https://npmjs.com/ava) used as test runner
-- [`istanbul`](https://gotwarlost.github.io/istanbul/) for reporing test coverage (with the help of [`isparta`](https://github.com/douglasduteil/isparta))
-- [`nodemon`](http://nodemon.io/) for app reloading
+- [`koa`][koa] to serve `HTTP` requests
+- [`ws`][ws] to manage `WebSocket` connections
+- [`babel`][babel] for compiling down to ES5
+- [`browserify`][browserify] for bundling browser code
+- [`watchify`][watchify] for incremental builds
+- [`flowtype`][flowtype] for static type analysis
+- [`react`][react] for rendering ui
+- [`redux`][redux] as state container
+- [`stylus`][stylus] as CSS preprocessor
+- [`eslint`][eslint] for linting the codebase
+- [`ava`][ava] used as test runner
+- [`istanbul`][istanbul] for reporing test coverage (with the help of [`isparta`][isparta])
+- [`nodemon`][nodemon] for app reloading
 
 ## license
 
 MIT
+
+[koa]: http://koajs.com
+[ws]: https://npmjs.com/ws
+[babel]: https://babeljs.io
+[browserify]: http://browserify.org
+[watchify]: https://npmjs.com/watchify
+[flowtype]: http://flowtype.org
+[react]: https://facebook.github.io/react
+[redux]: http://rackt.github.io/redux/
+[stylus]: https://learnboost.github.io/stylus/
+[eslint]: http://eslint.org
+[ava]: https://npmjs.com/ava
+[istanbul]: https://gotwarlost.github.io/istanbul
+[isparta]: https://github.com/douglasduteil/isparta
+[nodemon]: http://nodemon.io
+[travis-badge]: https://travis-ci.org/madbence/spacegame.svg
+[travis-repo]: https://travis-ci.org/madbence/spacegame
