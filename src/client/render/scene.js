@@ -5,7 +5,7 @@ import renderCrosshair from './crosshair';
 import renderSpace from './space';
 import renderMap from './map';
 
-export default (ctx, scene, decorations, particles, viewport) => {
+export default (ctx, scene, particles, viewport) => {
   ctx.save();
   ctx.clearRect(0, 0, 1000, 500);
   ctx.translate(500.5, 250.5);
@@ -29,14 +29,14 @@ export default (ctx, scene, decorations, particles, viewport) => {
     renderProjectile(ctx, projectile);
   }
 
-  for (const decoration of decorations) {
-    if (scene.time > decoration.time + 5000) {
+  for (const explosion of scene.explosions) {
+    if (scene.time > explosion.time + 5000) {
       continue;
     }
-    const progress = (scene.time - decoration.time) / 5000;
+    const progress = (scene.time - explosion.time) / 5000;
     ctx.save();
     ctx.fillStyle = `rgba(255, 0, 0, ${0.5 - progress / 2})`;
-    ctx.translate(decoration.position.x, decoration.position.y);
+    ctx.translate(explosion.position.x, explosion.position.y);
     ctx.beginPath();
     ctx.arc(0, 0, progress * 100, 0, Math.PI * 2);
     ctx.fill();

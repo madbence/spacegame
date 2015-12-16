@@ -15,6 +15,7 @@ test('stationary ship stays stationary', t => {
       hull: 1,
     }],
     projectiles: [],
+    explosions: [],
   };
   let next = game(initial, noop(1)).ships;
 
@@ -39,6 +40,7 @@ test('moving ship does not lose energy', t => {
       hull: 1,
     }],
     projectiles: [],
+    explosions: [],
   };
   let next = game(initial, noop(1)).ships;
 

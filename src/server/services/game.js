@@ -18,6 +18,7 @@ class Game {
       uid: 1,
       ships: [],
       projectiles: [],
+      explosions: [],
     };
     console.log('Game %s created!', this.id);
     this.heartbeat = setInterval(this.step.bind(this), 5000, heartbeat());

@@ -149,7 +149,10 @@ function handleCollisions(state) {
     ...state,
     projectiles,
     ships,
-    events: state.events.concat(events),
+    explosions: state.explosions.concat(events.map(event => ({
+      time: event.time,
+      position: event.position,
+    }))),
   };
 }
 
@@ -161,13 +164,20 @@ function destoryedShips(ship) {
   return ship.hull > 0;
 }
 
-function step(state) {
+function oldExplosions(time) {
+  return function (explosion) {
+    return explosion.time + 5000 > time;
+  };
+}
+
+function step(state: State): State {
 
   state = {
     ...state,
     time: state.time + state.step,
     ships: state.ships.filter(destoryedShips).map(ship => advanceShip(ship, state.step / 1000)),
     projectiles: state.projectiles.filter(oldProjectiles).map(projectile => advanceProjectile(projectile, state.step / 1000)),
+    explosions: state.explosions.filter(oldExplosions(state.time)),
   };
 
   return handleCollisions(state);
@@ -176,7 +186,6 @@ function step(state) {
 const process = combine(
 
   (state, action) => {
-    state.events = [];
     while (state.time < action.payload.time) {
       state = step(state);
     }
