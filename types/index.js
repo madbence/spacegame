@@ -1,3 +1,5 @@
+/* @flow */
+
 export type Vector = {
   x: number,
   y: number,
@@ -6,7 +8,10 @@ export type Vector = {
 export type State = {
   ships: Array<Ship>,
   projectiles: Array<Projectile>,
+  explosions: Array<Explosion>,
   uid: number,
+  time: number,
+  step: number,
 }
 
 export type Ship = {
@@ -36,26 +41,31 @@ export type Projectile = {
   ttl: number,
 }
 
+export type Explosion = {
+  position: Vector,
+  time: number,
+}
+
 type Position = Vector
 type Rotation = number
 
-export type Action = TickAction |
-              ThrusterAction |
-              FireAction
-
-export type TickAction = {
-  type: 'TICK'
-}
+export type Action = ThrusterAction |
+                     FireAction
 
 export type ThrusterAction = {
   type: 'SET_THRUSTER_STRENGTH',
   payload: {
+    shipId: number,
     thrusterIndex: number,
-    strength: number
+    strength: number,
+    time: number
   }
 }
 
 export type FireAction = {
   type: 'FIRE',
-  payload: {},
+  payload: {
+    shipId: number,
+    time: number,
+  },
 }

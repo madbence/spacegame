@@ -7,14 +7,14 @@ import {
 
 import {
   combine,
-} from './util/helpers';
+} from '../util/helpers';
 
 import {
   unit,
   add,
   scale,
   distance,
-} from './util/vector';
+} from '../util/vector';
 
 import {
   FIRE_WEAPON,
@@ -22,16 +22,16 @@ import {
   SYNC_GAME,
   JOIN_PLAYER,
   NOOP,
-} from './actions';
+} from '../actions';
 
 import type {
   Ship,
   Projectile,
   State,
   Action,
-} from '../../types';
+} from '../../../types';
 
-import * as gameActions from './actions';
+import * as gameActions from '../actions';
 
 const actionList = Object.keys(gameActions).map(name => gameActions[name]);
 
