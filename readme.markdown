@@ -1,5 +1,7 @@
 # spacegame [![Build Status][travis-badge]][travis-repo] [![Join the chat at https://gitter.im/madbence/spacegame][gitter-badge]][gitter-room]
 
+[![Join the chat at https://gitter.im/madbence/spacegame](https://badges.gitter.im/madbence/spacegame.svg)](https://gitter.im/madbence/spacegame?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ## install
 
 Right now, Windows is not fully supported (Flowtype has no pre-built windows binaries), everything else should work.
