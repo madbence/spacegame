@@ -7,7 +7,7 @@ import {
 
 import {
   CLIENT_INIT,
-} from '../../client/actions';
+} from '../../shared/actions';
 
 class Client {
   constructor(socket) {

@@ -1,5 +1,6 @@
+import { CLIENT_INIT } from '../../shared/actions';
+
 import {
-  CLIENT_INIT,
   CLIENT_DISCONNECT,
   CLIENT_CONNECT,
 } from '../actions';
