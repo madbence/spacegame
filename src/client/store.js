@@ -24,14 +24,6 @@ const store = applyMiddleware(...middlewares)(createStore)(combineReducers({
   game,
   route,
   client,
-}), {
-  route: '/login',
-  messages: [],
-  game: null,
-  client: {
-    state: 'disconnected',
-    id: null,
-  }
-});
+}), window.__INITIAL_STATE__);
 
 export default store;

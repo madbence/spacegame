@@ -16,22 +16,36 @@ const analytics = config.analytics.id ? `
   ga('send', 'pageview');
 </script>` : '';
 
-const spa =
-`<!doctype html>
+export default function* (next) {
+
+  function html(route) {
+    const state = {
+      route,
+      messages: [],
+      game: null,
+      client: {
+        state: 'disconnected',
+        id: null,
+      },
+    };
+    return `<!doctype html>
 <meta charset=utf-8 />
 <link rel=stylesheet href=style.css />
 <title>SpaceGame</title>
 <div id=mount></div>
-<script>window.__CONFIG__ = ${JSON.stringify(conf)}</script>
+<script>
+window.__CONFIG__ = ${JSON.stringify(conf)};
+window.__INITIAL_STATE__ = ${JSON.stringify(state)};
+</script>
 <script src=bundle.js></script>${analytics}`;
+  }
 
-export default function* (next) {
   switch (this.path) {
     case '/':
     case '/login':
     case '/lobby':
     case '/game':
-      this.body = spa;
+      this.body = html(this.path);
       break;
     default:
       yield* next;
