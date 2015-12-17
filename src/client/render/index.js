@@ -1,5 +1,6 @@
 import simulate from '../../shared/game';
 import subscribe from '../lib/keypress';
+import keys from '../constants/keycodes';
 import store from '../store';
 
 import renderScene from './scene';
@@ -58,10 +59,10 @@ class GameClient {
     const fire = () => dispatch(fireWeapon());
 
     this.listeners = [
-      subscribe(87, accelerate(0, 1), accelerate(0, 0)),
-      subscribe(65, accelerate(1, 1), accelerate(1, 0)),
-      subscribe(68, accelerate(2, 1), accelerate(2, 0)),
-      subscribe(32, fire, undefined, true),
+      subscribe(keys.W, accelerate(0, 1), accelerate(0, 0)),
+      subscribe(keys.A, accelerate(1, 1), accelerate(1, 0)),
+      subscribe(keys.D, accelerate(2, 1), accelerate(2, 0)),
+      subscribe(keys.SPACE, fire, undefined, true),
     ];
   }
 
