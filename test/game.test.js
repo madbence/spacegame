@@ -22,12 +22,12 @@ test('stationary ship stays stationary', t => {
   t.end();
 });
 
-[
-  [0, 1],
-  [1, 0],
-  [1, 1],
-].forEach(([x, y]) => {
-  test(`ship moves to the right direction (${x}, ${y})`, t => {
+test(`ship moves to the right direction`, t => {
+  [
+    [0, 1],
+    [1, 0],
+    [1, 1],
+  ].forEach(([x, y]) => {
     const initial = {
       position: nv,
       velocity: { x, y },
@@ -43,7 +43,7 @@ test('stationary ship stays stationary', t => {
     next = advanceShip(next, 1);
     t.same(next.position, { x: 2 * x, y: 2 * y });
     t.same(next.velocity, { x, y });
-
-    t.end();
   });
+
+  t.end();
 });
