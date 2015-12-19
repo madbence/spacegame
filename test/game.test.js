@@ -47,3 +47,28 @@ test(`ship moves to the right direction`, t => {
 
   t.end();
 });
+
+test(`ship rotates to the right direction`, t => {
+  [
+    1,
+    -1,
+  ].forEach(r => {
+    const initial = {
+      position: nv,
+      velocity: nv,
+      rotation: r,
+      orientation: 0,
+      thrusters: [],
+    };
+
+    let next = advanceShip(initial, 1);
+    t.is(next.rotation, r);
+    t.is(next.orientation, r);
+
+    next = advanceShip(next, 2);
+    t.is(next.rotation, r);
+    t.is(next.orientation, r * 3);
+  });
+
+  t.end();
+});
