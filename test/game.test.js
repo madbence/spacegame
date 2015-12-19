@@ -40,8 +40,8 @@ test(`ship moves to the right direction`, t => {
     t.same(next.position, { x, y });
     t.same(next.velocity, { x, y });
 
-    next = advanceShip(next, 1);
-    t.same(next.position, { x: 2 * x, y: 2 * y });
+    next = advanceShip(next, 2);
+    t.same(next.position, { x: 3 * x, y: 3 * y });
     t.same(next.velocity, { x, y });
   });
 
