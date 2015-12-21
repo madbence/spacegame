@@ -2,6 +2,11 @@ import React from 'react';
 
 export default class Lobby extends React.Component {
   displayName: 'Lobby'
+
+  componentWillMount() {
+    this.props.onLoad();
+  }
+
   render() {
     const { onJoin } = this.props;
     return (

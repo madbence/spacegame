@@ -5,7 +5,10 @@ import Lobby from './lobby';
 import Game from './game';
 import Placeholder from './placeholder';
 
-import { navigate } from '../actions';
+import {
+  navigate,
+  connectSocket,
+} from '../actions';
 import { joinGame } from '../../shared/actions';
 
 export default (props) => {
@@ -18,10 +21,13 @@ export default (props) => {
       />
     );
     case '/lobby': return (
-      <Lobby onJoin={(name) => {
-        props.dispatch(navigate('/game'));
-        props.dispatch(joinGame(name));
-      }} />
+      <Lobby
+        onLoad={() => props.dispatch(connectSocket())}
+        onJoin={(name) => {
+          props.dispatch(navigate('/game'));
+          props.dispatch(joinGame(name));
+        }}
+      />
     );
     case '/game': return (
       <Game {...props} />

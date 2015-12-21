@@ -2,7 +2,7 @@ import WS from 'ws';
 import {
   clientConnect,
   clientDisconnect,
-  NAVIGATE,
+  CONNECT_SOCKET,
 } from '../actions';
 import config from '../config';
 
@@ -54,7 +54,7 @@ export default store => next => action => {
   if (client && action.meta && action.meta.pending) {
     return client.send(action);
   }
-  if (action.type === NAVIGATE && action.payload.route === '/lobby' && !client) {
+  if (action.type === CONNECT_SOCKET && !client) {
     client = new Client(store);
   }
   return next(action);

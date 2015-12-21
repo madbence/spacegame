@@ -3,6 +3,7 @@ import { CLIENT_INIT } from '../../shared/actions';
 import {
   CLIENT_DISCONNECT,
   CLIENT_CONNECT,
+  CONNECT_SOCKET,
 } from '../actions';
 
 export default (state = {}, action) => {
@@ -20,6 +21,11 @@ export default (state = {}, action) => {
     case CLIENT_CONNECT:
     return {
       state: 'connected',
+      id: null,
+    };
+    case CONNECT_SOCKET:
+    return {
+      state: 'connecting',
       id: null,
     };
   }

@@ -2,6 +2,7 @@
 export const CLIENT_CONNECT = 'client-connect';
 export const CLIENT_DISCONNECT = 'client-disconnect';
 export const NAVIGATE = 'navigate';
+export const CONNECT_SOCKET = 'connect-socket';
 
 // action creators
 export const clientConnect = () => ({
@@ -22,4 +23,10 @@ export const navigate = (route) => ({
     route,
   },
   meta: {},
+});
+
+export const connectSocket = () => ({
+  type: CONNECT_SOCKET,
+  payload: {},
+  meta: {}
 });
