@@ -1,5 +1,5 @@
 import test from 'ava';
-import { advanceShip } from '../src/shared/game/physics';
+import { advanceShip, advanceProjectile } from '../src/shared/game/physics';
 
 const nv = { x: 0, y: 0 };
 
@@ -68,6 +68,28 @@ test(`ship rotates to the right direction`, t => {
     next = advanceShip(next, 2);
     t.is(next.rotation, r);
     t.is(next.orientation, r * 3);
+  });
+
+  t.end();
+});
+
+test('projectile moves to the right direction', t => {
+  [
+    [0, 0],
+    [1, 0],
+  ].forEach(([x, y]) => {
+    const p = {
+      position: nv,
+      velocity: { x, y },
+    };
+
+    let next = advanceProjectile(p, 1);
+    t.same(next.position, { x, y });
+    t.same(next.velocity, { x, y });
+
+    next = advanceProjectile(next, 9);
+    t.same(next.position, { x: x * 10, y: y * 10 });
+    t.same(next.velocity, { x, y });
   });
 
   t.end();
