@@ -4,7 +4,7 @@
   "description": "Multiplayer space-shooter game",
   "main": "app.js",
   "scripts": {
-    "test": "ava test/**/*.test.js",
+    "test": "babel-node node_modules/.bin/tape 'test/**/*.test.js'",
     "start": "babel-node src/server/app",
     "flow": "flow",
     "flow:single": "flow check",
@@ -48,7 +48,6 @@
     "ws": "^0.8.0"
   },
   "devDependencies": {
-    "ava": "^0.2.0",
     "babel-eslint": "^4.1.6",
     "babel-preset-react": "^6.3.13",
     "babelify": "^7.2.0",
@@ -66,6 +65,7 @@
     "react-redux": "^4.0.0",
     "redux": "^3.0.4",
     "stylus": "^0.52.4",
+    "tape": "^4.3.0",
     "uglify-js": "^2.6.0",
     "watchify": "^3.5.0"
   }

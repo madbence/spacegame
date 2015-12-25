@@ -1,4 +1,4 @@
-import test from 'ava';
+import test from 'tape';
 import { advanceShip } from '../src/shared/game/physics';
 
 const nv = { x: 0, y: 0 };
@@ -14,10 +14,10 @@ test('stationary ship stays stationary', t => {
 
   let next = advanceShip(initial, 1);
 
-  t.same(next.position, nv);
-  t.same(next.velocity, nv);
-  t.same(next.rotation, 0);
-  t.same(next.orientation, 0);
+  t.deepEquals(next.position, nv);
+  t.deepEquals(next.velocity, nv);
+  t.deepEquals(next.rotation, 0);
+  t.deepEquals(next.orientation, 0);
 
   t.end();
 });
@@ -37,12 +37,12 @@ test(`ship moves to the right direction`, t => {
     };
 
     let next = advanceShip(initial, 1);
-    t.same(next.position, { x, y });
-    t.same(next.velocity, { x, y });
+    t.deepEquals(next.position, { x, y });
+    t.deepEquals(next.velocity, { x, y });
 
     next = advanceShip(next, 2);
-    t.same(next.position, { x: 3 * x, y: 3 * y });
-    t.same(next.velocity, { x, y });
+    t.deepEquals(next.position, { x: 3 * x, y: 3 * y });
+    t.deepEquals(next.velocity, { x, y });
   });
 
   t.end();
@@ -62,12 +62,12 @@ test(`ship rotates to the right direction`, t => {
     };
 
     let next = advanceShip(initial, 1);
-    t.is(next.rotation, r);
-    t.is(next.orientation, r);
+    t.equals(next.rotation, r);
+    t.equals(next.orientation, r);
 
     next = advanceShip(next, 2);
-    t.is(next.rotation, r);
-    t.is(next.orientation, r * 3);
+    t.equals(next.rotation, r);
+    t.equals(next.orientation, r * 3);
   });
 
   t.end();

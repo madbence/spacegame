@@ -1,4 +1,4 @@
-import test from 'ava';
+import test from 'tape';
 import * as v from '../src/shared/util/vector';
 
 function roundVector(v) {
@@ -13,13 +13,13 @@ test('vector#add', t => {
   const b = { x: 1, y: 2 };
 
   // returns result
-  t.same(v.add(a, b), { x: 2, y: 2 });
+  t.deepEquals(v.add(a, b), { x: 2, y: 2 });
 
   // does not mutates arguments
-  t.is(a.x, 1);
-  t.is(a.y, 0);
-  t.is(b.x, 1);
-  t.is(b.y, 2);
+  t.equals(a.x, 1);
+  t.equals(a.y, 0);
+  t.equals(b.x, 1);
+  t.equals(b.y, 2);
 
   // test that add really works
   [
@@ -31,7 +31,7 @@ test('vector#add', t => {
     const a = { x: x1, y: y1 };
     const b = { x: x2, y: y2 };
     const c = { x: x3, y: y3 };
-    t.same(v.add(a, b), c);
+    t.deepEquals(v.add(a, b), c);
   });
 
   t.end();
@@ -42,13 +42,13 @@ test('vector#sub', t => {
   const b = { x: 1, y: 2 };
 
   // returns result
-  t.same(v.sub(a, b), { x: 0, y: -2 });
+  t.deepEquals(v.sub(a, b), { x: 0, y: -2 });
 
   // does not mutates arguments
-  t.is(a.x, 1);
-  t.is(a.y, 0);
-  t.is(b.x, 1);
-  t.is(b.y, 2);
+  t.equals(a.x, 1);
+  t.equals(a.y, 0);
+  t.equals(b.x, 1);
+  t.equals(b.y, 2);
 
   // test that add really works
   [
@@ -60,7 +60,7 @@ test('vector#sub', t => {
     const a = { x: x1, y: y1 };
     const b = { x: x2, y: y2 };
     const c = { x: x3, y: y3 };
-    t.same(v.sub(a, b), c);
+    t.deepEquals(v.sub(a, b), c);
   });
 
   t.end();
@@ -77,7 +77,7 @@ test('vector#unit', t => {
     [Math.PI / -2, [1, 0]],
     [Math.PI / 4, [-Math.sqrt(2) / 2, Math.sqrt(2) / 2]],
   ].forEach(([n, [x, y]]) => {
-    t.same(roundVector(v.unit(n)), roundVector({x, y}));
+    t.deepEquals(roundVector(v.unit(n)), roundVector({x, y}));
   });
   t.end();
 });
@@ -85,11 +85,11 @@ test('vector#unit', t => {
 test('vector#cross', t => {
   const a = { x: 1, y: 0 };
   const b = { x: 0, y: 1 };
-  t.is(v.cross(a, b), 1);
-  t.is(a.x, 1);
-  t.is(a.y, 0);
-  t.is(b.x, 0);
-  t.is(b.y, 1);
+  t.equals(v.cross(a, b), 1);
+  t.equals(a.x, 1);
+  t.equals(a.y, 0);
+  t.equals(b.x, 0);
+  t.equals(b.y, 1);
 
   [
     [[1, 0], [0, 1], 1],
@@ -99,16 +99,16 @@ test('vector#cross', t => {
   ].forEach(([[x1, y1], [x2, y2], n]) => {
     const a = { x: x1, y: y1 };
     const b = { x: x2, y: y2 };
-    t.is(v.cross(a, b), n);
+    t.equals(v.cross(a, b), n);
   });
   t.end();
 });
 
 test('vector#rotate', t => {
   const a = { x: 1, y: 0 };
-  t.same(roundVector(v.rotate(a, Math.PI)), { x: -1, y: 0 });
-  t.is(a.x, 1);
-  t.is(a.y, 0);
+  t.deepEquals(roundVector(v.rotate(a, Math.PI)), { x: -1, y: 0 });
+  t.equals(a.x, 1);
+  t.equals(a.y, 0);
 
   [
     [[1, 0], Math.PI, [-1, 0]],
@@ -119,16 +119,16 @@ test('vector#rotate', t => {
   ].forEach(([[x1, y1], f, [x2, y2]]) => {
     const a = { x: x1, y: y1 };
     const b = { x: x2, y: y2 };
-    t.same(roundVector(v.rotate(a, f)), roundVector(b));
+    t.deepEquals(roundVector(v.rotate(a, f)), roundVector(b));
   });
   t.end();
 });
 
 test('vector#scale', t => {
   const a = { x: 1, y: 0 };
-  t.same(v.scale(a, 10), { x: 10, y: 0 });
-  t.is(a.x, 1);
-  t.is(a.y, 0);
+  t.deepEquals(v.scale(a, 10), { x: 10, y: 0 });
+  t.equals(a.x, 1);
+  t.equals(a.y, 0);
 
   [
     [[1, 1], 0, [0, 0]],
@@ -137,22 +137,22 @@ test('vector#scale', t => {
   ].forEach(([[x1, y1], f, [x2, y2]]) => {
     const a = { x: x1, y: y1 };
     const b = { x: x2, y: y2 };
-    t.same(roundVector(v.scale(a, f)), roundVector(b));
+    t.deepEquals(roundVector(v.scale(a, f)), roundVector(b));
   });
   t.end();
 });
 
 test('vector#length', t => {
   const a = { x: 1, y: 0 }
-  t.is(v.length(a), 1);
-  t.is(a.x, 1);
-  t.is(a.y, 0);
+  t.equals(v.length(a), 1);
+  t.equals(a.x, 1);
+  t.equals(a.y, 0);
   [
     [[1, 0], 1],
     [[0, 1], 1],
     [[4, 3], 5],
   ].forEach(([[x, y], l]) => {
-    t.is(v.length({x, y}), l);
+    t.equals(v.length({x, y}), l);
   });
   t.end();
 });
@@ -160,11 +160,11 @@ test('vector#length', t => {
 test('vector#distance', t => {
   const a = { x: 1, y: 0 };
   const b = { x: 2, y: 0 };
-  t.is(v.distance(a, b), 1);
-  t.is(a.x, 1);
-  t.is(b.x, 2);
-  t.is(a.y, 0);
-  t.is(b.y, 0);
+  t.equals(v.distance(a, b), 1);
+  t.equals(a.x, 1);
+  t.equals(b.x, 2);
+  t.equals(a.y, 0);
+  t.equals(b.y, 0);
 
   [
     [[1, 0], [2, 0], 1],
@@ -175,7 +175,7 @@ test('vector#distance', t => {
   ].forEach(([[x1, y1], [x2, y2], d]) => {
     const a = { x: x1, y: y1 };
     const b = { x: x2, y: y2 };
-    t.is(v.distance(a, b), d);
+    t.equals(v.distance(a, b), d);
   });
   t.end();
 });

@@ -57,7 +57,7 @@ $ npm run check
 - [`redux`][redux] as state container
 - [`stylus`][stylus] as CSS preprocessor
 - [`eslint`][eslint] for linting the codebase
-- [`ava`][ava] used as test runner
+- [`tape`][tape] used as test runner
 - [`istanbul`][istanbul] for reporing test coverage (with the help of [`isparta`][isparta])
 - [`nodemon`][nodemon] for app reloading
 
@@ -75,7 +75,7 @@ MIT
 [redux]: http://rackt.github.io/redux/
 [stylus]: https://learnboost.github.io/stylus/
 [eslint]: http://eslint.org
-[ava]: https://npmjs.com/ava
+[tape]: https://npmjs.com/tape
 [istanbul]: https://gotwarlost.github.io/istanbul
 [isparta]: https://github.com/douglasduteil/isparta
 [nodemon]: http://nodemon.io
