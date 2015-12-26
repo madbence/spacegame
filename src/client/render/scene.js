@@ -22,7 +22,7 @@ export default (ctx, scene, particles, viewport) => {
   renderSpace(ctx, viewport, particles);
 
   for (const ship of scene.ships) {
-    renderShip(ctx, ship, viewport);
+    renderShip(ctx, scene, ship, viewport);
   }
 
   for (const projectile of scene.projectiles) {

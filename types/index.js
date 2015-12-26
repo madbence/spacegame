@@ -24,6 +24,7 @@ export type Ship = {
   rotation: Rotation,
   thrusters: Array<Thruster>,
   hull: number,
+  spawn: number,
 }
 
 export type Thruster = {

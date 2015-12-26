@@ -93,6 +93,7 @@ function makeShip(state: State, client: string, name: string): Ship {
       strength: 0,
     }],
     hull: 100,
+    spawn: state.time,
   };
 }
 
@@ -106,7 +107,7 @@ function handleCollisions(state) {
   // from projectiles, get the remaining projectiles and dealt damages
   const [projectiles, damages] = state.projectiles.reduce(([projectiles, damages], projectile) => {
     // collisions with ships (avoiding self-collisions)
-    const collisions = state.ships.filter(ship => ship.id !== projectile.owner && distance(projectile.position, ship.position) < 10);
+    const collisions = state.ships.filter(ship => ship.id !== projectile.owner && distance(projectile.position, ship.position) < 10 && ship.spawn + 5000 < state.time);
     // if there are no collisions, the projectile remains on the field
     if (collisions.length < 1) {
       return [projectiles.concat([projectile]), damages];
