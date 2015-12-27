@@ -41,6 +41,7 @@ export function advanceShip(ship: Ship, step: number): Ship {
     position,
     rotation,
     orientation,
+    shield: Math.max(0, ship.shield - step),
   };
 }
 

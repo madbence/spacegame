@@ -1,4 +1,4 @@
-export default (ctx, state, ship, viewport) => {
+export default (ctx, ship, viewport) => {
   ctx.save();
   ctx.translate(ship.position.x, ship.position.y);
   ctx.rotate(ship.orientation);
@@ -22,7 +22,7 @@ export default (ctx, state, ship, viewport) => {
     ctx.restore();
   }
 
-  if (state.time < ship.spawn + 5000) {
+  if (ship.shield > 0) {
     ctx.save();
     ctx.strokeStyle = 'blue';
     ctx.beginPath();
