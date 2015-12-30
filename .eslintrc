@@ -79,8 +79,8 @@
     "no-unreachable": 2,
     "use-isnan": 2,
 
-    // Ensure valid jsdoc syntax
-    "valid-jsdoc": 1,
+    // jsdoc is not used
+    "valid-jsdoc": 0,
 
     // typeof can be compared to correct strings
     "valid-typeof": 2,
@@ -317,7 +317,7 @@
     // allow multiple var statements
     "one-var": 0,
     "wrap-regex": 2,
-    "max-len": [1, 80, 4],
+    "max-len": 0,
     "no-mixed-requires": 2,
     "consistent-return": 0,
     "space-after-keywords": 2,
