@@ -7,6 +7,7 @@ import {
 
 import {
   combine,
+  updateAt,
 } from '../util/helpers';
 
 import {
@@ -34,10 +35,6 @@ import type {
 import * as gameActions from '../actions';
 
 const actionList = Object.keys(gameActions).map(name => gameActions[name]);
-
-function updateAt<T>(xs: Array<T>, index: number, modification: any): Array<T> {
-  return [...xs.slice(0, index), { ...xs[index], ...modification }, ...xs.slice(index + 1)];
-}
 
 function setThrust(ships: Array<Ship> = [], shipIndex: number, thrusterIndex: number, strength: number): Array<Ship> {
   return updateAt(
