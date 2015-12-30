@@ -9,9 +9,16 @@ export type State = {
   ships: Array<Ship>,
   projectiles: Array<Projectile>,
   explosions: Array<Explosion>,
+  players: Array<Player>,
   uid: number,
   time: number,
   step: number,
+}
+
+export type Player = {
+  name: string,
+  client: string,
+  state: string,
 }
 
 export type Ship = {

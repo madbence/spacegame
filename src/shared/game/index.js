@@ -6,6 +6,10 @@ import {
 } from './physics';
 
 import {
+  add as addPlayer,
+} from './player';
+
+import {
   combine,
   updateAt,
 } from '../util/helpers';
@@ -91,6 +95,25 @@ function makeShip(state: State, client: string, name: string): Ship {
     }],
     hull: 100,
     shield: 5,
+  };
+}
+
+function join(state: State, client: string, name: string): State {
+  const old = state.ships.filter(ship => ship.name === name)[0];
+  if (old) {
+    return {
+      ...state,
+      players: addPlayer(state.players, client, name),
+      ships: updateAt(state.ships, state.ships.indexOf(old), {
+        client,
+      }),
+    };
+  }
+  return {
+    ...state,
+    players: addPlayer(state.players, client, name),
+    ships: state.ships.concat([makeShip(state, client, name)]),
+    uid: state.uid + 1,
   };
 }
 
@@ -214,11 +237,7 @@ const process = combine(
           projectiles: addProjectile(state.projectiles, state.ships[index]),
         };
       case JOIN_PLAYER:
-        return {
-          ...state,
-          ships: state.ships.concat([makeShip(state, action.payload.client, action.payload.name)]),
-          uid: state.uid + 1,
-        };
+        return join(state, action.payload.client, action.payload.name);
       default:
         return state;
     }
