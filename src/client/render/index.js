@@ -36,22 +36,12 @@ class GameClient {
   attach(el) {
     this.ctx = el.getContext('2d');
 
-    const getCurrentShip = () => {
-      const clientId = store.getState().client.id;
-      const game = store.getState().game;
-      if (!clientId || !game) {
-        return null;
-      }
-      return game.ships.filter(ship => ship.client === clientId)[0] || null;
-    };
-
     const dispatch = (action) => {
-      const currentShip = getCurrentShip();
-      if (!currentShip) {
+      if (!this.currentShip) {
         return;
       }
 
-      action.payload.shipId = currentShip.id;
+      action.payload.shipId = this.currentShip.id;
       store.dispatch(action);
     };
 
@@ -77,6 +67,19 @@ class GameClient {
     requestAnimationFrame(this.loop);
   }
 
+  get currentShip() {
+    const clientId = this.store.getState().client.id;
+    const game = this.store.getState().game;
+    if (!clientId || !game) {
+      return null;
+    }
+    const player = game.players.filter(player => player.client === clientId)[0];
+    if (!player) {
+      return null;
+    }
+    return game.ships.filter(ship => ship.owner === player.id)[0] || null;
+  }
+
   render() {
     const state = this.store.getState();
     let game = state.game;
@@ -91,7 +94,8 @@ class GameClient {
       }
     }
 
-    const currentShip = game && game.ships.filter(ship => ship.client === state.client.id)[0];
+    const currentShipId = this.currentShip ? this.currentShip.id : null;
+    const currentShip = currentShipId ? game.ships.filter(ship => ship.id === currentShipId)[0] : null;
     const viewport = currentShip ? {
       position: currentShip.position,
       scale: 0.8 + Math.pow(0.2, 1 + length(currentShip.velocity) / 100),

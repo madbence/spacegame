@@ -47,8 +47,12 @@ class Game {
     if (!action.meta || !action.meta.client) {
       return true;
     }
-    const ship = this.state.ships.filter(ship => ship.client === action.meta.client)[0];
-    if (!ship || ship.id !== action.payload.shipId) {
+    const player = this.state.players.filter(player => player.client === action.meta.client)[0];
+    if (!player) {
+      return false;
+    }
+    const ship = this.state.ships.filter(ship => ship.owner === player.id && ship.id === action.payload.shipId)[0];
+    if (!ship) {
       return false;
     }
     return true;

@@ -64,11 +64,11 @@ function makeProjectile(ship: Ship): Projectile {
   };
 }
 
-function makeShip(state: State, client: string, name: string): Ship {
+function makeShip(state: State, owner: number, name: string): Ship {
   const count = state.ships.length;
   return {
     id: state.uid,
-    client,
+    owner,
     name,
     position: {
       x: count % 2 * 500 - 250,
@@ -101,18 +101,12 @@ function makeShip(state: State, client: string, name: string): Ship {
 function join(state: State, client: string, name: string): State {
   const old = state.ships.filter(ship => ship.name === name)[0];
   if (old) {
-    return {
-      ...state,
-      players: addPlayer(state.players, client, name),
-      ships: updateAt(state.ships, state.ships.indexOf(old), {
-        client,
-      }),
-    };
+    return addPlayer(state, client, name);
   }
+  state = addPlayer(state, client, name);
   return {
     ...state,
-    players: addPlayer(state.players, client, name),
-    ships: state.ships.concat([makeShip(state, client, name)]),
+    ships: state.ships.concat([makeShip(state, state.uid - 1, name)]),
     uid: state.uid + 1,
   };
 }

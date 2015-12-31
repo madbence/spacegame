@@ -19,11 +19,12 @@ export type Player = {
   name: string,
   client: string,
   state: string,
+  id: number,
 }
 
 export type Ship = {
   id: number,
-  client: string,
+  owner: number,
   name: string,
   position: Vector,
   velocity: Vector,

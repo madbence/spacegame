@@ -6,10 +6,12 @@ import {
 
 import type {
   Player,
+  State,
 } from '../../../types';
 
-function create(client: string, name: string): Player {
+function create(id: number, client: string, name: string): Player {
   return {
+    id,
     client,
     name,
     state: 'connected',
@@ -17,23 +19,20 @@ function create(client: string, name: string): Player {
   };
 }
 
-export function add(players: Array<Player>, client: string, name: string): Array<Player> {
-  const old = players.filter(player => player.name === name)[0];
+export function add(state: State, client: string, name: string): State {
+  const old = state.players.filter(player => player.name === name)[0];
   if (old) {
-    return updateAt(players, players.indexOf(old), {
-      client,
-      state: 'connected',
-    });
+    return {
+      ...state,
+      players: updateAt(state.players, state.players.indexOf(old), {
+        client,
+        state: 'connected',
+      }),
+    };
   }
-  return players.concat([create(client, name)]);
-}
-
-export function remove(players: Array<Player>, client: string): Array<Player> {
-  const old = players.filter(player => player.client === client)[0];
-  if (old) {
-    return updateAt(players, players.indexOf(old), {
-      state: 'disconnected',
-    });
-  }
-  return players;
+  return {
+    ...state,
+    players: state.players.concat([create(state.uid, client, name)]),
+    uid: state.uid + 1,
+  };
 }
