@@ -36,7 +36,7 @@ class Game {
       action.payload.time = Date.now() - this.offset;
       this.state = apply(this.state, action);
     } catch (e) {
-      //
+      console.error(e.stack);
     }
     for (const listener of this.listeners) {
       listener(action, this);
