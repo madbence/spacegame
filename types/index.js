@@ -20,6 +20,7 @@ export type Player = {
   client: string,
   state: string,
   id: number,
+  respawn: ?number,
 }
 
 export type Ship = {

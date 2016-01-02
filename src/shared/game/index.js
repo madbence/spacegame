@@ -139,6 +139,7 @@ function handleCollisions(state) {
   }, [[], []]);
 
   // remaining ships after applying dealt damages
+  const shipCache = {};
   const ships = state.ships.reduce((ships, ship) => {
     const damagedShip = damages
       // only relevant damages are checked
@@ -157,11 +158,25 @@ function handleCollisions(state) {
       });
       return ships;
     }
+    shipCache[ship.owner] = true;
     return [...ships, damagedShip];
   }, []);
 
+  const players = state.players.map(player => {
+    if (shipCache[player.id]) {
+      return player;
+    } else if (player.respawn !== null) {
+      return player;
+    }
+    return {
+      ...player,
+      respawn: 5000,
+    };
+  });
+
   return {
     ...state,
+    players,
     projectiles,
     ships,
     explosions: state.explosions.concat(events.map(event => ({
@@ -185,6 +200,30 @@ function oldExplosions(time) {
   };
 }
 
+function respawnShips(state: State): State {
+  const newShips = [];
+  return {
+    ...state,
+    players: state.players.map(player => {
+      if (player.respawn == null) {
+        return player;
+      } else if (player.respawn > 0) {
+        return {
+          ...player,
+          respawn: player.respawn - state.step,
+        };
+      }
+      newShips.push(makeShip(state, player.id, player.name));
+      return {
+        ...player,
+        respawn: null,
+      };
+    }),
+    ships: state.ships.concat(newShips),
+    uid: state.uid + newShips.length,
+  };
+}
+
 function step(state: State): State {
 
   state = {
@@ -195,7 +234,7 @@ function step(state: State): State {
     explosions: state.explosions.filter(oldExplosions(state.time)),
   };
 
-  return handleCollisions(state);
+  return respawnShips(handleCollisions(state));
 }
 
 const process = combine(

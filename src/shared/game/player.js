@@ -15,7 +15,7 @@ function create(id: number, client: string, name: string): Player {
     client,
     name,
     state: 'connected',
-    respawn: 5000,
+    respawn: null,
   };
 }
 
