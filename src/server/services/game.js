@@ -6,6 +6,8 @@ import {
   heartbeat,
 } from '../../shared/actions';
 
+const games = [];
+
 class Game {
   constructor() {
     this.id = uuid.v4();
@@ -93,8 +95,6 @@ class Game {
     };
   }
 }
-
-const games = [];
 
 export function create() {
   for (const game of games) {

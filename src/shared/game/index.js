@@ -49,8 +49,8 @@ function setThrust(ships: Array<Ship> = [], shipIndex: number, thrusterIndex: nu
         thrusterIndex, {
           strength,
         }
-      )
-    }
+      ),
+    },
   );
 }
 
@@ -60,7 +60,7 @@ function makeProjectile(ship: Ship): Projectile {
     velocity: add(ship.velocity, scale(unit(ship.orientation), 200)),
     orientation: ship.orientation,
     ttl: 2,
-    owner: ship.id
+    owner: ship.id,
   };
 }
 

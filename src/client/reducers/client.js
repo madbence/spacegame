@@ -8,20 +8,21 @@ import {
 export default (state = {}, action) => {
   switch (action.type) {
     case CLIENT_INIT:
-    return {
-      ...state,
-      id: action.payload.id,
-    };
+      return {
+        ...state,
+        id: action.payload.id,
+      };
     case CLIENT_DISCONNECT:
-    return {
-      state: 'disconnected',
-      id: null,
-    };
+      return {
+        state: 'disconnected',
+        id: null,
+      };
     case CLIENT_CONNECT:
-    return {
-      state: 'connected',
-      id: null,
-    };
+      return {
+        state: 'connected',
+        id: null,
+      };
+    default:
+      return state;
   }
-  return state;
 };

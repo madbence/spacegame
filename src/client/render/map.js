@@ -20,13 +20,13 @@ export default (ctx, scene, viewport) => {
   const dx = viewport.position.x * 0.05 % 10;
   const dy = viewport.position.y * 0.05 % 10;
   ctx.strokeStyle = 'gray';
-  for (var x = -50; x <= 50; x += 10) {
+  for (let x = -50; x <= 50; x += 10) {
     ctx.beginPath();
     ctx.moveTo(dx + x, -50);
     ctx.lineTo(dx + x, 50);
     ctx.stroke();
   }
-  for (var y = -50; y <= 50; y += 10) {
+  for (let y = -50; y <= 50; y += 10) {
     ctx.beginPath();
     ctx.moveTo(-50, dy + y);
     ctx.lineTo(50, dy + y);
