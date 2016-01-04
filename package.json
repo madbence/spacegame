@@ -1,6 +1,6 @@
 {
   "name": "spacegame",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Multiplayer space-shooter game",
   "main": "app.js",
   "scripts": {
