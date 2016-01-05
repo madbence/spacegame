@@ -21,6 +21,7 @@ export type Player = {
   state: string,
   id: number,
   respawn: ?number,
+  score: number,
 }
 
 export type Ship = {

@@ -60,7 +60,7 @@ function makeProjectile(ship: Ship): Projectile {
     velocity: add(ship.velocity, scale(unit(ship.orientation), 200)),
     orientation: ship.orientation,
     ttl: 2,
-    owner: ship.id,
+    owner: ship.owner,
   };
 }
 
@@ -121,7 +121,7 @@ function handleCollisions(state) {
   // from projectiles, get the remaining projectiles and dealt damages
   const [projectiles, damages] = state.projectiles.reduce(([projectiles, damages], projectile) => {
     // collisions with ships (avoiding self-collisions)
-    const collisions = state.ships.filter(ship => ship.id !== projectile.owner && distance(projectile.position, ship.position) < 10 && ship.shield < 1);
+    const collisions = state.ships.filter(ship => ship.owner !== projectile.owner && distance(projectile.position, ship.position) < 10 && ship.shield < 1);
     // if there are no collisions, the projectile remains on the field
     if (collisions.length < 1) {
       return [projectiles.concat([projectile]), damages];
@@ -140,17 +140,27 @@ function handleCollisions(state) {
 
   // remaining ships after applying dealt damages
   const shipCache = {};
+  const scoreCache = {};
   const ships = state.ships.reduce((ships, ship) => {
+    const sources = [];
     const damagedShip = damages
       // only relevant damages are checked
       .filter(damage => damage.target === ship.id)
       // every damage deals constant damage to the hull
-      .reduce(ship => ({
-        ...ship,
-        hull: ship.hull - 20,
-      }), ship);
+      .reduce((ship, damage) => {
+        sources.push(damage.source);
+        return {
+          ...ship,
+          hull: ship.hull - 20,
+        };
+      }, ship);
+
     // remove ship if hull broken
     if (damagedShip.hull < 1) {
+      sources.reduce((cache, source) => {
+        cache[source] = (cache[source] || 0) + 1;
+        return cache;
+      }, scoreCache);
       events.push({
         type: 'explosion',
         time: state.time,
@@ -162,17 +172,31 @@ function handleCollisions(state) {
     return [...ships, damagedShip];
   }, []);
 
-  const players = state.players.map(player => {
-    if (shipCache[player.id]) {
+  const players = state.players
+
+    // add scores
+    .map(player => {
+      if (scoreCache[player.id]) {
+        return {
+          ...player,
+          score: player.score + scoreCache[player.id],
+        };
+      }
       return player;
-    } else if (player.respawn !== null) {
-      return player;
-    }
-    return {
-      ...player,
-      respawn: 5000,
-    };
-  });
+    })
+
+    // trigger respawn timers
+    .map(player => {
+      if (shipCache[player.id]) {
+        return player;
+      } else if (player.respawn !== null) {
+        return player;
+      }
+      return {
+        ...player,
+        respawn: 5000,
+      };
+    });
 
   return {
     ...state,
