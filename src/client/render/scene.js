@@ -4,6 +4,7 @@ import renderProjectile from './projectile';
 import renderCrosshair from './crosshair';
 import renderSpace from './space';
 import renderMap from './map';
+import renderScores from './scores';
 
 export default (ctx, scene, particles, viewport) => {
   ctx.save();
@@ -55,5 +56,6 @@ export default (ctx, scene, particles, viewport) => {
     renderCrosshair(ctx, viewport);
     renderMap(ctx, scene, viewport);
   }
+  renderScores(ctx, scene, viewport);
   ctx.restore();
 };
