@@ -1,6 +1,4 @@
 import simulate from '../../shared/game';
-import subscribe from '../lib/keypress';
-import keys from '../constants/keycodes';
 import store from '../store';
 
 import renderScene from './scene';
@@ -10,8 +8,6 @@ import {
 } from '../../shared/util/vector';
 
 import {
-  setThrust,
-  fireWeapon,
   noop,
 } from '../../shared/actions';
 
@@ -35,31 +31,9 @@ class GameClient {
 
   attach(el) {
     this.ctx = el.getContext('2d');
-
-    const dispatch = (action) => {
-      if (!this.currentShip) {
-        return;
-      }
-
-      action.payload.shipId = this.currentShip.id;
-      store.dispatch(action);
-    };
-
-    const accelerate = (thrusterIndex, strength) => () => dispatch(setThrust(thrusterIndex, strength));
-    const fire = () => dispatch(fireWeapon());
-
-    this.listeners = [
-      subscribe(keys.W, accelerate(0, 1), accelerate(0, 0)),
-      subscribe(keys.A, accelerate(1, 1), accelerate(1, 0)),
-      subscribe(keys.D, accelerate(2, 1), accelerate(2, 0)),
-      subscribe(keys.SPACE, fire, null, true),
-    ];
   }
 
   detach() {
-    for (const unsubscribe of this.listeners) {
-      unsubscribe();
-    }
   }
 
   loop() {
