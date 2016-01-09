@@ -1,10 +1,6 @@
-export default (ctx, scene, viewport) => {
+export default (ctx, scene) => {
   ctx.save();
-  ctx.translate(viewport.position.x, viewport.position.y);
-  ctx.scale(1 / viewport.scale, 1 / viewport.scale);
-  ctx.rotate(viewport.orientation);
-  ctx.translate(400, 200);
-  ctx.scale(1, -1);
+  ctx.translate(400, -200);
   const players = scene.players.slice().sort((a, b) => b.score - a.score);
   for (const player of players) {
     ctx.fillText(`${player.name}: ${player.score}`, 0, 0);

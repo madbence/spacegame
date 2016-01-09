@@ -1,9 +1,7 @@
-export default (ctx, viewport) => {
+export default ctx => {
   ctx.save();
   ctx.strokeStyle = 'rgba(255, 0, 0, 0.6)';
-  ctx.translate(viewport.position.x, viewport.position.y);
-  ctx.rotate(viewport.orientation);
-  ctx.translate(0, 150);
+  ctx.translate(0, -150);
   ctx.beginPath();
   ctx.arc(0, 0, 5, 0, Math.PI * 2);
   ctx.moveTo(-7, 0);

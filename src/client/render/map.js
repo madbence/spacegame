@@ -6,11 +6,8 @@ import {
 
 export default (ctx, scene, viewport) => {
   ctx.save();
-  ctx.translate(viewport.position.x, viewport.position.y);
-  ctx.scale(1 / viewport.scale, 1 / viewport.scale);
+  ctx.translate(-400, 150);
   ctx.rotate(viewport.orientation);
-  ctx.translate(-400, -150);
-  ctx.rotate(-viewport.orientation);
   ctx.scale(-1, -1);
   ctx.beginPath();
   ctx.arc(0, 0, 50, 0, Math.PI * 2);
