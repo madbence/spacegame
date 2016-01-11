@@ -11,6 +11,7 @@ import {
 import type {
   Ship,
   Projectile,
+  Explosion,
 } from '../../../types';
 
 /**
@@ -56,5 +57,12 @@ export function advanceProjectile(projectile: Projectile, step: number): Project
     ...projectile,
     position,
     ttl: projectile.ttl - step,
+  };
+}
+
+export function advanceExplostion(explosion: Explosion, step: number): Explosion {
+  return {
+    ...explosion,
+    ttl: explosion.ttl - step,
   };
 }

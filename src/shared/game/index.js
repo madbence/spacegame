@@ -3,6 +3,7 @@
 import {
   advanceShip,
   advanceProjectile,
+  advanceExplostion,
 } from './physics';
 
 import {
@@ -34,6 +35,7 @@ import type {
   Projectile,
   State,
   Action,
+  Explosion,
 } from '../../../types';
 
 import * as gameActions from '../actions';
@@ -163,7 +165,6 @@ function handleCollisions(state) {
       }, scoreCache);
       events.push({
         type: 'explosion',
-        time: state.time,
         position: ship.position,
       });
       return ships;
@@ -204,24 +205,18 @@ function handleCollisions(state) {
     projectiles,
     ships,
     explosions: state.explosions.concat(events.map(event => ({
-      time: event.time,
+      ttl: 5,
       position: event.position,
     }))),
   };
 }
 
-function oldProjectiles(projectile) {
-  return projectile.ttl > 0;
+function oldEntities(entity: Projectile | Explosion): boolean {
+  return entity.ttl > 0;
 }
 
 function destoryedShips(ship) {
   return ship.hull > 0;
-}
-
-function oldExplosions(time) {
-  return function (explosion) {
-    return explosion.time + 5000 > time;
-  };
 }
 
 function respawnShips(state: State): State {
@@ -254,8 +249,8 @@ function step(state: State): State {
     ...state,
     time: state.time + state.step,
     ships: state.ships.filter(destoryedShips).map(ship => advanceShip(ship, state.step / 1000)),
-    projectiles: state.projectiles.filter(oldProjectiles).map(projectile => advanceProjectile(projectile, state.step / 1000)),
-    explosions: state.explosions.filter(oldExplosions(state.time)),
+    projectiles: state.projectiles.filter(oldEntities).map(projectile => advanceProjectile(projectile, state.step / 1000)),
+    explosions: state.explosions.filter(oldEntities).map(explosion => advanceExplostion(explosion, state.step / 1000)),
   };
 
   return respawnShips(handleCollisions(state));

@@ -54,7 +54,7 @@ export type Projectile = {
 
 export type Explosion = {
   position: Vector,
-  time: number,
+  ttl: number,
 }
 
 type Position = Vector
