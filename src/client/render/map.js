@@ -8,7 +8,7 @@ export default (ctx, scene, viewport) => {
   ctx.save();
   ctx.translate(-400, 150);
   ctx.rotate(viewport.orientation);
-  ctx.scale(-1, -1);
+  ctx.scale(-1, 1);
   ctx.beginPath();
   ctx.arc(0, 0, 50, 0, Math.PI * 2);
   ctx.stroke();
