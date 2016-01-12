@@ -28,6 +28,7 @@ export default class EditorPane extends React.Component {
 
     this.state = {
       value: this.props.value || defaultjs,
+      codeRunning: '',
     }
   }
 
@@ -41,17 +42,30 @@ export default class EditorPane extends React.Component {
     sandbox.stop();
   }
 
+  get hasCodeChanged() {
+    return this.state.value !== this.state.codeRunning;
+  }
+
   onChange(newValue) {
     this.setState({ value: newValue });
   }
 
   runCode() {
+    this.setState({ codeRunning: this.state.value });
+
     sandbox.stop();
     sandbox.code = this.state.value;
     sandbox.start();
   }
 
   render() {
+    const labelText = this.hasCodeChanged ?
+                        'Code changed. Hit "Run!" to reload code.' :
+                        'Latest code running.';
+    const labelStyle = this.hasCodeChanged ?
+                        { color: 'red' } :
+                        { color: 'green' };
+
     return (
       <div>
         <AceEditor
@@ -66,6 +80,9 @@ export default class EditorPane extends React.Component {
         <button onClick={this.runCode.bind(this)}>
           Run!
         </button>
+        <p style={labelStyle}>
+          {labelText}
+        </p>
       </div>
     );
   }
