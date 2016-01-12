@@ -21,7 +21,7 @@ helpers.addKeyListener(keys.SPACE, actions.fire, undefined, true);
 setInterval(() => console.log(getState()), 1000);`;
 
 export default class EditorPane extends React.Component {
-  displayName: 'EditorPane'
+  displayName: 'EditorPane';
 
   constructor(props) {
     super(props);
@@ -29,7 +29,7 @@ export default class EditorPane extends React.Component {
     this.state = {
       value: this.props.value || defaultjs,
       codeRunning: '',
-    }
+    };
   }
 
   componentDidMount() {
@@ -67,12 +67,12 @@ export default class EditorPane extends React.Component {
   }
 
   render() {
-    const labelText = this.hasCodeChanged ?
-                        'Code changed. Hit "Run!" to reload code.' :
-                        'Latest code running.';
-    const labelStyle = this.hasCodeChanged ?
-                        { color: 'red' } :
-                        { color: 'green' };
+    const labelText = this.hasCodeChanged
+                        ? 'Code changed. Hit "Run!" to reload code.'
+                        : 'Latest code running.';
+    const labelStyle = this.hasCodeChanged
+                        ? { color: 'red' }
+                        : { color: 'green' };
 
     return (
       <div>

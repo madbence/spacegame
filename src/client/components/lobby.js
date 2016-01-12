@@ -1,7 +1,7 @@
 import React from 'react';
 
 export default class Lobby extends React.Component {
-  displayName: 'Lobby'
+  displayName: 'Lobby';
   render() {
     const { onJoin } = this.props;
     return (
