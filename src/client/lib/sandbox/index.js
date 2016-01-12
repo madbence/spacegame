@@ -16,6 +16,7 @@ const states = {
 class SandboxProxy {
   constructor() {
     this.keySubscriptions = [];
+    this.listenersDisabled = false;
     this.storeSubscription = store.subscribe(this.stateUpdateHandler.bind(this));
     this.state = states.STOPPED;
 
@@ -63,12 +64,21 @@ class SandboxProxy {
         this.keySubscriptions.push(subscribe(msg.payload.code,
                                 this.createKeyDownHandler(msg.payload.code),
                                 this.createKeyUpHandler(msg.payload.code),
-                                msg.payload.preventDefault));
+                                msg.payload.preventDefault,
+                                () => this.listenersDisabled));
         break;
 
       default:
         console.error(`Unexpected message of type ${msg.type}`);
     }
+  }
+
+  enableKeyListeners() {
+    this.listenersDisabled = false;
+  }
+
+  disableKeyListeners() {
+    this.listenersDisabled = true;
   }
 
   set code(newCode) {

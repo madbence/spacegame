@@ -58,6 +58,14 @@ export default class EditorPane extends React.Component {
     sandbox.start();
   }
 
+  onEditorFocus() {
+    sandbox.disableKeyListeners();
+  }
+
+  onEditorBlur() {
+    sandbox.enableKeyListeners();
+  }
+
   render() {
     const labelText = this.hasCodeChanged ?
                         'Code changed. Hit "Run!" to reload code.' :
@@ -75,6 +83,8 @@ export default class EditorPane extends React.Component {
           width={this.props.editorWidth}
           height={this.props.editorHeight}
           onChange={this.onChange.bind(this)}
+          onFocus={this.onEditorFocus.bind(this)}
+          onBlur={this.onEditorBlur.bind(this)}
           editorProps={{$blockScrolling: true}}
         />
         <button onClick={this.runCode.bind(this)}>

@@ -1,10 +1,13 @@
 /* @flow */
 type callback = () => any;
 
-export default function subscribe(code: number, down: ?callback, up: ?callback, preventDefault: ?boolean): callback {
+export default function subscribe(code: number, down: ?callback, up: ?callback, preventDefault: ?boolean, disable: ?callback): callback {
   let pressed = false;
   const onDown = e => {
     if (e.keyCode !== code || pressed) {
+      return;
+    }
+    if (disable && disable()) {
       return;
     }
     pressed = true;
@@ -17,6 +20,9 @@ export default function subscribe(code: number, down: ?callback, up: ?callback, 
   };
   const onUp = e => {
     if (e.keyCode !== code || !pressed) {
+      return;
+    }
+    if (disable && disable()) {
       return;
     }
     pressed = false;
