@@ -206,6 +206,7 @@ function handleCollisions(state) {
     ships,
     explosions: state.explosions.concat(events.map(event => ({
       ttl: 5,
+      init: 5,
       position: event.position,
     }))),
   };
