@@ -1,0 +1,54 @@
+{
+  "name": "spacegame",
+  "version": "0.0.0",
+  "description": "Multiplayer space-shooter game",
+  "scripts": {
+    "watch:client": "watchify -v -d -o public/bundle.js -t [ babelify --presets [ es2015 ] --plugins [ inferno transform-class-properties ] ] src/client/app.js & http-server & stylus -o public/bundle.css -w src/client/style/index.styl & wait",
+    "flow": "flow",
+    "watch:app": "nodemon -w src/server --exec babel-node src/server/app",
+    "test": "mocha 'test/**/*.test.js'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/madbence/spacegame.git"
+  },
+  "author": "Bence Dányi <bence@danyi.me>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/madbence/spacegame/issues"
+  },
+  "homepage": "https://github.com/madbence/spacegame#readme",
+  "dependencies": {
+    "jsonwebtoken": "^7.1.9",
+    "koa": "^1.2.4",
+    "koa-compose": "^2.4.0",
+    "koa-route": "^2.4.2",
+    "koa-router": "^5.4.0",
+    "mz": "^2.4.0",
+    "pg": "^6.1.0",
+    "source-map-support": "^0.4.2",
+    "stylus": "^0.54.5"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.14.0",
+    "babel-plugin-inferno": "^0.7.7",
+    "babel-plugin-transform-class-properties": "^6.11.5",
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-es2015-node": "^6.1.1",
+    "babel-preset-flow": "^1.0.0",
+    "babel-preset-stage-2": "^6.13.0",
+    "babelify": "^7.3.0",
+    "browserify": "^13.1.0",
+    "flow-bin": "^0.32.0",
+    "http-server": "^0.9.0",
+    "inferno": "^0.7.27",
+    "inferno-component": "^0.7.27",
+    "inferno-dom": "^0.7.27",
+    "inferno-redux": "^0.7.27",
+    "inferno-router": "^0.7.27",
+    "mocha": "^3.0.2",
+    "nodemon": "^1.10.2",
+    "redux": "^3.6.0",
+    "watchify": "^3.7.0"
+  }
+}
