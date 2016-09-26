@@ -14,7 +14,7 @@ function drawShip(ctx, ref, ship, player) {
   ctx.lineTo(-5, 7);
   ctx.fill();
 
-  ctx.fillStyle = 'red';
+  ctx.fillStyle = 'rgba(255, 0, 0, .5)';
   for (const i in ships[ship.type].thrusters) {
     const thruster = ships[ship.type].thrusters[i];
     const strength = ship.thrusters[i];
@@ -71,11 +71,14 @@ function drawProjectile(ctx, projectile) {
 }
 
 export default function (ctx, state) {
+  const s = state.ships[0];
+  if (!s) return;
+
   ctx.clearRect(0, 0, 800, 600);
 
   ctx.save();
   ctx.translate(400, 300);
-  const s = state.ships[0];
+
   ctx.rotate(-s.ori);
   const ll = Math.sqrt(s.vel[0] * s.vel[0] + s.vel[1] * s.vel[1]);
   const l = Math.max(.8, Math.exp(-ll / 5) * 1.5);

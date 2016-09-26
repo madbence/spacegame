@@ -8,23 +8,27 @@ import AIController from '../../../common/game/ai';
 import {addShip} from '../../../common/game/actions';
 
 import Server from '../../../common/game/server';
+import ServerProxy from '../../../common/game/server-proxy';
 import Client from '../../../common/game/client';
+
 const server = new Server();
+const proxy = new ServerProxy(0, server);
 
 export default class GameComponent extends Component {
   constructor(props) {
     super(props);
 
     const client = new Client('me');
-    client.join(server);
+    client.join(proxy).then(id => {
+      const controller = new Controller(client, id);
+    });
 
     for (let i = 1; i < 10; i++) {
       const ai = new Client('AI ' + i);
-      ai.join(server);
-      new AIController(client.game, i);
+      ai.join(proxy).then(id => {
+        const controller = new AIController(ai, id);
+      });
     }
-
-    const controller = new Controller(client.game, 0);
 
     const start = Date.now();
 

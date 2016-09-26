@@ -4,7 +4,7 @@ import {updateShip, updateProjectile} from './update';
 import {sadd, unit, distance} from './vector';
 import {collision, mkShip} from './utils';
 
-import {SHOOT, THRUST, ADD_SHIP, ADD_PLAYER} from './actions';
+import {SHOOT, THRUST, ADD_SHIP, ADD_PLAYER, SYNC} from './actions';
 import type {Action} from './actions';
 
 export type Vec = [number, number];
@@ -63,6 +63,7 @@ export default class GameRunner {
       case THRUST: this.thrust(action.payload.id, action.payload.index, action.payload.strength); break;
       case ADD_SHIP: this.addShip(action.payload.type, action.payload.owner, action.payload.pos, action.payload.ori); break;
       case ADD_PLAYER: this.addPlayer(action.payload.name); break;
+      case SYNC: this.state = action.payload; break;
     }
   }
 
@@ -80,17 +81,40 @@ export default class GameRunner {
           .map(projectile => updateProjectile(projectile, this.state.dt)),
       };
 
-      const shipDmg = this.state.ships.map(ship => this.state.projectiles.reduce((dmg, proj) => dmg + collision(ship, proj) ? .1 : 0, 0));
+      const shipDmg = this.state.ships.map(ship => {
+        return this.state.projectiles.reduce((dmgs, projectile) => {
+          if (collision(ship, projectile)) {
+            dmgs[projectile.owner] = dmgs[projectile.owner] || 0;
+            dmgs[projectile.owner] += .1;;
+          }
+          return dmgs;
+        }, {});
+      });
+
+      const damagedShips = this.state.ships
+        .map((ship, i) => ({
+          ...ship,
+          health: ship.health - Object.keys(shipDmg[i]).reduce((sum, key) => sum + shipDmg[i][key], 0),
+        }));
+
+      const points = damagedShips.reduce((points, ship, i) => {
+        if (ship.health > 0) return points;
+        return Object.keys(shipDmg[i]).reduce((points, key) => {
+          points[key] = points[key] || 0;
+          points[key]++;
+          return points;
+        }, points);
+      }, {});
 
       this.state = {
         ...this.state,
+        players: this.state.players.map(player => ({
+          ...player,
+          score: player.score + (points[player.id] || 0),
+        })),
         projectiles: this.state.projectiles
           .filter(proj => this.state.ships.every(ship => !collision(ship, proj))),
-        ships: this.state.ships
-          .map((ship, i) => ({
-            ...ship,
-            health: ship.health - shipDmg[i],
-          }))
+        ships: damagedShips
           .filter(ship => ship.health > 0),
       };
     }

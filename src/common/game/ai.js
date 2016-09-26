@@ -1,8 +1,8 @@
 import {thrust, shoot} from './actions';
 
 export default class AIController {
-  constructor(game, id) {
-    this.game = game;
+  constructor(client, id) {
+    this.client = client;
     this.id = id;
 
     const s = () => {
@@ -20,15 +20,15 @@ export default class AIController {
   }
 
   shoot() {
-    const ship = this.game.state.ships.find(ship => ship.owner === this.id);
+    const ship = this.client.game.state.ships.find(ship => ship.owner === this.id);
     if (!ship) return;
-    this.game.handle(shoot(ship.id));
+    this.client.dispatch(shoot(ship.id));
   }
 
   thrust() {
-    const ship = this.game.state.ships.find(ship => ship.owner === this.id);
+    const ship = this.client.game.state.ships.find(ship => ship.owner === this.id);
     if (!ship) return;
     const idx = Math.floor(Math.random() * 4);
-    this.game.handle(thrust(ship.id, idx, Math.random()));
+    this.client.dispatch(thrust(ship.id, idx, Math.random()));
   }
 }

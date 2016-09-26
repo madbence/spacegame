@@ -1,11 +1,12 @@
 // @flow
 
-import type {Vec} from './'
+import type {Vec, State} from './'
 
 export const SHOOT = 'game:shoot';
 export const THRUST = 'game:thrust';
 export const ADD_PLAYER = 'game:add-player';
 export const ADD_SHIP = 'game:add-ship';
+export const SYNC = 'game:sync';
 
 export type ShootAction = {
   type: typeof SHOOT,
@@ -31,8 +32,12 @@ export type AddPlayerAction = {
     name: string,
   },
 };
+export type SyncAction = {
+  type: typeof SYNC,
+  payload: State,
+}
 
-export type Action = ShootAction | ThrustAction | AddShipAction | AddPlayerAction;
+export type Action = ShootAction | ThrustAction | AddShipAction | AddPlayerAction | SyncAction;
 
 export function thrust(id: number, index: number, strength: number): ThrustAction {
   return {
@@ -67,5 +72,12 @@ export function addPlayer(name: string): AddPlayerAction {
     payload: {
       name,
     },
+  };
+}
+
+export function sync(state: State): SyncAction {
+  return {
+    type: SYNC,
+    payload: state,
   };
 }

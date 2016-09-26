@@ -7,6 +7,13 @@ export default class GameClient {
   }
 
   join(server) {
-    server.join(this.name, action => this.game.handle(action));
+    this.server = server;
+    return server.join(this.name, action => {
+      this.game.handle(action);
+    });
+  }
+
+  dispatch(action) {
+    return this.server.dispatch(action);
   }
 }

@@ -1,6 +1,8 @@
+import {shoot, thrust} from '../../../common/game/actions';
+
 export default class GameController {
-  constructor(game, id) {
-    this.game = game;
+  constructor(client, id) {
+    this.client = client;
     this.id = id;
 
     const handlers = {
@@ -31,22 +33,22 @@ export default class GameController {
   }
 
   thrust(index, strength) {
-    const ship = this.game.state.ships.find(ship => ship.owner === this.id);
+    const ship = this.client.game.state.ships.find(ship => ship.owner === this.id);
 
     if (!ship) {
       throw new Error(`Player ${this.id} has no ship!`);
     }
 
-    this.game.thrust(ship.id, index, strength);
+    this.client.dispatch(thrust(ship.id, index, strength));
   }
 
   shoot() {
-    const ship = this.game.state.ships.find(ship => ship.owner === this.id);
+    const ship = this.client.game.state.ships.find(ship => ship.owner === this.id);
 
     if (!ship) {
       throw new Error(`Player ${this.id} has no ship!`);
     }
 
-    this.game.shoot(ship.id);
+    this.client.dispatch(shoot(ship.id));
   }
 }
