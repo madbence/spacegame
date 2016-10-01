@@ -93,4 +93,10 @@ export default function (ctx, state) {
     drawProjectile(ctx, projectile);
   }
   ctx.restore();
+
+  const players = state.players.slice().sort((a, b) => b.score - a.score);
+  for (const i in players) {
+    const player = players[i];
+    ctx.fillText(`${player.name}: ${player.score}`, 0, (+i + 1) * 10);
+  }
 }

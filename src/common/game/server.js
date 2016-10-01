@@ -1,7 +1,7 @@
 // @flow
 
 import Game from './';
-import {addPlayer, addShip, sync} from './actions';
+import {ADD_SHIP, ADD_PLAYER} from './actions';
 
 import type {Action} from './actions';
 
@@ -10,7 +10,6 @@ type Channel = (action: Action) => void;
 export default class GameServer {
   game: Game;
   channels: Channel[];
-  start: number;
 
   constructor() {
     this.game = new Game();
@@ -19,46 +18,45 @@ export default class GameServer {
   }
 
   join(name: string, channel: Channel): number {
-    const id = this.game.addPlayer(name);
+    const t = (Date.now() - this.start) / 1000;
     this.channels.push(channel);
-    this.broadcast(addPlayer(name));
+    const id = this.game.addPlayer(name, t);
+    const a = {
+      type: ADD_SHIP,
+      ship: 0,
+      owner: id,
+      pos: [Math.random() * 40, Math.random() * 30],
+      ori: Math.random() * Math.PI * 2,
+    }
+    this.game.addShip(a.ship, a.owner, a.pos, a.ori);
 
-    const add = addShip(0, id, [
-      Math.random() * 80, Math.random() * 60,
-    ], Math.random() * Math.PI * 2);
+    channel({
+      type: 'sync',
+      state: this.game.state,
+    });
 
-    this.game.addShip(add.payload.type, add.payload.owner, add.payload.pos, add.payload.ori);
-    this.broadcast(add);
+    this.broadcast({
+      type: ADD_PLAYER,
+      name,
+      t,
+    });
 
-    channel(sync(this.game.state));
+    this.broadcast(a);
 
     return id;
   }
 
-  broadcast(action: Action) {
-    for (const channel of this.channels) {
+  broadcast(action) {
+    for (let channel of this.channels) {
       channel(action);
     }
   }
 
-  handle(action: Action) {
-    const t = (Date.now() - this.start) / 1000;
-    this.game.simulate(t);
-    this.game.handle(action);
 
-    for (const player of this.game.state.players) {
-      const ship = this.game.state.ships.find(ship => ship.owner === player.id);
-      if (!ship) {
-        setTimeout(() => {
-          const ship = this.game.state.ships.find(ship => ship.owner === player.id);
-          if (ship) return;
-          const add = addShip(0, player.id, [
-            Math.random() * 80, Math.random() * 60,
-          ], Math.random() * Math.PI * 2);
-          this.handle(add);
-          this.broadcast(add);
-        }, 5000);
-      }
-    }
+  dispatch(action: Action) {
+    const now = (Date.now() - this.start) / 1000;
+    action.t = now;
+    this.game.handle(action);
+    this.broadcast(action);
   }
 }

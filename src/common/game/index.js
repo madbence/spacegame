@@ -1,8 +1,8 @@
 // @flow
 
-import {updateShip, updateProjectile} from './update';
+import simulate from './simulate';
 import {sadd, unit, distance} from './vector';
-import {collision, mkShip} from './utils';
+import {mkShip} from './utils';
 
 import {SHOOT, THRUST, ADD_SHIP, ADD_PLAYER, SYNC} from './actions';
 import type {Action} from './actions';
@@ -58,12 +58,15 @@ export default class GameRunner {
   }
 
   handle(action: Action) {
+    if (action.type !== SYNC && action.t) {
+      this.simulate(action.t);
+    }
+
     switch (action.type) {
-      case SHOOT: this.shoot(action.payload.id); break;
-      case THRUST: this.thrust(action.payload.id, action.payload.index, action.payload.strength); break;
-      case ADD_SHIP: this.addShip(action.payload.type, action.payload.owner, action.payload.pos, action.payload.ori); break;
-      case ADD_PLAYER: this.addPlayer(action.payload.name); break;
-      case SYNC: this.state = action.payload; break;
+      case SHOOT: this.shoot(action.id); break;
+      case THRUST: this.thrust(action.id, action.index, action.strength); break;
+      case ADD_SHIP: this.addShip(action.ship, action.owner, action.pos, action.ori); break;
+      case ADD_PLAYER: this.addPlayer(action.name); break;
     }
   }
 
@@ -71,53 +74,7 @@ export default class GameRunner {
     if (this.state.t + 10 < t) {
       throw new Error('Out of sync!');
     }
-    while (this.state.t + this.state.dt < t) {
-      this.state = {
-        ...this.state,
-        t: this.state.t + this.state.dt,
-        ships: this.state.ships.map(ship => updateShip(ship, this.state.dt)),
-        projectiles: this.state.projectiles
-          .filter(projectile => projectile.t + 5 > this.state.t)
-          .map(projectile => updateProjectile(projectile, this.state.dt)),
-      };
-
-      const shipDmg = this.state.ships.map(ship => {
-        return this.state.projectiles.reduce((dmgs, projectile) => {
-          if (collision(ship, projectile)) {
-            dmgs[projectile.owner] = dmgs[projectile.owner] || 0;
-            dmgs[projectile.owner] += .1;;
-          }
-          return dmgs;
-        }, {});
-      });
-
-      const damagedShips = this.state.ships
-        .map((ship, i) => ({
-          ...ship,
-          health: ship.health - Object.keys(shipDmg[i]).reduce((sum, key) => sum + shipDmg[i][key], 0),
-        }));
-
-      const points = damagedShips.reduce((points, ship, i) => {
-        if (ship.health > 0) return points;
-        return Object.keys(shipDmg[i]).reduce((points, key) => {
-          points[key] = points[key] || 0;
-          points[key]++;
-          return points;
-        }, points);
-      }, {});
-
-      this.state = {
-        ...this.state,
-        players: this.state.players.map(player => ({
-          ...player,
-          score: player.score + (points[player.id] || 0),
-        })),
-        projectiles: this.state.projectiles
-          .filter(proj => this.state.ships.every(ship => !collision(ship, proj))),
-        ships: damagedShips
-          .filter(ship => ship.health > 0),
-      };
-    }
+    this.state = simulate(this.state, t);
     return this.state;
   }
 

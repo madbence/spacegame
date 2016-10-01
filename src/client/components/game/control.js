@@ -1,4 +1,4 @@
-import {shoot, thrust} from '../../../common/game/actions';
+import {SHOOT, THRUST} from '../../../common/game/actions';
 
 export default class GameController {
   constructor(client, id) {
@@ -39,7 +39,7 @@ export default class GameController {
       throw new Error(`Player ${this.id} has no ship!`);
     }
 
-    this.client.dispatch(thrust(ship.id, index, strength));
+    this.client.thrust(ship.id, index, strength);
   }
 
   shoot() {
@@ -49,6 +49,6 @@ export default class GameController {
       throw new Error(`Player ${this.id} has no ship!`);
     }
 
-    this.client.dispatch(shoot(ship.id));
+    this.client.shoot(ship.id);
   }
 }

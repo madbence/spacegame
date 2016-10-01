@@ -25,7 +25,6 @@ export default class ServerProxy {
 
   async dispatch(action: Action) {
     await sleep(this.delay);
-    this.server.handle(action);
-    this.server.broadcast(action);
+    this.server.dispatch(action);
   }
 }

@@ -17,6 +17,7 @@ export function updateShip(ship: Ship, dt: number): Ship {
   const ts = ships[ship.type].thrusters;
   const acc = ship.thrusters.reduce((f, s, i) => sadd(f, unit(ts[i].ori), s * ts[i].thrust), [0, 0]);
   const tor = ship.thrusters.reduce((t, s, i) => t + cross(ts[i].pos, scale(unit(ts[i].ori), s * ts[i].thrust)), 0);
+
   return {
     ...ship,
     pos: sadd(ship.pos, ship.vel, dt),

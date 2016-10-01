@@ -10,74 +10,31 @@ export const SYNC = 'game:sync';
 
 export type ShootAction = {
   type: typeof SHOOT,
-  payload: {
-    id: number,
-  },
+  id: number,
+  t: number,
 };
+
 export type ThrustAction = {
   type: typeof THRUST,
-  payload: {
-    id: number, index: number, strength: number,
-  },
+  id: number,
+  index: number,
+  strength: number,
+  t: number,
 };
+
 export type AddShipAction = {
   type: typeof ADD_SHIP,
-  payload: {
-    type: number, owner: number, pos: Vec, ori: number,
-  },
+  ship: number,
+  owner: number,
+  pos: Vec,
+  ori: number,
+  t: number,
 };
+
 export type AddPlayerAction = {
   type: typeof ADD_PLAYER,
-  payload: {
-    name: string,
-  },
+  name: string,
+  t: number,
 };
-export type SyncAction = {
-  type: typeof SYNC,
-  payload: State,
-}
 
-export type Action = ShootAction | ThrustAction | AddShipAction | AddPlayerAction | SyncAction;
-
-export function thrust(id: number, index: number, strength: number): ThrustAction {
-  return {
-    type: THRUST,
-    payload: {
-      id, index, strength,
-    },
-  };
-}
-
-export function shoot(id: number): ShootAction {
-  return {
-    type: SHOOT,
-    payload: {
-      id,
-    },
-  };
-}
-
-export function addShip(type: number, owner: number, pos: Vec, ori: number): AddShipAction {
-  return {
-    type: ADD_SHIP,
-    payload: {
-      type, owner, pos, ori,
-    },
-  };
-}
-
-export function addPlayer(name: string): AddPlayerAction {
-  return {
-    type: ADD_PLAYER,
-    payload: {
-      name,
-    },
-  };
-}
-
-export function sync(state: State): SyncAction {
-  return {
-    type: SYNC,
-    payload: state,
-  };
-}
+export type Action = ShootAction | ThrustAction | AddShipAction | AddPlayerAction;
