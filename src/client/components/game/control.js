@@ -7,17 +7,17 @@ export default class GameController {
 
     const handlers = {
       'keydown': {
-        'w': () => this.thrust(1, 1),
-        's': () => this.thrust(0, 1),
-        'a': () => this.thrust(2, 1),
-        'd': () => this.thrust(3, 1),
+        'w': () => this.thrust(0, 1),
+        's': () => this.thrust(1, 1),
+        'a': () => this.thrust(3, 1),
+        'd': () => this.thrust(2, 1),
         ' ': () => this.shoot(),
       },
       'keyup': {
-        'w': () => this.thrust(1, 0),
-        's': () => this.thrust(0, 0),
-        'a': () => this.thrust(2, 0),
-        'd': () => this.thrust(3, 0),
+        'w': () => this.thrust(0, 0),
+        's': () => this.thrust(1, 0),
+        'a': () => this.thrust(3, 0),
+        'd': () => this.thrust(2, 0),
       },
     }
 

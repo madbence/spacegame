@@ -108,7 +108,7 @@ export default class GameRunner {
       projectiles: [...this.state.projectiles, {
         owner: ship.owner,
         pos: ship.pos,
-        vel: sadd(ship.vel, unit(ship.ori), -10),
+        vel: sadd(ship.vel, unit(ship.ori), 100),
         ori: ship.ori,
         t: this.state.t,
       }],

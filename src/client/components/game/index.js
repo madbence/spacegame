@@ -1,7 +1,7 @@
 import Inferno from 'inferno';
 import Component from 'inferno-component';
 
-import canvas from './canvas';
+import WebGLCanvas from './webgl';
 import Game from '../../../common/game';
 import Controller from './control';
 import AIController from '../../../common/game/ai';
@@ -10,20 +10,23 @@ import Server from '../../../common/game/server';
 import ServerProxy from '../../../common/game/server-proxy';
 import Client from '../../../common/game/client';
 
+const server = new Server();
+
 export default class GameComponent extends Component {
   constructor(props) {
     super(props);
 
-    const start = Date.now();
-    const client = new Client('me');
-    const server = new Server();
+    let client = new Client('me');
     const proxy = new ServerProxy(100, server);
 
-    client.join(proxy).then(id => {
-      new Controller(client, id);
-    });
+    setTimeout(() => {
+      client.join(proxy).then(id => {
+        client.id = id;
+        new Controller(client, id);
+      });
+    }, 100);
 
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < 5; i++) {
       const c = new Client('ai ' + i);
       c.join(proxy).then(id => {
         new AIController(c, id);
@@ -31,9 +34,10 @@ export default class GameComponent extends Component {
     }
 
     const frame = () => {
-      const now = (Date.now() - start) / 1000;
-      client.game.simulate(now);
-      this.renderCanvas(client.game.state);
+      client.simulate();
+      if (this.canvas) {
+        this.canvas.render(client.game.state, client.id);
+      }
       return requestAnimationFrame(frame);
     };
 
@@ -41,28 +45,15 @@ export default class GameComponent extends Component {
   }
 
   render() {
-    this.checkCanvas();
-    this.renderCanvas();
     return (
       <div>
         <h1>SpaceGame</h1>
-        <canvas ref='canvas' width='800' height='600'>Canvas not supported!</canvas>
+        <canvas ref='canvas'>Canvas not supported!</canvas>
       </div>
     );
   }
 
   componentDidMount() {
-    this.checkCanvas();
-  }
-
-  checkCanvas() {
-    if (!this.ctx && this.refs.canvas) {
-      this.ctx = this.refs.canvas.getContext('2d');
-    }
-  }
-
-  renderCanvas(state) {
-    if (!this.ctx) return;
-    canvas(this.ctx, state);
+    this.canvas = new WebGLCanvas(this.refs.canvas);
   }
 }

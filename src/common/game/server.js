@@ -19,21 +19,23 @@ export default class GameServer {
 
   join(name: string, channel: Channel): number {
     const t = (Date.now() - this.start) / 1000;
+
+    channel({
+      type: 'sync',
+      state: this.game.state,
+    });
+
     this.channels.push(channel);
     const id = this.game.addPlayer(name, t);
     const a = {
       type: ADD_SHIP,
       ship: 0,
       owner: id,
-      pos: [Math.random() * 40, Math.random() * 30],
+      pos: [Math.random() * 800 - 400, Math.random() * 600 - 300],
       ori: Math.random() * Math.PI * 2,
     }
     this.game.addShip(a.ship, a.owner, a.pos, a.ori);
 
-    channel({
-      type: 'sync',
-      state: this.game.state,
-    });
 
     this.broadcast({
       type: ADD_PLAYER,

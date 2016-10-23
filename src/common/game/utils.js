@@ -20,5 +20,5 @@ export function mkShip(id: number, type: number, owner: number, pos: Vec, ori: n
 }
 
 export function collision(ship: Ship, proj: Projectile): bool {
-  return ship.owner != proj.owner && distance(ship.pos, proj.pos) < 1;
+  return ship.owner != proj.owner && distance(ship.pos, proj.pos) < 10;
 }

@@ -2,6 +2,7 @@ import ships from '../../../common/game/ships';
 
 function drawShip(ctx, ref, ship, player) {
   ctx.save();
+
   ctx.translate(ship.pos[0] * 10, ship.pos[1] * 10);
 
   ctx.save();
@@ -70,9 +71,14 @@ function drawProjectile(ctx, projectile) {
   ctx.restore();
 }
 
-export default function (ctx, state) {
-  const s = state.ships[0];
-  if (!s) return;
+export default function (ctx, state, id) {
+  if (!state.ships.length || id == null) {
+    ctx.fillText('FOOO', 100, 100);
+    ctx.restore();
+    return;
+  }
+
+  const s = state.ships.find(ship => ship.owner === id);
 
   ctx.clearRect(0, 0, 800, 600);
 
@@ -87,7 +93,7 @@ export default function (ctx, state) {
 
   for (const ship of state.ships) {
     const player = state.players.find(player => player.id === ship.owner);
-    drawShip(ctx, state.ships[0], ship, player);
+    drawShip(ctx, s, ship, player);
   }
   for (const projectile of state.projectiles) {
     drawProjectile(ctx, projectile);

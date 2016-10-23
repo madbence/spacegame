@@ -7,8 +7,8 @@ import ships from './ships';
 
 export function updateShip(ship: Ship, dt: number): Ship {
   let vel = sadd(ship.vel, ship.acc, dt);
-  if (length(vel) > 1) {
-    vel = scale(vel, 1 / length(vel));
+  if (length(vel) > 100) {
+    vel = scale(vel, 100 / length(vel));
   }
   let rot = ship.rot + ship.tor * dt;
   if (Math.abs(rot) > 1) {

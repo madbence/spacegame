@@ -14,7 +14,7 @@ export default class AIController {
     };
 
     setTimeout(s, Math.random() * 1000);
-    // setTimeout(t, Math.random() * 5000);
+    setTimeout(t, Math.random() * 5000);
   }
 
   shoot() {
